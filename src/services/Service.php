@@ -1,15 +1,12 @@
 <?php
 namespace concepture\yii2logic\services;
 
-use concepture\yii2core\helper\ClassHelper;
-use concepture\yii2core\traits\services\ModifyTrait;
-use concepture\yii2core\traits\services\ReadTrait;
-use concepture\yii2core\traits\services\LocalizedReadTrait;
-use concepture\yii2core\traits\services\TreeReadTrait;
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
 use ReflectionClass;
+use concepture\yii2logic\services\traits\ModifyTrait;
+use concepture\yii2logic\services\traits\ReadTrait;
 
 /**
  * Class Service
@@ -20,8 +17,6 @@ abstract class Service extends Component
 {
     use ModifyTrait;
     use ReadTrait;
-    use LocalizedReadTrait;
-    use TreeReadTrait;
 
     /**
      * @return Connection

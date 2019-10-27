@@ -6,6 +6,8 @@ use concepture\yii2logic\actions\web\DeleteAction;
 use concepture\yii2logic\actions\web\IndexAction;
 use concepture\yii2logic\actions\web\UpdateAction;
 use concepture\yii2logic\actions\web\ViewAction;
+use concepture\yii2logic\services\Service;
+use ReflectionException;
 use Yii;
 use yii\web\Controller as Base;
 use yii\filters\VerbFilter;
@@ -65,6 +67,10 @@ abstract class Controller extends Base
         return $this->getService()->getRelatedFormClass();
     }
 
+    /**
+     * @return Service
+     * @throws ReflectionException
+     */
     public function getService()
     {
         $reflection = new ReflectionClass($this);
