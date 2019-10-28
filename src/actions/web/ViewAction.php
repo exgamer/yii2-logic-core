@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
  */
 class ViewAction extends Action
 {
+    
     public $view = 'view';
 
     public function run($id)
