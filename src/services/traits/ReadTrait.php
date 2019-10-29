@@ -141,5 +141,12 @@ trait ReadTrait
 
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }
+
+    public function getAllList($from = 'id', $to, $where = [])
+    {
+        $models = $this->getQuery()->where($where)->all();
+
+        return ArrayHelper::map($models, $from , $to);
+    }
 }
 
