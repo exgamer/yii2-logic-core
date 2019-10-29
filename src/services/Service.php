@@ -30,6 +30,17 @@ abstract class Service extends Component
     }
 
     /**
+     * @return string
+     * @throws ReflectionException
+     */
+    public function getTableName()
+    {
+        $modelClass = $this->getRelatedModelClass();
+
+        return $modelClass::tableName();
+    }
+
+    /**
      * Получить класс связанной модели
      * @return string
      * @throws ReflectionException
