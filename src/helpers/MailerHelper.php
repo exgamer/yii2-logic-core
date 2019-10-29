@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\helper;
+namespace concepture\yii2logic\helpers;
 
 use Yii;
 
