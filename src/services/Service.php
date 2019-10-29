@@ -83,7 +83,7 @@ abstract class Service extends Component
         $name = $reflection->getShortName();
         $name = str_replace("Service", "", $name);
         $nameSpace = $reflection->getNamespaceName();
-        $nameSpace = str_replace("services", "forms", $nameSpace);
+        $nameSpace = str_replace("services", "search", $nameSpace);
 
         return  $nameSpace."\\".$name."Search";
     }
