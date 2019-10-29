@@ -3,6 +3,7 @@ namespace concepture\yii2logic\services\traits;
 
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * Trait ReadTrait
@@ -12,6 +13,8 @@ use yii\db\ActiveQuery;
 trait ReadTrait
 {
     /**
+     * Возвращает QueryBuilder
+     *
      * @return ActiveQuery
      */
     public function getQuery()
@@ -22,6 +25,8 @@ trait ReadTrait
     }
 
     /**
+     * Возвращает DataProvider
+     *
      * @param array $queryParams
      * @return mixed
      */
@@ -53,6 +58,14 @@ trait ReadTrait
     }
 
     /**
+     * Возвращает одну запись
+     *
+     * Пример расширения запроса через $callback
+     *
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
+     *
      * @param array|callable $condition
      * @return mixed
      */
@@ -72,6 +85,13 @@ trait ReadTrait
     }
 
     /**
+     * Возвращает массив записей
+     *
+     * Пример расширения запроса через $callback
+     *
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
      * @param array|callable $condition
      * @return mixed
      */
