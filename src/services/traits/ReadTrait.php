@@ -110,41 +110,36 @@ trait ReadTrait
         return $query->all();
     }
 
-//    /**
-//     * @param null $term
-//     * @return array []
-//     */
-//    public function getAutocompleteList($term = null)
-//    {
-//        if(!$term){
-//            return [];
-//        }
-//
-//        $searchClass = $this->getRelatedSearchModelClass();
-//        $searchKey = $searchClass::getListSearchKeyAttribute();
-//        $searchAttr = $searchClass::getListSearchAttribute();
-//        $data = $this->getQuery()
-//            ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
-//            ->where(['like', $searchAttr, $term])
-//            ->asArray()
-//            ->all();
-//
-//        return $data;
-//    }
-//
-//    public function getDropDownList($queryParams = [])
-//    {
-//        $searchClass = $this->getRelatedSearchModelClass();
-//        $searchModel = new $searchClass();
-//        $searchAttribute = $searchClass::getListSearchAttribute();
-//        $dataProvider = $searchModel->search($queryParams);
-//
-//        return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
-//    }
+    /**
+     * @param null $term
+     * @return array []
+     */
+    public function getAutocompleteList($term = null)
+    {
+        if(!$term){
+            return [];
+        }
 
+        $searchClass = $this->getRelatedSearchModelClass();
+        $searchKey = $searchClass::getListSearchKeyAttribute();
+        $searchAttr = $searchClass::getListSearchAttribute();
+        $data = $this->getQuery()
+            ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
+            ->where(['like', $searchAttr, $term])
+            ->asArray()
+            ->all();
 
+        return $data;
+    }
 
+    public function getDropDownList($queryParams = [])
+    {
+        $searchClass = $this->getRelatedSearchModelClass();
+        $searchModel = new $searchClass();
+        $searchAttribute = $searchClass::getListSearchAttribute();
+        $dataProvider = $searchModel->search($queryParams);
 
-
+        return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
+    }
 }
 
