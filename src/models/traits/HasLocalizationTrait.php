@@ -71,6 +71,71 @@ trait HasLocalizationTrait
     }
 
     /**
+     * метод должен вызываться в afterDelete модели для удаления локализаций
+     *
+     *   public function afterDelete()
+     *   {
+     *       $this->deleteLocalizations();
+     *       return parent::afterDelete();
+     *   }
+     *
+     */
+    public function deleteLocalizations()
+    {
+        $locClass = static::getLocalizationModelClass();
+        $locClass::deleteAll([
+            'entity_id' => $this->id
+        ]);
+    }
+
+    /**
+     * метод должен вызываться в afterFind модели для удаления локализаций
+     *
+     *   public function afterFind()
+     *   {
+     *       $this->setLocalizations();
+     *       return parent::afterFind();
+     *   }
+     *
+     */
+    public function setLocalizations()
+    {
+        if (isset($this->localization)){
+            $this->load($this->getLocalized($this->localization, true), "");
+        }
+    }
+
+    /**
+     * ВОзвращает массив с локализациями
+     * 
+     * @param $localization
+     * @param bool $fromLocalized
+     * @return array
+     */
+    public function getLocalized($localization, $fromLocalized = false)
+    {
+        if (! $localization){
+            $localization = $this->localization;
+        }
+        $data = [];
+        if (!$localization){
+            return $data;
+        }
+        foreach ($localization->attributes as $f => $v){
+            if (in_array($f, ['id', 'entity_id'])){
+                continue;
+            }
+            if ($fromLocalized){
+                $data[$f] = $v;
+            }else{
+                $data[$f] = $this->{$f};
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * метод для получения модели с локализациями
      * модель локализации должна иметь такое же имя с постфиксом Localization
      *
