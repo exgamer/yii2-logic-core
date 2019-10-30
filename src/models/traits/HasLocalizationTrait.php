@@ -44,6 +44,7 @@ trait HasLocalizationTrait
      * Переопределяем find чтобы подцепить локализации
      *
      * @param string $type
+     * @param string $localizedAlias
      * @return ActiveQuery
      */
     public static function find($type = "joinWith", $localizedAlias = "p")
