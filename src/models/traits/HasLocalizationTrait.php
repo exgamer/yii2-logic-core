@@ -4,7 +4,6 @@ namespace concepture\yii2logic\models\traits;
 use yii\db\ActiveQuery;
 
 /**
- * @deprecated UNDER DEVELOPMENT
  *
  * Треит для моделей у которых есть таблица с деревом
  *
@@ -14,6 +13,33 @@ use yii\db\ActiveQuery;
  */
 trait HasLocalizationTrait
 {
+    /**
+     * аттрибут локали c с учетом которого будет получаться текущая локализация
+     *
+     * @var string
+     */
+    private $_current_locale = "ru";
+
+    /**
+     * Возвращает текущую локаль модели
+     *
+     * @return string
+     */
+    public function getCurrentLocale()
+    {
+        return $this->_current_locale;
+    }
+
+    /**
+     * Устанавливает текущую локаль модели
+     *
+     * @param string $current_locale
+     */
+    public function setCurrentLocale($current_locale)
+    {
+        $this->_current_locale = $current_locale;
+    }
+
     /**
      * Переопределяем find чтобы подцепить локализации
      *
@@ -35,28 +61,34 @@ trait HasLocalizationTrait
      * @param $query
      * @param null $callable
      * @param string $type
+     * @param string $localizedAlias
      */
-    public static function searchByLocalized($query, $callable = null, $type = "joinWith")
+    public static function searchByLocalized($query, $callable = null, $type = "joinWith", $localizedAlias = "p")
     {
         $query->{$type}([
-            'localization' => function ($q) use ($callable) {
+            'localization' => function ($q) use ($callable, $localizedAlias) {
                 $q->on = null;
                 $propModelClass = static::getLocalizationModelClass();
-                $q->from($propModelClass::tableName()." p");
-                $q->andWhere(['p.locale' => static::getLocalizationLocale()]);
+                $q->from($propModelClass::tableName()." {$localizedAlias}");
+                $q->andWhere(["{$localizedAlias}.locale" => static::getLocalizationLocale()]);
                 if (is_callable($callable)){
-                    call_user_func($callable, $q);
+                    call_user_func($callable, $q, $localizedAlias);
                 }
             }
         ]);
     }
 
-//    public function getLocalization()
-//    {
-//        $locClass = static::getLocalizationModelClass();
-//        return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-//            ->andOnCondition([$locClass::tableName().'.locale' => static::getLocalizationLocale()]);
-//    }
+    /**
+     * Возвращает текущую локализацию
+     *
+     * @return ActiveQuery
+     */
+    public function getLocalization()
+    {
+        $locClass = static::getLocalizationModelClass();
+        return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
+            ->andOnCondition([$locClass::tableName().'.locale' => $this->getCurrentLocale()]);
+    }
 
     /**
      * Все локализации
@@ -68,6 +100,41 @@ trait HasLocalizationTrait
         $locClass = static::getLocalizationModelClass();
 
         return $this->hasMany($locClass, ['entity_id' => 'id']);
+    }
+
+    /**
+     * метод должен вызываться в afterDelete модели для сохранения локализаций
+     *
+     *       public function afterSave($insert, $changedAttributes)
+     *       {
+     *           $this->saveProps();
+     *
+     *           return parent::afterSave($insert, $changedAttributes);
+     *       }
+     *
+     * @return bool
+     */
+    public function saveLocalizations()
+    {
+        $locClass = static::getLocalizationModelClass();
+        $localization = $locClass::find()->where(['locale' => $this->getCurrentLocale(), 'entity_id' => $this->id])->one();
+        if ($localization){
+            $localization->load($this->getLocalized($localization), "");
+            if(!$localization->save()){
+                throw new Exception("localization not saved");
+            }
+
+            return false;
+        }
+
+        $localization = new $locClass();
+        $localization->load($this->getLocalized($localization), '');
+        $localization->entity_id = $this->id;
+        if(!$localization->save()){
+            throw new Exception("localization not saved");
+        }
+
+        return true;
     }
 
     /**
@@ -106,9 +173,13 @@ trait HasLocalizationTrait
     }
 
     /**
-     * ВОзвращает массив с локализациями
-     * 
+     * Возвращает массив с локализациями
+     *
+     * Модель локализации
      * @param $localization
+     *
+     * если false возвращает значения из текущей модели
+     * если true возвращает значения из связи с локализацией
      * @param bool $fromLocalized
      * @return array
      */
@@ -117,19 +188,23 @@ trait HasLocalizationTrait
         if (! $localization){
             $localization = $this->localization;
         }
+
         $data = [];
         if (!$localization){
+
             return $data;
         }
+
         foreach ($localization->attributes as $f => $v){
             if (in_array($f, ['id', 'entity_id'])){
                 continue;
             }
+
             if ($fromLocalized){
                 $data[$f] = $v;
-            }else{
-                $data[$f] = $this->{$f};
+                continue;
             }
+            $data[$f] = $this->{$f};
         }
 
         return $data;
