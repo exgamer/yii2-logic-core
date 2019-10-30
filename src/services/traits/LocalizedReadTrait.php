@@ -9,6 +9,7 @@ use Yii;
 /**
  * Trait LocalizedReadTrait
  * @package concepture\yii2logic\services\traits
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 trait LocalizedReadTrait
 {

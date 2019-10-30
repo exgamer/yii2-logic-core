@@ -8,7 +8,7 @@ use yii\helpers\Json;
 /**
  * Универсальный валидатор для возможности валидации массивов данных с помощью моделей
  * @todo переработать отдачу ошибок
- * @author CitizenZet
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class ModelValidator extends Validator
 {

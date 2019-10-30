@@ -6,9 +6,9 @@ use yii\base\Exception;
 use yii\validators\Validator;
 use yii\db\ActiveRecord;
 /**
+ * Валидатор на уникальность по локализованному атрибуту
  *
- *
- * @author citizenzet <exgamer@live.ru>
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class UniquePropertyValidator extends Validator
 {
@@ -20,7 +20,7 @@ class UniquePropertyValidator extends Validator
                 $q->on = null;
                 $propModelClass = $model::getLocalizationModelClass();
                 $q->from($propModelClass::tableName() . " p");
-                $q->andWhere(['p.locale' => $model::getLocalizationLocale()]);
+                $q->andWhere(['p.locale' => $model::getCurrentLocale()]);
                 $q->andWhere(['p.' . $attribute => $model->{$attribute}]);
                 if (isset($model->id)) {
                     $q->andWhere(['<>', 'entity_id', $model->id]);

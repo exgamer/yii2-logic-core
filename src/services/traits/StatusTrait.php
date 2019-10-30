@@ -6,6 +6,7 @@ use concepture\yii2logic\models\ActiveRecord;
 /**
  * Trait StatusTrait
  * @package concepture\yii2logic\services\traits
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 trait StatusTrait
 {
