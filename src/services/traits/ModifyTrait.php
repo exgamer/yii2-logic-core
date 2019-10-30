@@ -64,7 +64,7 @@ trait ModifyTrait
      *
      * @param Form $form класс для работы
      * @param ActiveRecord $model модель данных - передается при редактировании
-     * @return ActiveRecord
+     * @return ActiveRecord | boolean
      * @throws
      */
     protected function save(Form $form , ActiveRecord $model = null)

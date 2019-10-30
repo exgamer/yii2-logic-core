@@ -22,12 +22,8 @@ class CreateAction extends Action
     {
         $model = $this->getForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            try {
-                if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
-                    return $this->redirect([$this->redirect, 'id' => $result->id]);
-                }
-            }catch (\Exception $e){
-
+            if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
+                return $this->redirect([$this->redirect, 'id' => $result->id]);
             }
         }
 

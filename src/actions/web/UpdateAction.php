@@ -28,12 +28,8 @@ class UpdateAction extends Action
         if ($model->load(Yii::$app->request->post())) {
             $originModel->load($model->attributes);
             if ($originModel->validate()) {
-                try {
-                    if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
-                        return $this->redirect([$this->redirect, 'id' => $originModel->id]);
-                    }
-                } catch (\Exception $e) {
-
+                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
+                    return $this->redirect([$this->redirect, 'id' => $originModel->id]);
                 }
             }
         }
