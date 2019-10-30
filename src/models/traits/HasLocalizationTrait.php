@@ -46,11 +46,11 @@ trait HasLocalizationTrait
      * @param string $type
      * @return ActiveQuery
      */
-    public static function find($type = "joinWith")
+    public static function find($type = "joinWith", $localizedAlias = "p")
     {
         $query = parent::find();
         $query->with('localizations');
-        static::searchByLocalized($query, null, $type);
+        static::searchByLocalized($query, null, $type, $localizedAlias);
 
         return $query;
     }
