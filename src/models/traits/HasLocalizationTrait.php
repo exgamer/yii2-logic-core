@@ -14,30 +14,13 @@ use yii\db\ActiveQuery;
 trait HasLocalizationTrait
 {
     /**
-     * аттрибут локали c с учетом которого будет получаться текущая локализация
-     *
-     * @var string
-     */
-    private $_current_locale = "ru";
-
-    /**
      * Возвращает текущую локаль модели
      *
      * @return string
      */
-    public function getCurrentLocale()
+    public static function getCurrentLocale()
     {
-        return $this->_current_locale;
-    }
-
-    /**
-     * Устанавливает текущую локаль модели
-     *
-     * @param string $current_locale
-     */
-    public function setCurrentLocale($current_locale)
-    {
-        $this->_current_locale = $current_locale;
+        return CurrentLocale::$_current_locale;
     }
 
     /**
@@ -71,7 +54,7 @@ trait HasLocalizationTrait
                 $q->on = null;
                 $propModelClass = static::getLocalizationModelClass();
                 $q->from($propModelClass::tableName()." {$localizedAlias}");
-                $q->andWhere(["{$localizedAlias}.locale" => static::getLocalizationLocale()]);
+                $q->andWhere(["{$localizedAlias}.locale" => static::getCurrentLocale()]);
                 if (is_callable($callable)){
                     call_user_func($callable, $q, $localizedAlias);
                 }
@@ -88,7 +71,7 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-            ->andOnCondition([$locClass::tableName().'.locale' => $this->getCurrentLocale()]);
+            ->andOnCondition([$locClass::tableName().'.locale' => static::getCurrentLocale()]);
     }
 
     /**
@@ -118,7 +101,7 @@ trait HasLocalizationTrait
     public function saveLocalizations()
     {
         $locClass = static::getLocalizationModelClass();
-        $localization = $locClass::find()->where(['locale' => $this->getCurrentLocale(), 'entity_id' => $this->id])->one();
+        $localization = $locClass::find()->where(['locale' => static::getCurrentLocale(), 'entity_id' => $this->id])->one();
         if ($localization){
             $localization->load($this->getLocalized($localization), "");
             if(!$localization->save()){
@@ -222,8 +205,16 @@ trait HasLocalizationTrait
         $class = static::class;
         $class = str_replace("search", "models", $class);
         $class = str_replace("Search", "", $class);
-
         return $class."Localization";
     }
 }
 
+class CurrentLocale
+{
+    /**
+     * аттрибут локали c с учетом которого будет получаться текущая локализация
+     *
+     * @var string
+     */
+    public static $_current_locale = "ru";
+}
