@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\helpers;
 
+use Swift_Message;
 use Yii;
 
 /**
@@ -65,14 +66,14 @@ class MailerHelper
      * @param $to
      * @param $subject
      * @param $body
-     * @return \Swift_Message
+     * @return Swift_Message
      */
     private static  function  createMessage($from, $to, $subject, $body)
     {
         if (!is_array($to)){
             $to= [$to];
         }
-        $message = new \Swift_Message();
+        $message = new Swift_Message();
         $message->setTo($to);
         $message->setSubject($subject);
         $message->setBody($body);
