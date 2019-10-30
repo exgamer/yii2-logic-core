@@ -106,7 +106,7 @@ trait HasLocalizationTrait
      *
      *       public function afterSave($insert, $changedAttributes)
      *       {
-     *           $this->saveProps();
+     *           $this->saveLocalizations();
      *
      *           return parent::afterSave($insert, $changedAttributes);
      *       }
