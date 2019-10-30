@@ -92,7 +92,8 @@ abstract class Form extends Model
      */
     public static function getDb()
     {
-        $modelClass =  static::getModelClass();
+        $me = new static();
+        $modelClass =  $me->getModelClass();
 
         return $modelClass::getDb();
     }
@@ -106,7 +107,8 @@ abstract class Form extends Model
      */
     public static function find()
     {
-        $modelClass =  static::getModelClass();
+        $me = new static();
+        $modelClass =  $me->getModelClass();
 
         return $modelClass::find();
     }
