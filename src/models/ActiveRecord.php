@@ -15,7 +15,17 @@ use yii\db\ActiveQuery;
 abstract class ActiveRecord extends Base
 {
     /**
-     * Creates data provider instance with search query applied
+     * Возвращает DataProvider с учетом параметров
+     *
+     * Пример использования из concepture\yii2logic\services\traits\ReadTrait.php
+     *
+     *   public function getDataProvider($queryParams = [])
+     *   {
+     *       $searchClass = $this->getRelatedSearchModelClass();
+     *       $searchModel = new $searchClass();
+     *
+     *       return $searchModel->search($queryParams);
+     *   }
      *
      * @param array $params
      *
@@ -44,9 +54,57 @@ abstract class ActiveRecord extends Base
         return $dataProvider;
     }
 
+    /**
+     * Метод для расширения ActiveQuery
+     * используетсяв Search модели
+     *
+     * Пример
+     *   protected function extendQuery(ActiveQuery $query)
+     *   {
+     *         $query->andFilterWhere([
+     *            'id' => $this->id
+     *         ]);
+     *
+     *         $query->andFilterWhere(['like', 'username', $this->username]);
+     *   }
+     *
+     *
+     * @param ActiveQuery $query
+     */
+    protected function extendQuery(ActiveQuery $query){}
+
+    /**
+     * Метод для расширения DataProvider
+     * используетсяв Search модели
+     *
+     * Пример
+     *   protected function extendDataProvider(ActiveDataProvider $dataProvider)
+     *   {
+     *       $dataProvider->sort->attributes['username'] = [
+     *           'asc' => [User::tableName().'.username' => SORT_ASC],
+     *           'desc' => [User::tableName().'.username' => SORT_DESC],
+     *       ];
+     *       $dataProvider->sort->attributes['caption'] = [
+     *           'asc' => [UserRoleHandbook::tableName().'.caption' => SORT_ASC],
+     *           'desc' => [UserRoleHandbook::tableName().'.caption' => SORT_DESC],
+     *       ];
+     *   }
+     *
+     * @param ActiveDataProvider $dataProvider
+     */
+    protected function extendDataProvider(ActiveDataProvider $dataProvider){}
 
     /**
      * Аттрибут модели который будет использован для ключа в выпадающих списках
+     * используетсяв Search модели
+     *
+     *
+     * Пример
+     *       public static function getListSearchKeyAttribute()
+     *       {
+     *           return 'id';
+     *       }
+     *
      *
      * @return string
      */
@@ -57,6 +115,12 @@ abstract class ActiveRecord extends Base
 
     /**
      * Аттрибут модели который будет использован для метки в выпадающих списках
+     * используетсяв Search модели
+     *
+     *   public static function getListSearchAttribute()
+     *   {
+     *       return 'username';
+     *   }
      *
      * @return string
      */
@@ -64,16 +128,6 @@ abstract class ActiveRecord extends Base
     {
         return null;
     }
-
-    /**
-     * @param ActiveQuery $query
-     */
-    protected function extendQuery(ActiveQuery $query){}
-
-    /**
-     * @param ActiveDataProvider $dataProvider
-     */
-    protected function extendDataProvider(ActiveDataProvider $dataProvider){}
 
     /**
      * @param bool $runValidation
