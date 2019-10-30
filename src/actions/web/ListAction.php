@@ -6,8 +6,9 @@ use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
+ * Экшен для полчения списка для выпадающего списка
  *
- * @author CitizenZet
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class ListAction extends Action
 {

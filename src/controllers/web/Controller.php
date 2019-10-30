@@ -15,6 +15,8 @@ use yii\filters\AccessControl;
 use ReflectionClass;
 
 /**
+ * Базовый веб контроллер
+ *
  * Class Controller
  * @package concepture\yii2logic\controllers\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
@@ -60,7 +62,10 @@ abstract class Controller extends Base
     }
 
     /**
+     * Возвращает класс формы сущности из сервиса
+     *
      * @return string
+     * @throws ReflectionException
      */
     public function getFormClass()
     {
@@ -68,6 +73,8 @@ abstract class Controller extends Base
     }
 
     /**
+     * Возвращает сервис сущности
+     *
      * @return Service
      * @throws ReflectionException
      */

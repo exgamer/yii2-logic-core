@@ -7,8 +7,9 @@ use Yii;
 use yii\db\Exception;
 
 /**
+ * Экшен для обновления сущности
  *
- * @author CitizenZet
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class UpdateAction extends Action
 {

@@ -3,6 +3,13 @@ namespace concepture\yii2logic\enum;
 
 use ReflectionClass;
 
+/**
+ * Класс для хранения констант
+ *
+ * Class Enum
+ * @package concepture\yii2logic\enum
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
+ */
 abstract class Enum {
 
     /**

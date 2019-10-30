@@ -4,6 +4,8 @@ namespace concepture\yii2logic\actions\web;
 use concepture\yii2logic\actions\Action;
 
 /**
+ * Экшен для удаления сущности
+ *
  * Class DeleteAction
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

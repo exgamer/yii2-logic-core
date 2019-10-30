@@ -6,6 +6,8 @@ use Yii;
 use yii\db\Exception;
 
 /**
+ * Экшен для создания сущности
+ *
  * Class CreateAction
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

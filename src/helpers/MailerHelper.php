@@ -4,9 +4,9 @@ namespace concepture\yii2logic\helpers;
 use Yii;
 
 /**
- * Вспомогательный для отрправки почты
+ * Вспомогательный класс для отправки почты
  *
- * @author CitizenZet <exgamer@live.ru>
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class MailerHelper
 {
@@ -17,6 +17,13 @@ class MailerHelper
     const ENCRYPTION = "cMailerEncryption";
     const FROM = "cMailerFrom";
 
+    /**
+     * отправка
+     *
+     * @param $to
+     * @param $subject
+     * @param $body
+     */
     public static function send($to, $subject, $body)
     {
         $transport = self::createTransport(
@@ -34,7 +41,14 @@ class MailerHelper
         return self::sendMail($transport, $message);
     }
 
-
+    /**
+     * Создание транспорта
+     *
+     * @param string $host
+     * @param int $port
+     * @param null $encryption
+     * @return \Swift_SmtpTransport
+     */
     private static  function  createTransport($host = 'localhost', $port = 25, $encryption = null)
     {
         $transport = new \Swift_SmtpTransport($host, $port, $encryption);
@@ -44,6 +58,15 @@ class MailerHelper
         return $transport;
     }
 
+    /**
+     * Создание сообщения
+     *
+     * @param $from
+     * @param $to
+     * @param $subject
+     * @param $body
+     * @return \Swift_Message
+     */
     private static  function  createMessage($from, $to, $subject, $body)
     {
         if (!is_array($to)){
@@ -60,6 +83,11 @@ class MailerHelper
         return $message;
     }
 
+    /**
+     * отправка письма
+     * @param $transport
+     * @param $message
+     */
     private static  function  sendMail($transport, $message)
     {
         $mailer = new \Swift_Mailer($transport);

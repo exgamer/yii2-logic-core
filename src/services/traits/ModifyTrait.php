@@ -9,12 +9,17 @@ use yii\helpers\Json;
 use yii\base\Exception;
 
 /**
+ * Треит сервиса содержащий методы для модификации данных
+ *
  * Trait ModifyTrait
  * @package concepture\yii2logic\services\traits
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 trait ModifyTrait
 {
+    /**
+     * @var array
+     */
     private $oldData = [];
 
     /**

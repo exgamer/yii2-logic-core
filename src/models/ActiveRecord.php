@@ -8,6 +8,8 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 
 /**
+ * Базовая модель для сущности
+ *
  * Class ActiveRecord
  * @package cconcepture\yii2logic\models
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

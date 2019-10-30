@@ -9,6 +9,8 @@ use concepture\yii2logic\services\traits\ModifyTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
 
 /**
+ * Базовый класс сервиса для реализации бизнес логики
+ *
  * Class Service
  * @package concepture\yii2logic\services
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
@@ -19,6 +21,8 @@ abstract class Service extends Component
     use ReadTrait;
 
     /**
+     * Возвращает соединение к БД
+     *
      * @return Connection
      * @throws ReflectionException
      */
@@ -30,6 +34,8 @@ abstract class Service extends Component
     }
 
     /**
+     * Возвращает имя таблицы
+     *
      * @return string
      * @throws ReflectionException
      */
@@ -42,6 +48,7 @@ abstract class Service extends Component
 
     /**
      * Получить класс связанной модели
+     *
      * @return string
      * @throws ReflectionException
      */
@@ -58,6 +65,7 @@ abstract class Service extends Component
 
     /**
      * Получить класс связанной формы
+     *
      * @return string
      * @throws ReflectionException
      */
@@ -74,6 +82,7 @@ abstract class Service extends Component
 
     /**
      * Получить класс связанной search модели
+     * 
      * @return string
      * @throws ReflectionException
      */

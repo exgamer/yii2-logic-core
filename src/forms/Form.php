@@ -11,6 +11,8 @@ use yii\db\ActiveQuery;
 use yii\db\Connection;
 
 /**
+ * Базовая форма сущности
+ *
  * Class Form
  * @package cconcepture\yii2logic\forms
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
@@ -18,7 +20,7 @@ use yii\db\Connection;
 abstract class Form extends Model
 {
     /**
-     * правила модели
+     * возвращает массив содержащий правила связанной модели и текущей формы
      * @return array
      * @throws ReflectionException
      */
@@ -31,6 +33,7 @@ abstract class Form extends Model
     }
 
     /**
+     * возвращает массив содержащий метки аттрибутов связанной модели и текущей формы
      * @return array
      * @throws ReflectionException
      */
@@ -43,6 +46,8 @@ abstract class Form extends Model
     }
 
     /**
+     * метод для определения правил валидации для формы
+     *
      * form rules
      * @return array
      */
@@ -52,6 +57,8 @@ abstract class Form extends Model
     }
 
     /**
+     * метод для определения меток аттрибутов для формы
+     *
      * @return array
      */
     public function formAttributeLabels()
@@ -77,6 +84,9 @@ abstract class Form extends Model
     }
 
     /**
+     * Возвращает соединение к БД модели
+     * реализовано для возможности использования валидаторов котрые требуют обращения к БД
+     *
      * @return Connection
      * @throws ReflectionException
      */
@@ -88,6 +98,9 @@ abstract class Form extends Model
     }
 
     /**
+     * Возвращает ActiveQuery из модели
+     * реализовано для возможности использования валидаторов котрые требуют обращения к БД
+     *
      * @return ActiveQuery
      * @throws ReflectionException
      */

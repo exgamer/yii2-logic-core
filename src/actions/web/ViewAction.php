@@ -5,6 +5,8 @@ use concepture\yii2logic\actions\Action;
 use yii\web\NotFoundHttpException;
 
 /**
+ * Экшен для просмотра сущности
+ *
  * Class ViewAction
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

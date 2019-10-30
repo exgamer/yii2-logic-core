@@ -6,6 +6,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
+ * Треит сервиса содержащий методы для чтения данных
  * Trait ReadTrait
  * @package concepture\yii2logic\services\traits
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

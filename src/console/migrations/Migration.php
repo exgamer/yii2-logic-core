@@ -3,6 +3,13 @@ namespace concepture\yii2logic\console\migrations;
 
 use yii\db\Migration as Base;
 
+/**
+ * Базовая мигргация
+ *
+ * Class Migration
+ * @package concepture\yii2logic\console\migrations
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
+ */
 abstract class Migration extends Base
 {
     protected $tableName;

@@ -8,8 +8,10 @@ use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
 
 /**
+ * Экшен для работы с выпадающими списками виджет \yii\jui\AutoComplete
  *
- * @author CitizenZet
+ *
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class AutocompleteListAction extends Action
 {
