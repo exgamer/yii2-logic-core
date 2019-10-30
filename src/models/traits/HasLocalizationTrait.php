@@ -5,7 +5,7 @@ use yii\db\ActiveQuery;
 
 /**
  *
- * Треит для моделей у которых есть таблица с деревом
+ * Треит для моделей у которых есть таблица с локализированными свойствами
  *
  * Trait HasLocalizationTrait
  * @package concepture\yii2logic\models\traits
