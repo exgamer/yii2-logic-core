@@ -220,6 +220,7 @@ trait HasLocalizationTrait
     public static function getLocalizationModelClass()
     {
         $class = static::class;
+        $class = str_replace("Search", "", $class);
 
         return $class."Localization";
     }
