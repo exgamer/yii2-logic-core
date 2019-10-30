@@ -12,6 +12,23 @@ use yii\web\ServerErrorHttpException;
  *
  * Пример:
  *
+ * search модель
+ *
+ *       class UserSearch extends User
+ *       {
+ *
+ *           public static function getListSearchKeyAttribute()
+ *           {
+ *               return 'id';
+ *           }
+ *
+ *           public static function getListSearchAttribute()
+ *           {
+ *               return 'username';
+ *           }
+ *       }
+ *
+ *
  * Контроллер:
  *
  *        public function actions()
