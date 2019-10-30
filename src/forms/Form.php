@@ -26,7 +26,7 @@ abstract class Form extends Model
      */
     public function rules()
     {
-        $modelClass = static::getModelClass();
+        $modelClass = $this->getModelClass();
         $model = new $modelClass();
 
         return array_merge($this->formRules(), $model->rules());
@@ -39,7 +39,7 @@ abstract class Form extends Model
      */
     public function attributeLabels()
     {
-        $modelClass = static::getModelClass();
+        $modelClass = $this->getModelClass();
         $model = new $modelClass();
 
         return array_merge($model->attributeLabels(), $this->formAttributeLabels());
