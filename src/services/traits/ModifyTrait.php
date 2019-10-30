@@ -17,6 +17,12 @@ trait ModifyTrait
 {
     private $oldData = [];
 
+    /**
+     * Добавление записи в бд
+     *
+     * @param Form $form
+     * @return ActiveRecord
+     */
     public function create(Form $form)
     {
         $this->beforeCreate($form);
@@ -29,6 +35,13 @@ trait ModifyTrait
         return $model;
     }
 
+    /**
+     * обновление записи в бд
+     *
+     * @param Form $form
+     * @param ActiveRecord $model
+     * @return ActiveRecord
+     */
     public function update(Form $form, ActiveRecord $model)
     {
         $this->beforeUpdate($form, $model);
@@ -49,7 +62,7 @@ trait ModifyTrait
      * @return ActiveRecord
      * @throws
      */
-    public function save(Form $form , ActiveRecord $model = null)
+    protected function save(Form $form , ActiveRecord $model = null)
     {
         $modelClass = $this->getRelatedModelClass();
         if($model === null){
@@ -84,7 +97,7 @@ trait ModifyTrait
     /**
      * @param array $oldData
      */
-    private function setOldData($oldData)
+    protected function setOldData($oldData)
     {
         $this->oldData = $oldData;
     }
@@ -92,12 +105,12 @@ trait ModifyTrait
     /**
      * @return array
      */
-    public function getOldData()
+    protected function getOldData()
     {
         return $this->oldData;
     }
 
-    public function getOldDataAttribute($name)
+    protected function getOldDataAttribute($name)
     {
         if (! isset($this->oldData[$name])){
             return null;
@@ -111,7 +124,7 @@ trait ModifyTrait
      * @param Form $form
      * @param ActiveRecord $model
      */
-    public function setPrimaryKeysToFrom(Form $form, ActiveRecord $model)
+    protected function setPrimaryKeysToFrom(Form $form, ActiveRecord $model)
     {
         $primaryKeys = $model::primaryKey();
         foreach ($primaryKeys as $attribute) {

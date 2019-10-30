@@ -45,11 +45,21 @@ abstract class ActiveRecord extends Base
     }
 
 
+    /**
+     * Аттрибут модели который будет использован для ключа в выпадающих списках
+     *
+     * @return string
+     */
     public static function getListSearchKeyAttribute()
     {
         return null;
     }
 
+    /**
+     * Аттрибут модели который будет использован для метки в выпадающих списках
+     *
+     * @return string
+     */
     public static function getListSearchAttribute()
     {
         return null;

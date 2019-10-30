@@ -111,6 +111,8 @@ trait ReadTrait
     }
 
     /**
+     * Возвращает данные для исползования с виджетом \yii\jui\AutoComplete
+     *
      * @param null $term
      * @return array []
      */
@@ -132,6 +134,14 @@ trait ReadTrait
         return $data;
     }
 
+    /**
+     * Возвращает массив даных для выпадающих списков
+     * Для использования у search модели должны быть определены методы
+     * getListSearchAttribute и getListSearchKeyAttribute
+     *
+     * @param array $queryParams
+     * @return array
+     */
     public function getDropDownList($queryParams = [])
     {
         $searchClass = $this->getRelatedSearchModelClass();
@@ -142,6 +152,14 @@ trait ReadTrait
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }
 
+    /**
+     * Возвращает массив записей таблицы для выпадающих списков
+     *
+     * @param string $from
+     * @param $to
+     * @param array $where
+     * @return mixed
+     */
     public function getAllList($from = 'id', $to, $where = [])
     {
         $models = $this->getQuery()->where($where)->all();
