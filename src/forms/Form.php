@@ -39,7 +39,7 @@ abstract class Form extends Model
      */
     public function attributeLabels()
     {
-        $modelClass = $this->getModelClass();
+        $modelClass = static::getModelClass();
         $model = new $modelClass();
 
         return array_merge($model->attributeLabels(), $this->formAttributeLabels());
@@ -72,9 +72,10 @@ abstract class Form extends Model
      * @return string;
      * @throws ReflectionException
      */
-    public function getModelClass()
+    public static function getModelClass()
     {
-        $reflection = new ReflectionClass($this);
+        $me = new static();
+        $reflection = new ReflectionClass($me);
         $name = $reflection->getShortName();
         $name = str_replace("Form", "", $name);
         $nameSpace = $reflection->getNamespaceName();
@@ -92,8 +93,7 @@ abstract class Form extends Model
      */
     public static function getDb()
     {
-        $me = new static();
-        $modelClass =  $me->getModelClass();
+        $modelClass =  static::getModelClass();
 
         return $modelClass::getDb();
     }
@@ -107,8 +107,7 @@ abstract class Form extends Model
      */
     public static function find()
     {
-        $me = new static();
-        $modelClass =  $me->getModelClass();
+        $modelClass =  static::getModelClass();
 
         return $modelClass::find();
     }
