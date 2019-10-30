@@ -24,6 +24,21 @@ trait HasLocalizationTrait
     }
 
     /**
+     * Возвращает массив с существующими локализациями
+     * @return array
+     */
+    public function locales()
+    {
+        $l = [];
+        if (isset($this->localizations)){
+            foreach ($this->localizations as $locale){
+                $l[]= $locale->locale;
+            }
+        }
+        return $l;
+    }
+
+    /**
      * Переопределяем find чтобы подцепить локализации
      *
      * @param string $type
