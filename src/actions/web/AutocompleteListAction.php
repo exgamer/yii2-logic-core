@@ -10,6 +10,31 @@ use yii\web\ServerErrorHttpException;
 /**
  * Экшен для работы с выпадающими списками виджет \yii\jui\AutoComplete
  *
+ * Пример:
+ *
+ * Контроллер:
+ *
+ *        public function actions()
+ *       {
+ *           $actions = parent::actions();
+ *           $actions['list'] = AutocompleteListAction::class;
+ *
+ *           return $actions;
+ *       }
+ *
+ * вьюшка
+ *
+ *       <?= \yii\jui\AutoComplete::widget([
+ *           'options' => ['class' => 'form-control'],
+ *           'clientOptions' => [
+ *               'source' => \yii\helpers\Url::to(['/user/user/list']),
+ *               'minLength'=>'2',
+ *               'autoFill'=>true,
+ *               'select' => new \yii\web\JsExpression("function( event, ui ) {
+ *                    $('#userroleform-user_id').val(ui.item.id);
+ *               }")]
+ *       ]); ?>
+ *
  *
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
