@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\validators;
 
+use concepture\yii2logic\forms\Form;
 use Yii;
 use yii\base\Exception;
 use yii\validators\Validator;
@@ -18,9 +19,17 @@ class UniquePropertyValidator extends Validator
         $query->joinWith([
             'localization' => function ($q) use ($model, $attribute) {
                 $q->on = null;
-                $propModelClass = $model::getLocalizationModelClass();
+                $locale = null;
+                if ($model instanceof Form){
+                    $arClass = $model::getModelClass();
+                    $locale = $arClass::$current_locale;
+                    $propModelClass = $arClass::getLocalizationModelClass();
+                }else{
+                    $locale = $model::$current_locale;
+                    $propModelClass = $model::getLocalizationModelClass();
+                }
                 $q->from($propModelClass::tableName() . " p");
-                $q->andWhere(['p.locale' => $model::getCurrentLocale()]);
+                $q->andWhere(['p.locale' => $locale]);
                 $q->andWhere(['p.' . $attribute => $model->{$attribute}]);
                 if (isset($model->id)) {
                     $q->andWhere(['<>', 'entity_id', $model->id]);
