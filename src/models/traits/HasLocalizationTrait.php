@@ -14,14 +14,11 @@ use yii\db\ActiveQuery;
 trait HasLocalizationTrait
 {
     /**
-     * Возвращает текущую локаль модели
+     * переменная для установки языка модели
      *
-     * @return string
+     * @var string
      */
-    public static function getCurrentLocale()
-    {
-        return CurrentLocale::$_current_locale;
-    }
+    public static $current_locale = "ru";
 
     /**
      * Возвращает массив с существующими локализациями
@@ -69,7 +66,7 @@ trait HasLocalizationTrait
                 $q->on = null;
                 $propModelClass = static::getLocalizationModelClass();
                 $q->from($propModelClass::tableName()." {$localizedAlias}");
-                $q->andWhere(["{$localizedAlias}.locale" => static::getCurrentLocale()]);
+                $q->andWhere(["{$localizedAlias}.locale" => static::$current_locale]);
                 if (is_callable($callable)){
                     call_user_func($callable, $q, $localizedAlias);
                 }
@@ -86,7 +83,7 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-            ->andOnCondition([$locClass::tableName().'.locale' => static::getCurrentLocale()]);
+            ->andOnCondition([$locClass::tableName().'.locale' => static::$current_locale]);
     }
 
     /**
@@ -116,7 +113,7 @@ trait HasLocalizationTrait
     public function saveLocalizations()
     {
         $locClass = static::getLocalizationModelClass();
-        $localization = $locClass::find()->where(['locale' => static::getCurrentLocale(), 'entity_id' => $this->id])->one();
+        $localization = $locClass::find()->where(['locale' => static::$current_locale, 'entity_id' => $this->id])->one();
         if ($localization){
             $localization->load($this->getLocalized($localization), "");
             if(!$localization->save()){
@@ -222,14 +219,4 @@ trait HasLocalizationTrait
         $class = str_replace("Search", "", $class);
         return $class."Localization";
     }
-}
-
-class CurrentLocale
-{
-    /**
-     * аттрибут локали c с учетом которого будет получаться текущая локализация
-     *
-     * @var string
-     */
-    public static $_current_locale = "ru";
 }
