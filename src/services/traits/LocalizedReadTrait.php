@@ -6,6 +6,8 @@ use yii\db\ActiveQuery;
 use Yii;
 
 /**
+ * Треит для подключения к сервисам локализованных сущностей
+ *
  * Trait LocalizedReadTrait
  * @package concepture\yii2logic\services\traits
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

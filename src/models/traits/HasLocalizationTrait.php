@@ -15,6 +15,13 @@ trait HasLocalizationTrait
 {
     /**
      * переменная для установки языка модели
+     * по умолчнию в запрос будет посдтавлен русский язык
+     * для изменения нужно изменить значение $current_locale
+     *
+     * Пример:
+     *   $originModelClass = $this->getService()->getRelatedModelClass();
+     *   $originModelClass::$current_locale = $locale;
+     *   $originModel = $originModelClass::find("with")->where(['id' => $id])->one();
      *
      * @var string
      */
