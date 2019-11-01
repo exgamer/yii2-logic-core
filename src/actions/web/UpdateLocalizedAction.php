@@ -1,46 +1,47 @@
 <?php
 namespace concepture\yii2logic\actions\web;
 
-use concepture\yii2logic\actions\Action;
+use ReflectionException;
+use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
 use Yii;
 use yii\db\Exception;
+use concepture\yii2logic\actions\traits\LocalizedTrait;
 
 /**
+ * Экшон для обновления сущностей с локализациями
  * Class UpdateLocalizedAction
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class UpdateLocalizedAction extends Action
+class UpdateLocalizedAction extends UpdateAction
 {
-    public $view = 'update';
-    public $redirect = 'view';
-    public $serviceMethod = 'update';
+    use LocalizedTrait;
 
-    public function run($id, $locale = "ru")
+    /**
+     * Устанавливаем модели локаль и загружаем локализованные атрибуты
+     * @param $model
+     * @param $originModel
+     */
+    protected function processModel($model, $originModel)
     {
-        $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::$current_locale = $locale;
-        $originModel = $originModelClass::find("with")->where(['id' => $id])->one();
-        if (!$originModel){
-            throw new NotFoundHttpException();
-        }
-        $model = $this->getForm();
-        $model->locale = $locale;
+        $model->locale = $this->getLocale();
         $model->setAttributes($originModel->attributes, false);
         $model->setAttributes($originModel->getLocalized(null, true), false);
-        if ($model->load(Yii::$app->request->post())) {
-            $originModel->load($model->attributes);
-            if ($originModel->validate()) {
-                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
-                    return $this->redirect([$this->redirect, 'id' => $originModel->id]);
-                }
-            }
-        }
+    }
 
-        return $this->render($this->view, [
-            'model' => $model,
-            'originModel' => $originModel
-        ]);
+    /**
+     * Возвращает локализованную сущность с учетом локали
+     *
+     * @param $id
+     * @return ActiveRecord
+     * @throws ReflectionException
+     */
+    protected function getModel($id)
+    {
+        $originModelClass = $this->getService()->getRelatedModelClass();
+        $originModelClass::$current_locale = $this->getLocale();
+
+        return $originModelClass::find("with")->where(['id' => $id])->one();
     }
 }
