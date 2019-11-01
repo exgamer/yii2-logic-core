@@ -20,6 +20,19 @@ abstract class Action extends Base
     public $redirect;
     public $serviceMethod;
 
+    protected function getArguments()
+    {
+        $reflector = new \ReflectionClass(__CLASS__);
+        $parameters = $reflector->getMethod("run")->getParameters();
+        $args = array();
+        foreach($parameters as $parameter)
+        {
+            $args[$parameter->name] = ${$parameter->name};
+        }
+
+        return $args;
+    }
+
     /**
      * редирект
      *

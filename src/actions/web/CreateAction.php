@@ -21,6 +21,7 @@ class CreateAction extends Action
     public function run()
     {
         $model = $this->getForm();
+        $this->processModel($model);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
                 return $this->redirect([$this->redirect, 'id' => $result->id]);
@@ -31,4 +32,10 @@ class CreateAction extends Action
             'model' => $model,
         ]);
     }
+
+    /**
+     * Для доп обработки модели
+     * @param $model
+     */
+    protected function processModel($model){}
 }

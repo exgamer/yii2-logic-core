@@ -4,6 +4,7 @@ namespace concepture\yii2logic\actions\web;
 use concepture\yii2logic\actions\Action;
 use Yii;
 use yii\db\Exception;
+use concepture\yii2logic\actions\traits\LocalizedTrait;
 
 /**
  * Class CreateLocalizedAction
@@ -12,23 +13,30 @@ use yii\db\Exception;
  */
 class CreateLocalizedAction extends Action
 {
-    public $view = 'create';
-    public $redirect = 'view';
-    public $serviceMethod = 'create';
+    use LocalizedTrait;
 
-    public function run($locale = "ru")
+//    public $view = 'create';
+//    public $redirect = 'view';
+//    public $serviceMethod = 'create';
+
+//    public function run($locale = "ru")
+//    {
+//        $model = $this->getForm();
+//        $model->locale = $locale;
+//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+//            if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
+//                return $this->redirect([$this->redirect, 'id' => $result->id]);
+//            }
+//        }
+//
+//        return $this->render($this->view, [
+//            'model' => $model,
+//            'params' => Yii::$app->request->getQueryParams(),
+//        ]);
+//    }
+
+    protected function processModel($model)
     {
-        $model = $this->getForm();
-        $model->locale = $locale;
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
-                return $this->redirect([$this->redirect, 'id' => $result->id]);
-            }
-        }
-
-        return $this->render($this->view, [
-            'model' => $model,
-            'params' => Yii::$app->request->getQueryParams(),
-        ]);
+        $model->locale = $this->getLocale();
     }
 }
