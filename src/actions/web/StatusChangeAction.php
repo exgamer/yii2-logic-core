@@ -2,6 +2,8 @@
 namespace concepture\yii2logic\actions\web;
 
 use concepture\yii2logic\actions\Action;
+use ReflectionException;
+use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
 use Yii;
 use yii\db\Exception;
@@ -20,9 +22,23 @@ class StatusChangeAction extends Action
 
     public function run($id, $status)
     {
-        $model = $this->getService()->findById($id);
+        $model = $this->getModel($id);
         $this->getService()->{$this->serviceMethod}($model, $status);
 
         return $this->redirect([$this->redirect]);
+    }
+
+    /**
+     * Возвращает модель для редактирования
+     *
+     * @param $id
+     * @return ActiveRecord
+     * @throws ReflectionException
+     * @throws ReflectionException
+     * @throws ReflectionException
+     */
+    protected function getModel($id)
+    {
+        return $this->getService()->findById($id);
     }
 }
