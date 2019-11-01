@@ -40,7 +40,7 @@ abstract class Action extends Base
      */
     protected function getArguments($functionName)
     {
-        $reflector = new \ReflectionClass(__CLASS__);
+        $reflector = new \ReflectionClass($this);
         $parameters = $reflector->getMethod($functionName)->getParameters();
         $args = array();
         foreach($parameters as $parameter)
