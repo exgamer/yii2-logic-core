@@ -216,7 +216,8 @@ class StaticBlockForm extends Form
 
 ```
 
-3. Создаем search модель унаследованную от модели AR к примеру *StaticBlock*
+3. Для организации поиска создаем search модель унаследованную от модели AR к примеру *StaticBlock*
+    поиск по локализованным атрибутом осуществляется с помощью метода searchByLocalized, где $localizedAlias - альяс таблицы с переводами
 
 ```php
 
