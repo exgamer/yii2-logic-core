@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\models\traits;
 
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  *
@@ -25,7 +26,21 @@ trait HasLocalizationTrait
      *
      * @var string
      */
-    public static $current_locale = "ru";
+    public static $current_locale;
+
+    /**
+     * Возвращает текущий язык модели
+     *
+     * @return string
+     */
+    public static function currentLocale()
+    {
+        if (static::$current_locale === null){
+            return Yii::$app->language;
+        }
+
+        return static::$current_locale;
+    }
 
     /**
      * Возвращает массив с существующими локализациями
@@ -73,7 +88,7 @@ trait HasLocalizationTrait
                 $q->on = null;
                 $propModelClass = static::getLocalizationModelClass();
                 $q->from($propModelClass::tableName()." {$localizedAlias}");
-                $q->andWhere(["{$localizedAlias}.locale" => static::$current_locale]);
+                $q->andWhere(["{$localizedAlias}.locale" => static::currentLocale()]);
                 if (is_callable($callable)){
                     call_user_func($callable, $q, $localizedAlias);
                 }
@@ -90,7 +105,7 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-            ->andOnCondition([$locClass::tableName().'.locale' => static::$current_locale]);
+            ->andOnCondition([$locClass::tableName().'.locale' => static::currentLocale()]);
     }
 
     /**
@@ -224,6 +239,7 @@ trait HasLocalizationTrait
         $class = static::class;
         $class = str_replace("search", "models", $class);
         $class = str_replace("Search", "", $class);
+
         return $class."Localization";
     }
 }
