@@ -20,10 +20,28 @@ abstract class Action extends Base
     public $redirect;
     public $serviceMethod;
 
-    protected function getArguments()
+    /**
+     * Возвращает аргументы переданные в метод run
+     *
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function getRunArguments()
+    {
+        return $this->getArguments("run");
+    }
+
+    /**
+     * Возвращает аргументы перданные в метод
+     *
+     * @param string $functionName
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function getArguments($functionName)
     {
         $reflector = new \ReflectionClass(__CLASS__);
-        $parameters = $reflector->getMethod("run")->getParameters();
+        $parameters = $reflector->getMethod($functionName)->getParameters();
         $args = array();
         foreach($parameters as $parameter)
         {

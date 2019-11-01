@@ -18,7 +18,7 @@ trait LocalizedTrait
      */
     protected function getLocale()
     {
-        $args = $this->getArguments();
+        $args = $this->getRunArguments();
         if (!isset($args['locale'])){
 
             return Yii::$app->language;

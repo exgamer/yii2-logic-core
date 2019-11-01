@@ -7,6 +7,8 @@ use Yii;
 use yii\db\Exception;
 
 /**
+ * Экшен для смены статуса сущности
+ *
  * Class StatusChangeAction
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

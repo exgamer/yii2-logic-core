@@ -7,6 +7,9 @@ use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 
 /**
+ * Экшен для создания сущности с локализацией
+ *
+ *
  * Class CreateLocalizedAction
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
