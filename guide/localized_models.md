@@ -1,5 +1,15 @@
 ####Мини гайд по использованию моделей с локализированными свойствами
 
+Локализованные модели по умолчанию будут возвращать дефолтный язык приложения.
+Для изменения выборки по языку нужно сделать следующее:
+
+```php
+        Post::$current_locale = $this->getLocale();
+        Post::find()->where(['id' => $id])->one();
+
+```
+
+
 1. Создаем модель AR унаследованную от *concepture\yii2logic\models\ActiveRecord* и подключаем треит concepture\yii2logic\models\traits\HasLocalizationTrait
    и реализовать поведения afterSave, afterDelete, afterFind
 
