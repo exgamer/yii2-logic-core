@@ -20,6 +20,7 @@ class IndexAction extends Action
     {
         $searchClass = $this->getSearchClass();
         $searchModel = new $searchClass();
+        $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams);
 
@@ -28,4 +29,10 @@ class IndexAction extends Action
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * Для доп обработки search модели
+     * @param $searchModel
+     */
+    protected function extendSearch($searchModel){}
 }

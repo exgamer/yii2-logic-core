@@ -2,7 +2,9 @@
 namespace concepture\yii2logic\actions\web;
 
 use concepture\yii2logic\actions\Action;
+use ReflectionException;
 use yii\web\NotFoundHttpException;
+use yii\db\ActiveRecord;
 
 /**
  * Экшен для просмотра сущности
@@ -18,7 +20,7 @@ class ViewAction extends Action
 
     public function run($id)
     {
-        $model = $this->getService()->findById($id);
+        $model = $this->getModel($id);
         if (!$model){
             throw new NotFoundHttpException();
         }
@@ -26,5 +28,18 @@ class ViewAction extends Action
         return $this->render($this->view, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Возвращает модель для редактирования
+     *
+     * @param $id
+     * @return ActiveRecord
+     * @throws ReflectionException
+     * @throws ReflectionException
+     */
+    protected function getModel($id)
+    {
+        return $this->getService()->findById($id);
     }
 }

@@ -2,10 +2,10 @@
 namespace concepture\yii2logic\controllers\web\localized;
 
 use concepture\yii2logic\actions\web\CreateLocalizedAction;
+use concepture\yii2logic\actions\web\IndexLocalizedAction;
 use concepture\yii2logic\actions\web\UpdateLocalizedAction;
 use concepture\yii2logic\actions\web\DeleteAction;
-use concepture\yii2logic\actions\web\IndexAction;
-use concepture\yii2logic\actions\web\ViewAction;
+use concepture\yii2logic\actions\web\ViewLocalizedAction;
 use concepture\yii2logic\controllers\web\Controller as Base;
 
 /**
@@ -20,10 +20,10 @@ abstract class Controller extends Base
     public function actions()
     {
         return [
-            'index' => IndexAction::class,
+            'index' => IndexLocalizedAction::class,
             'create' => CreateLocalizedAction::class,
             'update' => UpdateLocalizedAction::class,
-            'view' => ViewAction::class,
+            'view' => ViewLocalizedAction::class,
             'delete' => DeleteAction::class,
         ];
     }
