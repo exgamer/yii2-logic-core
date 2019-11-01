@@ -11,20 +11,18 @@ use Yii;
 trait LocalizedTrait
 {
     /**
-     * Получить из аргументов экшона локаль
+     * Получить из запроса экшона локаль
      * по умолчанию вернет язык приложения
      *
      * @return string
      */
     protected function getLocale()
     {
-        $args = $this->getRunArguments();
-        if (!isset($args['locale'])){
-
+        if (Yii::$app->getRequest()->getQueryParam('locale') === null){
             return Yii::$app->language;
         }
 
-        return $args['locale'];
+        return Yii::$app->getRequest()->getQueryParam('locale');
     }
 }
 
