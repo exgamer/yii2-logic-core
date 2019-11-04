@@ -22,7 +22,7 @@ trait HasLocalizationTrait
      * Пример:
      *   $originModelClass = $this->getService()->getRelatedModelClass();
      *   $originModelClass::$current_locale = $locale;
-     *   $originModel = $originModelClass::find("with")->where(['id' => $id])->one();
+     *   $originModel = $originModelClass::find()->where(['id' => $id])->one();
      *
      * @var string
      */
