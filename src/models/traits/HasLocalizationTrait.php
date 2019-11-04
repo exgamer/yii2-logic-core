@@ -30,6 +30,12 @@ trait HasLocalizationTrait
 
     /**
      * Возвращает анонимку для расширения выборки по локализации
+     *
+     *   static::$search_by_locale_callable = function($q, $localizedAlias){
+     *       $q->andFilterWhere(['like', "{$localizedAlias}.seo_name", $this->seo_name]);
+     *       $q->andFilterWhere(['like', "{$localizedAlias}.title", $this->title]);
+     *   };
+     *
      * @var callable|null
      */
     public static $search_by_locale_callable;
