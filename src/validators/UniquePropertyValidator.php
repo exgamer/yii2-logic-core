@@ -17,7 +17,7 @@ class UniquePropertyValidator extends Validator
     {
         $qFunc = function($q, $localizedAlias) use ($model, $attribute){
             $q->andWhere([$localizedAlias .".". $attribute => $model->{$attribute}]);
-            if (isset($model->id)) {
+            if ($model->id) {
                 $q->andWhere(['<>', 'entity_id', $model->id]);
             }
         };
@@ -25,9 +25,11 @@ class UniquePropertyValidator extends Validator
             $arClass = $model::getModelClass();
             $arClass::$search_by_locale_callable = $qFunc;
             $arClass::$current_locale = $model->locale;
+            $model::$by_locale_hard_search = true;
         }else{
             $model::$search_by_locale_callable = $qFunc;
             $model::$current_locale = $model->locale;
+            $model::$by_locale_hard_search = true;
         }
 
         $result = $model::find()->all();
