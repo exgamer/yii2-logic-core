@@ -15,28 +15,22 @@ class UniquePropertyValidator extends Validator
 {
     public function validateAttribute($model, $attribute)
     {
-        $query = $model::find();
-        $query->joinWith([
-            'localization' => function ($q) use ($model, $attribute) {
-                $q->on = null;
-                $locale = null;
-                if ($model instanceof Form){
-                    $arClass = $model::getModelClass();
-                    $locale = $arClass::$current_locale;
-                    $propModelClass = $arClass::getLocalizationModelClass();
-                }else{
-                    $locale = $model::$current_locale;
-                    $propModelClass = $model::getLocalizationModelClass();
-                }
-                $q->from($propModelClass::tableName() . " p");
-                $q->andWhere(['p.locale' => $locale]);
-                $q->andWhere(['p.' . $attribute => $model->{$attribute}]);
-                if (isset($model->id)) {
-                    $q->andWhere(['<>', 'entity_id', $model->id]);
-                }
+        $qFunc = function($q, $localizedAlias) use ($model, $attribute){
+            $q->andWhere([$localizedAlias .".". $attribute => $model->{$attribute}]);
+            if (isset($model->id)) {
+                $q->andWhere(['<>', 'entity_id', $model->id]);
             }
-        ]);
-        $result = $query->all();
+        };
+        if ($model instanceof Form){
+            $arClass = $model::getModelClass();
+            $arClass::$search_by_locale_callable = $qFunc;
+            $arClass::$current_locale = $model->locale;
+        }else{
+            $model::$search_by_locale_callable = $qFunc;
+            $model::$current_locale = $model->locale;
+        }
+
+        $result = $model::find()->all();
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
             return false;

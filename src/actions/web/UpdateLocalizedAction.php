@@ -30,6 +30,11 @@ class UpdateLocalizedAction extends UpdateAction
         $model->setAttributes($originModel->getLocalized(null, true), false);
     }
 
+    protected function extendRedirectParams(&$redirectParams)
+    {
+        $redirectParams['locale'] = $this->getLocale();
+    }
+
     /**
      * Возвращает локализованную сущность с учетом локали
      *
@@ -42,6 +47,6 @@ class UpdateLocalizedAction extends UpdateAction
         $originModelClass = $this->getService()->getRelatedModelClass();
         $originModelClass::$current_locale = $this->getLocale();
 
-        return $originModelClass::find("with")->where(['id' => $id])->one();
+        return $this->getService()->findById($id);
     }
 }

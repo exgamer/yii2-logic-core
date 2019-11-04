@@ -19,4 +19,9 @@ class CreateLocalizedAction extends CreateAction
     {
         $model->locale = $this->getLocale();
     }
+
+    protected function extendRedirectParams(&$redirectParams)
+    {
+        $redirectParams['locale'] = $this->getLocale();
+    }
 }
