@@ -41,6 +41,13 @@ trait HasLocalizationTrait
     public static $search_by_locale_callable;
 
     /**
+     * true означает что поиск будет вестись жестко по языку
+     * false означает что будет искаться запись, но язык необязателен
+     * @var bool
+     */
+    public static $by_locale_hard_search = true;
+
+    /**
      * Возвращает текущий язык модели
      *
      * @return string
@@ -78,14 +85,16 @@ trait HasLocalizationTrait
     {
         $query = parent::find();
         $query->with('localizations');
-        $query->innerJoinWith([
-            'localization' => function ($q) {
-                $callable = static::$search_by_locale_callable;
-                if (is_callable($callable)){
-                    call_user_func($callable, $q, "p");
+        if (static::$by_locale_hard_search) {
+            $query->innerJoinWith([
+                'localization' => function ($q) {
+                    $callable = static::$search_by_locale_callable;
+                    if (is_callable($callable)) {
+                        call_user_func($callable, $q, "p");
+                    }
                 }
-            }
-        ]);
+            ]);
+        }
 
         return $query;
     }
