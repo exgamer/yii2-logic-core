@@ -25,7 +25,7 @@ class UniquePropertyValidator extends Validator
             $arClass = $model::getModelClass();
             $arClass::$search_by_locale_callable = $qFunc;
             $arClass::$current_locale = $model->locale;
-            $model::$by_locale_hard_search = true;
+            $arClass::$by_locale_hard_search = true;
         }else{
             $model::$search_by_locale_callable = $qFunc;
             $model::$current_locale = $model->locale;
