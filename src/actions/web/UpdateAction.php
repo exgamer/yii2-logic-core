@@ -38,6 +38,7 @@ class UpdateAction extends Action
                     return $this->redirect($redirectParams);
                 }
             }
+            $model->addErrors($originModel->getErrors());
         }
 
         return $this->render($this->view, [
