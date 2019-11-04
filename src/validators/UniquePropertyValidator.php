@@ -16,7 +16,6 @@ class UniquePropertyValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         $qFunc = function($q, $localizedAlias) use ($model, $attribute){
-            $q->andWhere([$localizedAlias .".".'locale' => $model->locale]);
             $q->andWhere([$localizedAlias .".". $attribute => $model->{$attribute}]);
             if (isset($model->id)) {
                 $q->andWhere(['<>', 'entity_id', $model->id]);
@@ -32,8 +31,6 @@ class UniquePropertyValidator extends Validator
         }
 
         $result = $model::find()->all();
-
-
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
             return false;

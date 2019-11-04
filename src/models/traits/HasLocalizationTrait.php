@@ -71,15 +71,14 @@ trait HasLocalizationTrait
 
     /**
      * Переопределяем find чтобы подцепить локализации
-     * для  поиска только по языку joinType = innerJoinWith
-     * @param string $joinType
+     *innerJoinWith
      * @return ActiveQuery
      */
-    public static function find($joinType = "with")
+    public static function find()
     {
         $query = parent::find();
         $query->with('localizations');
-        $query->{$joinType}([
+        $query->innerJoinWith([
             'localization' => function ($q) {
                 $callable = static::$search_by_locale_callable;
                 if (is_callable($callable)){
