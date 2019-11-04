@@ -22,11 +22,30 @@ trait HasLocalizationTrait
      * Пример:
      *   $originModelClass = $this->getService()->getRelatedModelClass();
      *   $originModelClass::$current_locale = $locale;
-     *   $originModel = $originModelClass::find("with")->where(['id' => $id])->one();
+     *   $originModel = $originModelClass::find()->where(['id' => $id])->one();
      *
      * @var string
      */
     public static $current_locale;
+
+    /**
+     * Возвращает анонимку для расширения выборки по локализации
+     *
+     *   static::$search_by_locale_callable = function($q, $localizedAlias){
+     *       $q->andFilterWhere(['like', "{$localizedAlias}.seo_name", $this->seo_name]);
+     *       $q->andFilterWhere(['like', "{$localizedAlias}.title", $this->title]);
+     *   };
+     *
+     * @var callable|null
+     */
+    public static $search_by_locale_callable;
+
+    /**
+     * true означает что поиск будет вестись жестко по языку
+     * false означает что будет искаться запись, но язык необязателен
+     * @var bool
+     */
+    public static $by_locale_hard_search = true;
 
     /**
      * Возвращает текущий язык модели
@@ -59,41 +78,25 @@ trait HasLocalizationTrait
 
     /**
      * Переопределяем find чтобы подцепить локализации
-     *
-     * @param string $type
-     * @param string $localizedAlias
+     *innerJoinWith
      * @return ActiveQuery
      */
-    public static function find($type = "joinWith", $localizedAlias = "p")
+    public static function find()
     {
         $query = parent::find();
         $query->with('localizations');
-        static::searchByLocalized($query, null, $type, $localizedAlias);
+        if (static::$by_locale_hard_search) {
+            $query->innerJoinWith([
+                'localization' => function ($q) {
+                    $callable = static::$search_by_locale_callable;
+                    if (is_callable($callable)) {
+                        call_user_func($callable, $q, "p");
+                    }
+                }
+            ]);
+        }
 
         return $query;
-    }
-
-    /**
-     * Метод для расширения поиска по локализациям
-     *
-     * @param $query
-     * @param null $callable
-     * @param string $type
-     * @param string $localizedAlias
-     */
-    public static function searchByLocalized($query, $callable = null, $type = "joinWith", $localizedAlias = "p")
-    {
-        $query->{$type}([
-            'localization' => function ($q) use ($callable, $localizedAlias) {
-                $q->on = null;
-                $propModelClass = static::getLocalizationModelClass();
-                $q->from($propModelClass::tableName()." {$localizedAlias}");
-                $q->andWhere(["{$localizedAlias}.locale" => static::currentLocale()]);
-                if (is_callable($callable)){
-                    call_user_func($callable, $q, $localizedAlias);
-                }
-            }
-        ]);
     }
 
     /**
@@ -105,7 +108,8 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-            ->andOnCondition([$locClass::tableName().'.locale' => static::currentLocale()]);
+            ->alias('p')
+            ->andOnCondition(['p.locale' => static::currentLocale()]);
     }
 
     /**
@@ -134,6 +138,7 @@ trait HasLocalizationTrait
      */
     public function saveLocalizations()
     {
+
         $locClass = static::getLocalizationModelClass();
         $localization = $locClass::find()->where(['locale' => static::currentLocale(), 'entity_id' => $this->id])->one();
         if ($localization){
