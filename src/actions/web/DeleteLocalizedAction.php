@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\actions\web;
 
+use concepture\yii2logic\actions\traits\LocalizedTrait;
 use yii\db\ActiveRecord;
 use ReflectionException;
 
@@ -13,6 +14,8 @@ use ReflectionException;
  */
 class DeleteLocalizedAction extends DeleteAction
 {
+    use LocalizedTrait;
+    
     /**
      * Возвращает локализованную сущность с учетом локали если текущей локализации нет атрибуты будут пустые
      *
