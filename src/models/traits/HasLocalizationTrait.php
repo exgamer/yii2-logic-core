@@ -85,16 +85,19 @@ trait HasLocalizationTrait
     {
         $query = parent::find();
         $query->with('localizations');
+        $joinType = "with";
         if (static::$by_locale_hard_search) {
-            $query->innerJoinWith([
-                'localization' => function ($q) {
-                    $callable = static::$search_by_locale_callable;
-                    if (is_callable($callable)) {
-                        call_user_func($callable, $q, "p");
-                    }
-                }
-            ]);
+            $joinType = "innerJoinWith";
         }
+        $query->{$joinType}([
+            'localization' => function ($q) {
+                $callable = static::$search_by_locale_callable;
+                if (is_callable($callable)) {
+                    call_user_func($callable, $q, "p");
+                }
+            }
+        ]);
+
 
         return $query;
     }
