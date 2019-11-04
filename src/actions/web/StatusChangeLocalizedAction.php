@@ -6,13 +6,13 @@ use yii\db\ActiveRecord;
 use ReflectionException;
 
 /**
- * Экшен для удаления сущности с локализацией
+ * Экшен для смены статуса сущности с локализацией
  *
- * Class DeleteLocalizedAction
+ * Class StatusChangeLocalizedAction
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class DeleteLocalizedAction extends DeleteAction
+class StatusChangeLocalizedAction extends StatusChangeAction
 {
     use LocalizedTrait;
 

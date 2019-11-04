@@ -23,6 +23,9 @@ class StatusChangeAction extends Action
     public function run($id, $status)
     {
         $model = $this->getModel($id);
+        if (!$model){
+            throw new NotFoundHttpException();
+        }
         $this->getService()->{$this->serviceMethod}($model, $status);
 
         return $this->redirect([$this->redirect]);
