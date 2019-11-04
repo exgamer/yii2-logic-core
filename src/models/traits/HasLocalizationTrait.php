@@ -29,6 +29,12 @@ trait HasLocalizationTrait
     public static $current_locale;
 
     /**
+     * Возвращает анонимку для расширения выборки по локализации
+     * @var callable|null
+     */
+    public static $search_by_locale_callable;
+
+    /**
      * Возвращает текущий язык модели
      *
      * @return string
@@ -60,40 +66,22 @@ trait HasLocalizationTrait
     /**
      * Переопределяем find чтобы подцепить локализации
      *
-     * @param string $type
-     * @param string $localizedAlias
      * @return ActiveQuery
      */
-    public static function find($type = "joinWith", $localizedAlias = "p")
+    public static function find()
     {
         $query = parent::find();
         $query->with('localizations');
-        static::searchByLocalized($query, null, $type, $localizedAlias);
-
-        return $query;
-    }
-
-    /**
-     * Метод для расширения поиска по локализациям
-     *
-     * @param $query
-     * @param null $callable
-     * @param string $type
-     * @param string $localizedAlias
-     */
-    public static function searchByLocalized($query, $callable = null, $type = "joinWith", $localizedAlias = "p")
-    {
-        $query->{$type}([
-            'localization' => function ($q) use ($callable, $localizedAlias) {
-                $q->on = null;
-                $propModelClass = static::getLocalizationModelClass();
-                $q->from($propModelClass::tableName()." {$localizedAlias}");
-                $q->andWhere(["{$localizedAlias}.locale" => static::currentLocale()]);
+        $query->joinWith([
+            'localization' => function ($q) {
+                $callable = static::$search_by_locale_callable;
                 if (is_callable($callable)){
-                    call_user_func($callable, $q, $localizedAlias);
+                    call_user_func($callable, $q, "p");
                 }
             }
         ]);
+
+        return $query;
     }
 
     /**
@@ -105,7 +93,8 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
-            ->andOnCondition([$locClass::tableName().'.locale' => static::currentLocale()]);
+            ->alias('p')
+            ->andOnCondition(['p.locale' => static::currentLocale()]);
     }
 
     /**
@@ -134,6 +123,7 @@ trait HasLocalizationTrait
      */
     public function saveLocalizations()
     {
+
         $locClass = static::getLocalizationModelClass();
         $localization = $locClass::find()->where(['locale' => static::currentLocale(), 'entity_id' => $this->id])->one();
         if ($localization){
