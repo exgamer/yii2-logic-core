@@ -32,7 +32,10 @@ class UpdateAction extends Action
             $originModel->load($model->attributes);
             if ($originModel->validate()) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
-                    return $this->redirect([$this->redirect, 'id' => $originModel->id]);
+                    $redirectParams = [$this->redirect, 'id' => $originModel->id];
+                    $this->extendRedirectParams($redirectParams);
+
+                    return $this->redirect($redirectParams);
                 }
             }
         }
@@ -49,6 +52,12 @@ class UpdateAction extends Action
      * @param $originModel
      */
     protected function processModel($model, $originModel){}
+
+    /**
+     * Для расширения парметров редиректа
+     * @param $redirectParams
+     */
+    protected function extendRedirectParams(&$redirectParams){}
 
     /**
      * Возвращает модель для редактирования

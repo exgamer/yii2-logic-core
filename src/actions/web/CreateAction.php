@@ -24,7 +24,10 @@ class CreateAction extends Action
         $this->processModel($model);
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
-                return $this->redirect([$this->redirect, 'id' => $result->id]);
+                $redirectParams = [$this->redirect, 'id' => $result->id];
+                $this->extendRedirectParams($redirectParams);
+
+                return $this->redirect($redirectParams);
             }
         }
 
@@ -38,4 +41,10 @@ class CreateAction extends Action
      * @param $model
      */
     protected function processModel($model){}
+
+    /**
+     * Для расширения парметров редиректа
+     * @param $redirectParams
+     */
+    protected function extendRedirectParams(&$redirectParams){}
 }

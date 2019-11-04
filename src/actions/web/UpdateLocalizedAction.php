@@ -30,6 +30,11 @@ class UpdateLocalizedAction extends UpdateAction
         $model->setAttributes($originModel->getLocalized(null, true), false);
     }
 
+    protected function extendRedirectParams(&$redirectParams)
+    {
+        $redirectParams['locale'] = $this->getLocale();
+    }
+
     /**
      * Возвращает локализованную сущность с учетом локали
      *
