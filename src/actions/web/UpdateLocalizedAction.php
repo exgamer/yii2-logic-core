@@ -46,6 +46,7 @@ class UpdateLocalizedAction extends UpdateAction
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
         $originModelClass::$current_locale = $this->getLocale();
+        $originModelClass::$by_locale_hard_search = false;
 
         return $this->getService()->findById($id);
     }
