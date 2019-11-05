@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\models\traits;
 
+use concepture\yii2logic\converters\LocaleConverter;
 use yii\db\ActiveQuery;
 use Yii;
 
@@ -24,7 +25,7 @@ trait HasLocalizationTrait
      *   $originModelClass::$current_locale = $locale;
      *   $originModel = $originModelClass::find()->where(['id' => $id])->one();
      *
-     * @var string
+     * @var mixed
      */
     public static $current_locale;
 
@@ -48,17 +49,31 @@ trait HasLocalizationTrait
     public static $by_locale_hard_search = true;
 
     /**
+     * Возвращает конвертер для локали
+     * с помощью этого можно управлять типом данных аттрибута локаль сущности
+     *
+     * @return string
+     */
+    protected static function getLocaleConverterClass()
+    {
+        return LocaleConverter::class;
+    }
+
+    /**
      * Возвращает текущий язык модели
+     * локаль для запросов нужно плучать имеено с помощью этого метода
+     * т.к. он учитывает правила конвертации
      *
      * @return string
      */
     public static function currentLocale()
     {
+        $localeConverterClass = static::getLocaleConverterClass();
         if (static::$current_locale === null){
-            return Yii::$app->language;
+            return $localeConverterClass::key(Yii::$app->language);
         }
 
-        return static::$current_locale;
+        return $localeConverterClass::key(static::$current_locale);
     }
 
     /**
@@ -78,7 +93,7 @@ trait HasLocalizationTrait
 
     /**
      * Переопределяем find чтобы подцепить локализации
-     *innerJoinWith
+     *
      * @return ActiveQuery
      */
     public static function find()
@@ -86,6 +101,9 @@ trait HasLocalizationTrait
         $query = parent::find();
         $query->with('localizations');
         $joinType = "with";
+        /**
+         * Если true то поиск ведем жеско по языку и доп условиям
+         */
         if (static::$by_locale_hard_search) {
             $joinType = "innerJoinWith";
         }
@@ -141,7 +159,6 @@ trait HasLocalizationTrait
      */
     public function saveLocalizations()
     {
-
         $locClass = static::getLocalizationModelClass();
         $localization = $locClass::find()->where(['locale' => static::currentLocale(), 'entity_id' => $this->id])->one();
         if ($localization){
