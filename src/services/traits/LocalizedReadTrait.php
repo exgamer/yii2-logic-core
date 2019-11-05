@@ -21,7 +21,7 @@ trait LocalizedReadTrait
     public function getBySeoName($seo_name)
     {
         return $this->getOneByCondition(function(ActiveQuery $query) use ($seo_name){
-            $query->andWhere(['seo_name' => $seo_name]);
+            $query->andWhere(['p.seo_name' => $seo_name]);
         });
     }
 }
