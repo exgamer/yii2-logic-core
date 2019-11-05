@@ -20,9 +20,6 @@ trait LocalizedReadTrait
      */
     public function getBySeoName($seo_name)
     {
-        $modelClass = $this->getRelatedModelClass();
-        $modelClass::$current_locale = Yii::$app->language;
-
         return $this->getOneByCondition(function(ActiveQuery $query) use ($seo_name){
             $query->andWhere(['seo_name' => $seo_name]);
         });
