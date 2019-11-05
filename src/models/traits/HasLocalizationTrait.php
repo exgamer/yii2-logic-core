@@ -219,7 +219,10 @@ trait HasLocalizationTrait
     public function setLocalizations()
     {
         if (isset($this->localization)){
-            $this->load($this->getLocalized($this->localization, true), "");
+            $localizationData = $this->getLocalized($this->localization, true);
+            foreach ($localizationData as $attribute => $value){
+                $this->{$attribute} = $value;
+            }
         }
     }
 
@@ -253,6 +256,7 @@ trait HasLocalizationTrait
 
             if ($fromLocalized){
                 $data[$f] = $v;
+
                 continue;
             }
             $data[$f] = $this->{$f};

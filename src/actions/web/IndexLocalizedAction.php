@@ -21,5 +21,6 @@ class IndexLocalizedAction extends IndexAction
     protected function extendSearch($searchModel)
     {
         $searchModel::$current_locale = $this->getConvertedLocale();
+        //        $searchModel::$by_locale_hard_search = false;
     }
 }
