@@ -24,5 +24,19 @@ trait LocalizedTrait
 
         return Yii::$app->getRequest()->getQueryParam('locale');
     }
+
+    /**
+     * Возвращает конвертированную локаль для сущности
+     *
+     * @return mixed
+     */
+    protected function getConvertedLocale()
+    {
+        $locale = $this->getLocale();
+        $modelClass = $this->getService()->getRelatedModelClass();
+        $localeConverterClass = $modelClass::getLocaleConverterClass();
+
+        return  $localeConverterClass::key($locale);
+    }
 }
 

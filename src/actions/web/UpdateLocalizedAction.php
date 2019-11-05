@@ -25,14 +25,14 @@ class UpdateLocalizedAction extends UpdateAction
      */
     protected function processModel($model, $originModel)
     {
-        $model->locale = $this->getLocale();
+        $model->locale = $this->getConvertedLocale();
         $model->setAttributes($originModel->attributes, false);
         $model->setAttributes($originModel->getLocalized(null, true), false);
     }
 
     protected function extendRedirectParams(&$redirectParams)
     {
-        $redirectParams['locale'] = $this->getLocale();
+        $redirectParams['locale'] = $this->getConvertedLocale();
     }
 
     /**
@@ -46,7 +46,7 @@ class UpdateLocalizedAction extends UpdateAction
     protected function getModel($id)
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::$current_locale = $this->getLocale();
+        $originModelClass::$current_locale = $this->getConvertedLocale();
         $originModelClass::$by_locale_hard_search = false;
 
         return $this->getService()->findById($id);

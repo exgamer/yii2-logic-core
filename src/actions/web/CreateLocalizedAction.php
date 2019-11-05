@@ -17,11 +17,11 @@ class CreateLocalizedAction extends CreateAction
 
     protected function processModel($model)
     {
-        $model->locale = $this->getLocale();
+        $model->locale = $this->getConvertedLocale();
     }
 
     protected function extendRedirectParams(&$redirectParams)
     {
-        $redirectParams['locale'] = $this->getLocale();
+        $redirectParams['locale'] = $this->getConvertedLocale();
     }
 }
