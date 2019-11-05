@@ -76,16 +76,18 @@ trait HasLocalizationTrait
         return $localeConverterClass::key(static::$current_locale);
     }
 
+
     /**
      * Возвращает массив с существующими локализациями
      * @return array
      */
     public function locales()
     {
+        $localeConverterClass = static::getLocaleConverterClass();
         $l = [];
         if (isset($this->localizations)){
             foreach ($this->localizations as $locale){
-                $l[]= $locale->locale;
+                $l[$localeConverterClass::key($locale->locale)] = $localeConverterClass::value($locale->locale);
             }
         }
         return $l;
