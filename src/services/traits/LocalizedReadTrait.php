@@ -15,6 +15,8 @@ use Yii;
 trait LocalizedReadTrait
 {
     /**
+     * Получить локализованную сущность по seo_name
+     *
      * @param $seo_name
      * @return mixed
      */
