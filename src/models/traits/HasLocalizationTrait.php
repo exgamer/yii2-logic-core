@@ -79,9 +79,10 @@ trait HasLocalizationTrait
 
     /**
      * Возвращает массив с существующими локализациями
+     * @param bool $flip
      * @return array
      */
-    public function locales()
+    public function locales($flip = false)
     {
         $localeConverterClass = static::getLocaleConverterClass();
         $l = [];
@@ -90,6 +91,11 @@ trait HasLocalizationTrait
                 $l[$localeConverterClass::key($locale->locale)] = $localeConverterClass::value($locale->locale);
             }
         }
+        if ($flip){
+
+            return array_flip($flip);
+        }
+
         return $l;
     }
 
