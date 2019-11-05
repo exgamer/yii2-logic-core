@@ -93,7 +93,7 @@ trait HasLocalizationTrait
         }
         if ($flip){
 
-            return array_flip($flip);
+            return array_flip($l);
         }
 
         return $l;
