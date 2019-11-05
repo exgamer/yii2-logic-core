@@ -54,7 +54,7 @@ trait HasLocalizationTrait
      *
      * @return string
      */
-    protected static function getLocaleConverterClass()
+    public static function getLocaleConverterClass()
     {
         return LocaleConverter::class;
     }
