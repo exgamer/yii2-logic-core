@@ -289,9 +289,6 @@ trait HasLocalizationTrait
      */
     protected function addSortByLocalizationAttribute(ActiveDataProvider $dataProvider, $attribute)
     {
-        $dataProvider->sort->attributes[$attribute] = [
-            'asc' => ["p.{$attribute}" => SORT_ASC],
-            'desc' => ["p.{$attribute}" => SORT_DESC],
-        ];
+        $this->addSortByRelatedAttribute($dataProvider, "p", $attribute);
     }
 }

@@ -57,6 +57,20 @@ abstract class ActiveRecord extends Base
     }
 
     /**
+     * Добавляет в Дата провайдер сортировку по атрибуту связанной таблицы
+     *
+     * @param ActiveDataProvider $dataProvider
+     * @param $attribute
+     */
+    protected function addSortByRelatedAttribute(ActiveDataProvider $dataProvider, $tableAlias, $attribute)
+    {
+        $dataProvider->sort->attributes[$attribute] = [
+            'asc' => ["{$tableAlias}.{$attribute}" => SORT_ASC],
+            'desc' => ["{$tableAlias}.{$attribute}" => SORT_DESC],
+        ];
+    }
+
+    /**
      * Метод для расширения ActiveQuery
      * используетсяв Search модели
      *
