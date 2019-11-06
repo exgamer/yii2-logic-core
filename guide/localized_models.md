@@ -218,6 +218,7 @@ class StaticBlockForm extends Form
 
 3. Для организации поиска создаем search модель унаследованную от модели AR к примеру *StaticBlock*
     поиск по локализованным атрибутом осуществляется с помощью метода searchByLocalized, где $localizedAlias - альяс таблицы с переводами
+    если нужна сортировка по локализованным атрибутам реалзиуем метод extendDataProvider и вызываем addSortByLocalizationAttribute с атрибутом во 2 аргументе
 
 ```php
 
@@ -275,6 +276,13 @@ class StaticBlockSearch extends StaticBlock
             $q->andFilterWhere(['like', "{$localizedAlias}.title", $this->title]);
         };
     }
+
+    protected function extendDataProvider(ActiveDataProvider $dataProvider)
+    {
+        $this->addSortByLocalizationAttribute($dataProvider, 'seo_name');
+        $this->addSortByLocalizationAttribute($dataProvider, 'title');
+    }
+
 }
 
 
