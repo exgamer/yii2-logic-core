@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
 
@@ -278,5 +279,19 @@ trait HasLocalizationTrait
         $class = str_replace("Search", "", $class);
 
         return $class."Localization";
+    }
+
+    /**
+     * Добавляет в DataProvider сортировку по локализованным атрибутам
+     * 
+     * @param ActiveDataProvider $dataProvider
+     * @param $attribute
+     */
+    protected function addSortByLocalizationAttribute(ActiveDataProvider $dataProvider, $attribute)
+    {
+        $dataProvider->sort->attributes[$attribute] = [
+            'asc' => ["p.{$attribute}" => SORT_ASC],
+            'desc' => ["p.{$attribute}" => SORT_DESC],
+        ];
     }
 }
