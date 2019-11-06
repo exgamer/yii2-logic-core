@@ -283,7 +283,7 @@ trait HasLocalizationTrait
 
     /**
      * Добавляет в DataProvider сортировку по локализованным атрибутам
-     * 
+     *
      * @param ActiveDataProvider $dataProvider
      * @param $attribute
      */
