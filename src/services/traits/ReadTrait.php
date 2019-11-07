@@ -23,17 +23,19 @@ trait ReadTrait
     /**
      * Возвращает массив с каталогом записей
      *
-     * @param string $from
-     * @param $to
      * @return array
      */
-    public function catalog($from = 'id', $to)
+    public function catalog()
     {
+        $searchClass = $this->getRelatedSearchModelClass();
+        $searchKey = $searchClass::getListSearchKeyAttribute();
+        $searchAttr = $searchClass::getListSearchAttribute();
+
         if (! empty(static::$_catalog)){
             return static::$_catalog;
         }
 
-        static::$_catalog = $this->getAllList($from, $to);
+        static::$_catalog = $this->getAllList($searchKey, $searchAttr);
 
         return static::$_catalog;
     }
