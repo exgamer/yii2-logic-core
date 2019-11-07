@@ -14,6 +14,31 @@ use yii\db\ActiveRecord;
 trait ReadTrait
 {
     /**
+     * переменная для хранения списка записей
+     *
+     * @var array
+     */
+    protected static $_catalog = [];
+
+    /**
+     * Возвращает массив с каталогом записей
+     *
+     * @param string $from
+     * @param $to
+     * @return array
+     */
+    public function catalog($from = 'id', $to)
+    {
+        if (! empty(static::$_catalog)){
+            return static::$_catalog;
+        }
+
+        static::$_catalog = $this->getAllList($from, $to);
+
+        return static::$_catalog;
+    }
+
+    /**
      * Возвращает QueryBuilder
      *
      * @return ActiveQuery
