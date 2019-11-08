@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use Exception;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -29,6 +30,7 @@ trait CatalogTrait
      * getListSearchAttribute и getListSearchKeyAttribute
      *
      * @return array
+     * @throws Exception
      */
     public function catalog()
     {
@@ -39,6 +41,10 @@ trait CatalogTrait
         $searchClass = $this->getRelatedSearchModelClass();
         $searchKey = $searchClass::getListSearchKeyAttribute();
         $searchAttr = $searchClass::getListSearchAttribute();
+        if (! $searchKey || ! $searchAttr){
+            throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
+        }
+
         static::$_catalog = $this->getAllList($searchKey, $searchAttr);
 
         return static::$_catalog;
@@ -51,6 +57,7 @@ trait CatalogTrait
      *
      * @param $value
      * @return mixed|null
+     * @throws Exception
      */
     public function catalogKey($value)
     {
@@ -70,6 +77,7 @@ trait CatalogTrait
      *
      * @param $key
      * @return mixed|null
+     * @throws Exception
      */
     public function catalogValue($key)
     {
@@ -86,6 +94,7 @@ trait CatalogTrait
      *
      * @param null $term
      * @return array []
+     * @throws Exception
      */
     public function getAutocompleteList($term = null)
     {
@@ -96,6 +105,10 @@ trait CatalogTrait
         $searchClass = $this->getRelatedSearchModelClass();
         $searchKey = $searchClass::getListSearchKeyAttribute();
         $searchAttr = $searchClass::getListSearchAttribute();
+        if (! $searchKey || ! $searchAttr){
+            throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
+        }
+
         $data = $this->getQuery()
             ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
             ->where(['like', $searchAttr, $term])
@@ -112,12 +125,16 @@ trait CatalogTrait
      *
      * @param array $queryParams
      * @return array
+     * @throws Exception
      */
     public function getDropDownList($queryParams = [])
     {
         $searchClass = $this->getRelatedSearchModelClass();
         $searchModel = new $searchClass();
         $searchAttribute = $searchClass::getListSearchAttribute();
+        if (! $searchAttribute){
+            throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
+        }
         $dataProvider = $searchModel->search($queryParams);
 
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);

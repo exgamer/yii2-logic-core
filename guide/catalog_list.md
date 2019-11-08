@@ -15,4 +15,9 @@
 
 ```
 
-2. Вызываем Yii::$app->someService->catalog();
+2. для получения записей таблицы как массива ключ=> значение 
+вызываем Yii::$app->someService->catalog();
+
+3. для получения ключа по значению Yii::$app->someService->catalogKey();
+
+4. для получения значения по ключу Yii::$app->someService->catalogValue();
