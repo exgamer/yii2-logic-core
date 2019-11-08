@@ -25,6 +25,8 @@ trait CatalogTrait
 
     /**
      * Возвращает массив с каталогом записей
+     * Для использования у search модели должны быть определены методы
+     * getListSearchAttribute и getListSearchKeyAttribute
      *
      * @return array
      */
@@ -44,6 +46,8 @@ trait CatalogTrait
 
     /**
      * Возвращает ключ из каталога по значению
+     * Для использования у search модели должны быть определены методы
+     * getListSearchAttribute и getListSearchKeyAttribute
      *
      * @param $value
      * @return mixed|null
@@ -61,7 +65,9 @@ trait CatalogTrait
 
     /**
      * Возвращает значение из каталога по ключу
-     *
+     * Для использования у search модели должны быть определены методы
+     * getListSearchAttribute и getListSearchKeyAttribute
+     * 
      * @param $key
      * @return mixed|null
      */
