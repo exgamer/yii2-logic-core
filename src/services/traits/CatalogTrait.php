@@ -18,13 +18,6 @@ use yii\db\ActiveRecord;
 trait CatalogTrait
 {
     /**
-     * переменная для хранения списка записей
-     *
-     * @var array
-     */
-    protected static $_catalog = [];
-
-    /**
      * Возвращает массив с каталогом записей
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
@@ -34,8 +27,10 @@ trait CatalogTrait
      */
     public function catalog()
     {
-        if (! empty(static::$_catalog)){
-            return static::$_catalog;
+        static $_catalog = null;
+
+        if (! empty($_catalog)){
+            return $_catalog;
         }
 
         $searchClass = $this->getRelatedSearchModelClass();
@@ -45,9 +40,9 @@ trait CatalogTrait
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
 
-        static::$_catalog = $this->getAllList($searchKey, $searchAttr);
+        $_catalog = $this->getAllList($searchKey, $searchAttr);
 
-        return static::$_catalog;
+        return $_catalog;
     }
 
     /**

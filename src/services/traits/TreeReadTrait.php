@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\models\traits\HasTreeTrait;
 use Exception;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
@@ -54,7 +55,7 @@ trait TreeReadTrait
     {
         $modelClass = $this->getRelatedModelClass();
         if (! method_exists($modelClass, "getTreeModelClass")){
-            throw new Exception($modelClass. " must have getTreeModelClass function ");
+            throw new Exception($modelClass. " must have getTreeModelClass function, use ". HasTreeTrait::class);
         }
 
         return $modelClass::getTreeModelClass();
