@@ -52,7 +52,7 @@ trait CatalogTrait
      * @param $value
      * @return mixed|null
      */
-    public function getCatalogKey($value)
+    public function catalogKey($value)
     {
         $catalog = $this->catalog();
         $catalog = array_flip($catalog);
@@ -67,11 +67,11 @@ trait CatalogTrait
      * Возвращает значение из каталога по ключу
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
-     * 
+     *
      * @param $key
      * @return mixed|null
      */
-    public function getCatalogValue($key)
+    public function catalogValue($key)
     {
         $catalog = $this->catalog();
         if (isset($catalog[$key])){
