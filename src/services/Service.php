@@ -1,12 +1,14 @@
 <?php
 namespace concepture\yii2logic\services;
 
+
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
 use ReflectionClass;
 use concepture\yii2logic\services\traits\ModifyTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
+use concepture\yii2logic\services\traits\CatalogTrait;
 
 /**
  * Базовый класс сервиса для реализации бизнес логики
@@ -19,6 +21,7 @@ abstract class Service extends Component
 {
     use ModifyTrait;
     use ReadTrait;
+    use CatalogTrait;
 
     /**
      * Возвращает соединение к БД
