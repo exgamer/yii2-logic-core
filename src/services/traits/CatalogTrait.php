@@ -28,7 +28,6 @@ trait CatalogTrait
     public function catalog()
     {
         static $_catalog = null;
-
         if (! empty($_catalog)){
             return $_catalog;
         }
