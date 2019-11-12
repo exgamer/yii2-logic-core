@@ -64,14 +64,8 @@ class AutocompleteListAction extends Action
         if(!$term){
             return [];
         }
-        $searchClass = $this->getSearchClass();
-        $searchKey = $searchClass::getListSearchKeyAttribute();
-        $searchAttr = $searchClass::getListSearchAttribute();
-        $data = $searchClass::find()
-            ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
-            ->where(['like', $searchAttr, $term])
-            ->asArray()
-            ->all();
+        
+        $data =  $this->getService()->getAutocompleteList($term);
         
         return $data;
     }
