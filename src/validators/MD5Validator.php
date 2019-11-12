@@ -38,6 +38,11 @@ class MD5Validator extends Validator
         if($model->{$attribute} && ! $this->changeOnEdit){
             return;
         }
+
+        if ($model->{$this->source} === null || $model->{$this->source} === ''){
+            return;
+        }
+        
         $result = $model->{$this->source};
         if(is_array($result)){
             $result = reset($result);
