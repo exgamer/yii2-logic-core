@@ -26,5 +26,34 @@ trait LocalizedReadTrait
             $query->andWhere(['p.seo_name' => $seo_name]);
         });
     }
+
+    /**
+     * Возвращает данные для исползования с виджетом \yii\jui\AutoComplete
+     *
+     * @param null $term
+     * @return array []
+     * @throws Exception
+     */
+    public function getLocalizedAutocompleteList($term = null)
+    {
+        if(!$term){
+            return [];
+        }
+
+        $searchClass = $this->getRelatedSearchModelClass();
+        $searchKey = $searchClass::getListSearchKeyAttribute();
+        $searchAttr = $searchClass::getListSearchAttribute();
+        if (! $searchKey || ! $searchAttr){
+            throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
+        }
+        $tableName = $this->getTableName();
+        $data = $this->getQuery()
+            ->select(["p.{$searchAttr} as value", "p.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])
+            ->where(['like', "p.".$searchAttr, $term])
+            ->asArray()
+            ->all();
+
+        return $data;
+    }
 }
 

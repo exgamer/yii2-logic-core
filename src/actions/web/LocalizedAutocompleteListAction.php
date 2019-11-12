@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
 
 /**
- * Экшен для работы с выпадающими списками виджет \yii\jui\AutoComplete
+ * Экшен для работы с выпадающими списками виджет \yii\jui\AutoComplete для сущностей с локализацией
  *
  * Пример:
  *
@@ -55,7 +55,7 @@ use yii\web\ServerErrorHttpException;
  *
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class AutocompleteListAction extends Action
+class LocalizedAutocompleteListAction extends Action
 {
 
     public function run($term = null)
@@ -65,8 +65,8 @@ class AutocompleteListAction extends Action
             return [];
         }
 
-        $data =  $this->getService()->getAutocompleteList($term);
-        
+        $data =  $this->getService()->getLocalizedAutocompleteList($term);
+
         return $data;
     }
 }
