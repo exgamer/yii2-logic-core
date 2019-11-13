@@ -1,14 +1,14 @@
 <?php
 namespace concepture\yii2logic\forms;
 
-use yii\base\Model;
+use yii\base\Model as Base;
 
 /**
- * Class BaseForm
+ * Class Model
  * @package concepture\yii2logic\forms
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-abstract class BaseForm extends Model
+abstract class Model extends Base
 {
 
 }

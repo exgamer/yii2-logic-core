@@ -16,7 +16,7 @@ use yii\db\Connection;
  * @package cconcepture\yii2logic\forms
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-abstract class Form extends BaseForm
+abstract class Form extends Model
 {
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
