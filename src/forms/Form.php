@@ -4,20 +4,19 @@ namespace concepture\yii2logic\forms;
 use concepture\yii2core\models\ActiveRecord;
 use ReflectionClass;
 use ReflectionException;
-use yii\base\Model;
 use Yii;
 use yii\helpers\Json;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
 
 /**
- * Базовая форма сущности
+ * Базовая форма сущности связанной с  моделью AR
  *
  * Class Form
  * @package cconcepture\yii2logic\forms
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-abstract class Form extends Model
+abstract class Form extends BaseForm
 {
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
