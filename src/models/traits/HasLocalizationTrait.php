@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
+use concepture\yii2logic\db\LocalizedActiveQuery;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
@@ -107,7 +108,7 @@ trait HasLocalizationTrait
      */
     public static function find()
     {
-        $query = parent::find();
+        $query = Yii::createObject(LocalizedActiveQuery::className(), [get_called_class()]);
         $query->with('localizations');
         $joinType = "with";
         /**
