@@ -24,29 +24,28 @@ trait ModelScenarioTrait
         );
         $extendedScenarios = $this->extendedScenarios();
         foreach ($extendedScenarios as $name => $excludedAttributes){
-            $this->addCustomScenario($scenarios, $name, $excludedAttributes);
+            $attributes = $this->resolveScenarioAttributes( $name, $excludedAttributes);
+            $scenarios[$name] = $attributes;
         }
 
         return $scenarios;
     }
 
     /**
-     * Добавить сценарий
+     * разрулить аттриубты для сценария
      *
-     * @param array $scenarios
-     * @param string $name
      * @param array $excludedAttributes
+     * @return array
      */
-    protected function addCustomScenario(array &$scenarios, string $name, array $excludedAttributes)
+    protected function resolveScenarioAttributes(array $excludedAttributes)
     {
-        $scenarios = parent::scenarios();
         $attributes = $this->attributes();
         $attributes = array_flip($attributes);
         foreach ($excludedAttributes as $attribute){
             unset($attributes[$attribute]);
         }
-        $attributes = array_flip($attributes);
-        $scenarios[$name] = $attributes;
+
+        return array_flip($attributes);
     }
 
     /**
