@@ -86,3 +86,54 @@ class BannerForm extends Form
 }
 
 ```
+
+3. Пример формы со сценариями которые зависят от типа
+    На событие onchange dropDownList отправляем ПОСТ с выставленным типом и метку reload=true чтобы не произошло сохранение формы
+
+```php
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use mihaildev\ckeditor\CKEditor;
+use yii\widgets\Pjax;
+use concepture\yii2handbook\enum\TargetAttributeEnum;
+use concepture\yii2banner\enum\BannerTypesEnum;
+?>
+
+<div class="post-category-form">
+    <?php Pjax::begin(['id' => 'form']); ?>
+
+
+    <?php $form = ActiveForm::begin(['enableClientValidation'=>false]) ?>
+
+    <?= $form->field($model, 'type')->dropDownList(
+        BannerTypesEnum::arrayList(),
+        [
+            'onchange'=> "$.pjax.reload({container: '#form', 'type': 'POST', 'data': {'BannerForm[type]': this.value, 'reload': true}});"
+        ]
+    );?>
+    <?php if ($model->type == BannerTypesEnum::IMAGE) :?>
+        <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
+    <?php endif;?>
+
+    <?php if ($model->type == BannerTypesEnum::HTML) :?>
+        <?= $form->field($model, 'content')->widget(CKEditor::className(),[
+            'editorOptions' => [
+                'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+                'inline' => false, //по умолчанию false
+                'allowedContent' => true,
+            ],
+        ]); ?>
+    <?php endif;?>
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('banner', 'Сохранить'), ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+    <?php Pjax::end(); ?>
+</div>
+
+
+```
