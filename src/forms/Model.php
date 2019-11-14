@@ -1,7 +1,7 @@
 <?php
 namespace concepture\yii2logic\forms;
 
-use concepture\yii2logic\enum\ScenarioEnum;
+use concepture\yii2logic\actions\traits\ModelScenarioTrait;
 use yii\base\Model as Base;
 
 /**
@@ -11,19 +11,5 @@ use yii\base\Model as Base;
  */
 abstract class Model extends Base
 {
-    /**
-     * @return array
-     */
-    public function scenarios()
-    {
-        $scenarios = array_merge(
-            parent::scenarios(),
-            [
-                ScenarioEnum::INSERT => $this->attributes(),
-                ScenarioEnum::UPDATE => $this->attributes()
-            ]
-        );
-
-        return $scenarios;
-    }
+    use ModelScenarioTrait;
 }

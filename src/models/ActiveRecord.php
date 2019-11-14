@@ -1,7 +1,7 @@
 <?php
 namespace concepture\yii2logic\models;
 
-use concepture\yii2logic\enum\ScenarioEnum;
+use concepture\yii2logic\actions\traits\ModelScenarioTrait;
 use Throwable;
 use yii\db\ActiveRecord as Base;
 use yii\base\Model;
@@ -17,21 +17,7 @@ use yii\db\ActiveQuery;
  */
 abstract class ActiveRecord extends Base
 {
-    /**
-     * @return array
-     */
-    public function scenarios()
-    {
-        $scenarios = array_merge(
-            parent::scenarios(),
-            [
-                ScenarioEnum::INSERT => $this->attributes(),
-                ScenarioEnum::UPDATE => $this->attributes()
-            ]
-        );
-
-        return $scenarios;
-    }
+    use ModelScenarioTrait;
 
     /**
      * Возвращает DataProvider с учетом параметров
