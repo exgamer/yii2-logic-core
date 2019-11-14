@@ -24,7 +24,7 @@ trait ModelScenarioTrait
         );
         $extendedScenarios = $this->extendedScenarios();
         foreach ($extendedScenarios as $name => $excludedAttributes){
-            $attributes = $this->resolveScenarioAttributes( $name, $excludedAttributes);
+            $attributes = $this->resolveScenarioAttributes($excludedAttributes);
             $scenarios[$name] = $attributes;
         }
 
