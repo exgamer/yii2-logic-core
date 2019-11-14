@@ -239,7 +239,7 @@ trait HasLocalizationTrait
      * @param bool $fromLocalized
      * @return array
      */
-    public function getLocalized($localization, $fromLocalized = false)
+    public function getLocalized($localization = null, $fromLocalized = false)
     {
         if (! $localization){
             $localization = $this->localization;
