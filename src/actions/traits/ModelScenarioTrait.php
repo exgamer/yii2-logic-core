@@ -32,7 +32,7 @@ trait ModelScenarioTrait
     }
 
     /**
-     * разрулить аттриубты для сценария
+     * Исключить ненужные аттрибуты для сценария
      *
      * @param array $excludedAttributes
      * @return array
