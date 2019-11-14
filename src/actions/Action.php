@@ -140,4 +140,16 @@ abstract class Action extends Base
 
         return $this->getService()->getRelatedSearchModelClass();
     }
+
+    /**
+     * Метод для определния нужно ли просто перезагрузить форму/вьюшку
+     *
+     * @param string $method
+     * @return bool
+     * @throws \Exception
+     */
+    public function isReload($method = "post")
+    {
+        return $this->getController()->isReload($method);
+    }
 }

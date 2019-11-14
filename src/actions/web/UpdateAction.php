@@ -30,7 +30,7 @@ class UpdateAction extends Action
         $model->setAttributes($originModel->attributes, false);
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
-            if ($model->validate(null, true, $originModel)) {
+            if ($model->validate(null, true, $originModel)  && !$this->isReload()) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
                     $redirectParams = [$this->redirect, 'id' => $originModel->id];
                     $this->extendRedirectParams($redirectParams);
