@@ -5,6 +5,7 @@ use concepture\yii2core\models\ActiveRecord;
 use ReflectionClass;
 use ReflectionException;
 use Yii;
+use yii\base\InvalidArgumentException;
 use yii\helpers\Json;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
@@ -109,5 +110,53 @@ abstract class Form extends Model
         $modelClass =  static::getModelClass();
 
         return $modelClass::find();
+    }
+
+    /**
+     * Метод переопределен для возможнсти подстановки в форму связанной модели для валидации при редактировании
+     * чтобы корректно работала валидация unique
+     *
+     * @param null $attributeNames
+     * @param bool $clearErrors
+     * @param null $model
+     * @return bool
+     */
+    public function validate($attributeNames = null, $clearErrors = true, $model = null)
+    {
+        if ($clearErrors) {
+            $this->clearErrors();
+            if ($model){
+                $model->clearErrors();
+            }
+        }
+
+        if (!$this->beforeValidate()) {
+            return false;
+        }
+
+        $scenarios = $this->scenarios();
+        $scenario = $this->getScenario();
+        if (!isset($scenarios[$scenario])) {
+            throw new InvalidArgumentException("Unknown scenario: $scenario");
+        }
+
+        if ($attributeNames === null) {
+            $attributeNames = $this->activeAttributes();
+        }
+
+        $attributeNames = (array)$attributeNames;
+        $validationModel = $this;
+        if ($model){
+            $validationModel = $model;
+        }
+        foreach ($this->getActiveValidators() as $validator) {
+            $validator->validateAttributes($validationModel, $attributeNames);
+        }
+        if ($validationModel->hasErrors()){
+            $this->addErrors($validationModel->getErrors());
+        }
+        $this->afterValidate();
+
+        return !$this->hasErrors();
     }
 }
