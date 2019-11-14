@@ -1,7 +1,9 @@
 ####Мини гайд по использованию сценриев валидации
 
 1. Рассмотрим использвоание сценариев для валидации на примере формы
-    Важно для использования выставления сценария через метод baforeValidate формы
+    Реализуем метод extendedScenarios как в примере, где в значении указываетс массив с атрибутами 
+    которые нужно исключить из валидации
+2.  Важно для использования выставления сценария через метод baforeValidate формы
     на пресдатвлении у ActiveForm должна быть отлючена клиентская валидация 
     *<?php $form = ActiveForm::begin(['enableClientValidation'=>false]) ?>*
     
@@ -39,22 +41,16 @@ class BannerForm extends Form
     public $target;
     public $status = StatusEnum::INACTIVE;
 
-    /**
-     * Дополняем дефлтные сценарии формы своими
-     */
-    public function scenarios()
+    protected function extendedScenarios()
     {
-        $scenarios = parent::scenarios();
-        /**
-         * Сценарий для баннера с изображением
-         */
-        $scenarios[BannerTypesEnum::IMAGE] = ['title', 'locale', 'image', 'type'];
-        /**
-         * Сценарий для баннера с HTML контентом
-         */
-        $scenarios[BannerTypesEnum::HTML] = ['title', 'locale', 'content', 'type'];
-
-        return $scenarios;
+        return [
+            BannerTypesEnum::IMAGE => [
+                'content'
+            ],
+            BannerTypesEnum::HTML => [
+                'image'
+            ]
+        ];
     }
 
     /**
