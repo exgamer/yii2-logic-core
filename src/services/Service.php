@@ -68,7 +68,7 @@ abstract class Service extends Component
      */
     public function getRelatedFormClass()
     {
-        return ClassHelper::getRelatedClass($this, ["Service" => ""], ["services" => "forms"]);
+        return ClassHelper::getRelatedClass($this, ["Service" => "Form"], ["services" => "forms"]);
     }
 
     /**
@@ -79,6 +79,6 @@ abstract class Service extends Component
      */
     public function getRelatedSearchModelClass()
     {
-        return ClassHelper::getRelatedClass($this, ["Service" => ""], ["services" => "search"]);
+        return ClassHelper::getRelatedClass($this, ["Service" => "Search"], ["services" => "search"]);
     }
 }
