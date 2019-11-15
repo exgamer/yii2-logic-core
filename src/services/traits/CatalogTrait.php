@@ -1,6 +1,8 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\enum\IsDeletedEnum;
+use concepture\yii2logic\enum\StatusEnum;
 use Exception;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
@@ -102,10 +104,19 @@ trait CatalogTrait
         if (! $searchKey || ! $searchAttr){
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
+        $where = [];
+        $model = new $searchClass();
+        if ($model->hasAttribute('status')){
+            $where['status'] = StatusEnum::ACTIVE;
+        }
+        if ($model->hasAttribute('is_deleted')){
+            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+        }
 
         $data = $this->getQuery()
             ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
             ->where(['like', $searchAttr, $term])
+            ->andWhere($where)
             ->asArray()
             ->all();
 
@@ -140,13 +151,23 @@ trait CatalogTrait
      * @param string $from
      * @param $to
      * @param array $where
+     * @param boolean $excludeDefault
      * @return mixed
      */
-    public function getAllList($from = 'id', $to, $where = [])
+    public function getAllList($from = 'id', $to, $where = [], $excludeDefault = false)
     {
-        $models = $this->getQuery()->where($where)->all();
+        if ($excludeDefault === false) {
+            $modelClass = $this->getRelatedModelClass();
+            $model = new $modelClass();
+            if ($model->hasAttribute('status')) {
+                $where['status'] = StatusEnum::ACTIVE;
+            }
+            if ($model->hasAttribute('is_deleted')) {
+                $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+            }
+        }
+        $models = $this->getQuery()->andWhere($where)->all();
 
         return ArrayHelper::map($models, $from , $to);
     }
 }
-
