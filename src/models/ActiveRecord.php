@@ -2,7 +2,7 @@
 namespace concepture\yii2logic\models;
 
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
-use concepture\yii2logic\actions\traits\NonPhysicalDeleteTrait;
+use concepture\yii2logic\models\traits\NonPhysicalDeleteTrait;
 use Exception;
 use Throwable;
 use yii\db\ActiveRecord as Base;
