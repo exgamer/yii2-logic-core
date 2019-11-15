@@ -1,12 +1,6 @@
 ####Мини гайд по использованию моделей с нефизическим удалением
 
 
-```php
-   
-
-```
-
-
 1. Для нефизического удаления таблица должна содержать поле is_deleted типа smallint
 2. Унаследовать модель AR от *concepture\yii2logic\models\ActiveRecord*
 3. Выставить метку public $allow_physical_delete = false;
