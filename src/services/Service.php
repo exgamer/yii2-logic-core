@@ -6,7 +6,6 @@ use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
-use ReflectionClass;
 use concepture\yii2logic\services\traits\ModifyTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
 use concepture\yii2logic\services\traits\CatalogTrait;

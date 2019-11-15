@@ -3,7 +3,6 @@ namespace concepture\yii2logic\forms;
 
 use concepture\yii2core\models\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
-use ReflectionClass;
 use ReflectionException;
 use Yii;
 use yii\base\InvalidArgumentException;
