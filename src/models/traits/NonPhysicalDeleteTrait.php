@@ -16,7 +16,7 @@ trait NonPhysicalDeleteTrait
      *
      * @var bool
      */
-    public static $allow_physical_delete = true;
+    public $allow_physical_delete = true;
 
     /**
      * Переопределено для возможности реализации нефизического удаления
@@ -26,7 +26,7 @@ trait NonPhysicalDeleteTrait
      */
     public function delete()
     {
-        if (static::$allow_physical_delete) {
+        if ($this->allow_physical_delete) {
             return parent::delete();
         }
 
@@ -47,7 +47,7 @@ trait NonPhysicalDeleteTrait
      */
     public function undelete()
     {
-        if (static::$allow_physical_delete) {
+        if ($this->allow_physical_delete) {
             throw new Exception("cannot undelete if allowed physical delete");
         }
 
