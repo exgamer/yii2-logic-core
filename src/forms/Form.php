@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\forms;
 
 use concepture\yii2core\models\ActiveRecord;
+use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionClass;
 use ReflectionException;
 use Yii;
@@ -75,13 +76,8 @@ abstract class Form extends Model
     public static function getModelClass()
     {
         $me = new static();
-        $reflection = new ReflectionClass($me);
-        $name = $reflection->getShortName();
-        $name = str_replace("Form", "", $name);
-        $nameSpace = $reflection->getNamespaceName();
-        $nameSpace = str_replace("forms", "models", $nameSpace);
 
-        return  $nameSpace."\\".$name;
+        return ClassHelper::getRelatedClass($me, ["Form" => ""], ["forms" => "models"]);
     }
 
     /**

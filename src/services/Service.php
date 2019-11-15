@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\services;
 
 
+use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
@@ -57,13 +58,7 @@ abstract class Service extends Component
      */
     public function getRelatedModelClass()
     {
-        $reflection = new ReflectionClass($this);
-        $name = $reflection->getShortName();
-        $name = str_replace("Service", "", $name);
-        $nameSpace = $reflection->getNamespaceName();
-        $nameSpace = str_replace("services", "models", $nameSpace);
-
-        return  $nameSpace."\\".$name;
+        return ClassHelper::getRelatedClass($this, ["Service" => ""], ["services" => "models"]);
     }
 
     /**
@@ -74,13 +69,7 @@ abstract class Service extends Component
      */
     public function getRelatedFormClass()
     {
-        $reflection = new ReflectionClass($this);
-        $name = $reflection->getShortName();
-        $name = str_replace("Service", "", $name);
-        $nameSpace = $reflection->getNamespaceName();
-        $nameSpace = str_replace("services", "forms", $nameSpace);
-
-        return  $nameSpace."\\".$name."Form";
+        return ClassHelper::getRelatedClass($this, ["Service" => ""], ["services" => "forms"]);
     }
 
     /**
@@ -91,12 +80,6 @@ abstract class Service extends Component
      */
     public function getRelatedSearchModelClass()
     {
-        $reflection = new ReflectionClass($this);
-        $name = $reflection->getShortName();
-        $name = str_replace("Service", "", $name);
-        $nameSpace = $reflection->getNamespaceName();
-        $nameSpace = str_replace("services", "search", $nameSpace);
-
-        return  $nameSpace."\\".$name."Search";
+        return ClassHelper::getRelatedClass($this, ["Service" => ""], ["services" => "search"]);
     }
 }
