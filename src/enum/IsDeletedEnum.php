@@ -20,8 +20,8 @@ class IsDeletedEnum extends Enum
     public static function labels()
     {
         return [
-            self::NOT_DELETED => Yii::t('core', "Не удалено"),
-            self::DELETED => Yii::t('core', "Удалено"),
+            self::NOT_DELETED => Yii::t('core', "Нет"),
+            self::DELETED => Yii::t('core', "Да"),
         ];
     }
 }
