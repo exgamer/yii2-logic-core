@@ -2,6 +2,8 @@
 namespace concepture\yii2logic\models;
 
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
+use concepture\yii2logic\actions\traits\NonPhysicalDeleteTrait;
+use Exception;
 use Throwable;
 use yii\db\ActiveRecord as Base;
 use yii\base\Model;
@@ -18,6 +20,7 @@ use yii\db\ActiveQuery;
 abstract class ActiveRecord extends Base
 {
     use ModelScenarioTrait;
+    use NonPhysicalDeleteTrait;
 
     /**
      * Возвращает DataProvider с учетом параметров
@@ -162,7 +165,7 @@ abstract class ActiveRecord extends Base
             $transaction->commit();
 
             return $r;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
             throw $e;
         } catch (Throwable $e) {

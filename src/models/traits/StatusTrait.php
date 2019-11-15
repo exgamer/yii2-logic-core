@@ -9,6 +9,11 @@ use concepture\yii2logic\enum\StatusEnum;
  */
 trait StatusTrait
 {
+    /**
+     * Возвращает метку статуса
+     *
+     * @return string|null
+     */
     public function statusLabel()
     {
         return StatusEnum::label($this->status);

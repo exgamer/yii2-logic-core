@@ -60,6 +60,8 @@ trait ModifyTrait
     }
 
     /**
+     * TODO тут когда нибудь нужен рефактор, метод взят как есть из V3
+     * 
      * Сохранение формы
      *
      * @param Form $form класс для работы
@@ -151,6 +153,24 @@ trait ModifyTrait
         if (! $model->delete()){
             throw new Exception(
                 Yii::t('service','model delete exception - {errors}', [
+                    'errors' => Json::encode($model->getErrors())
+                ])
+            );
+        }
+    }
+
+    /**
+     * восстановление нефизически удаленной сущности
+     *
+     * @param ActiveRecord $model
+     * @throws
+     * @return boolean
+     */
+    public function undelete(ActiveRecord $model)
+    {
+        if (! $model->undelete()){
+            throw new Exception(
+                Yii::t('service','model undelete exception - {errors}', [
                     'errors' => Json::encode($model->getErrors())
                 ])
             );
