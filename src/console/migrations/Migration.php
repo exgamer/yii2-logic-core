@@ -59,5 +59,11 @@ abstract class Migration extends Base
             true);
     }
 
+    protected function addForeign($column, $refTable, $refColumn, $delete = null, $update = null)
+    {
+        $name = "foreign_key_{$column}_{$refTable}_{$refColumn}";
+        $this->addForeignKey($name, $this->getTableName(), $column, $refTable, $refColumn, $delete, $update);
+    }
+
     abstract function getTableName();
 }
