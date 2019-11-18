@@ -60,7 +60,7 @@ class ModelValidator extends Validator
         if (! $this->asArray) {
             $result = $this->validateModel($model->{$attribute});
             if ($result == false){
-                $this->addError($model, $attribute,  Json::encode($this->errors));
+                $this->addError($model, $attribute,  $this->message ?? Json::encode($this->errors));
                 return false;
             }
 
@@ -81,7 +81,7 @@ class ModelValidator extends Validator
         foreach ($model->{$attribute} as $data) {
             $result = $this->validateModel($data);
             if ($result == false){
-                $this->addError($model, $attribute,  Json::encode($this->errors));
+                $this->addError($model, $attribute,  $this->message ?? Json::encode($this->errors));
 
                 return false;
             }
