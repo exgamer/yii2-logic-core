@@ -268,6 +268,32 @@ trait HasLocalizationTrait
     }
 
     /**
+     * Возвращает правила валидации модели с локализациями
+     *
+     * @return array
+     */
+    public static function getLocalizationModelRules()
+    {
+        $class = static::getLocalizationModelClass();
+        $model = new $class();
+
+        return $model->rules();
+    }
+
+    /**
+     * Возвращает массив лейблов модели локализаций
+     *
+     * @return array
+     */
+    public static function getLocalizationModelAttributesLabels()
+    {
+        $class = static::getLocalizationModelClass();
+        $model = new $class();
+
+        return $model->attributeLabels();
+    }
+
+    /**
      * метод для получения модели с локализациями
      * модель локализации должна иметь такое же имя с постфиксом Localization
      *
