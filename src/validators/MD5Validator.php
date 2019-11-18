@@ -1,4 +1,5 @@
 <?php
+
 namespace concepture\yii2logic\validators;
 
 use Yii;
@@ -8,6 +9,8 @@ use yii\db\ActiveRecord;
 
 /**
  * Валидатор переводит в MD5 выбранный атрибут, используя значение $toAttr
+ *
+ * @todo валидатор не должен модифицировать данные
  *
  * @author Kamaelkz
  */
@@ -24,7 +27,12 @@ class MD5Validator extends Validator
      * @var boolean
      */
     public $changeOnEdit = true;
+
     public $skipOnEmpty = false;
+
+    /**
+     * @inheritDoc
+     */
     public function init()
     {
         parent::init();
@@ -33,6 +41,9 @@ class MD5Validator extends Validator
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validateAttribute($model, $attribute)
     {
         if($model->{$attribute} && ! $this->changeOnEdit){
