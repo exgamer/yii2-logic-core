@@ -1,12 +1,12 @@
 <?php
+
 namespace concepture\yii2logic\services\traits;
 
-
-use concepture\yii2logic\forms\Form;
-use concepture\yii2logic\models\ActiveRecord;
 use Yii;
 use yii\helpers\Json;
 use yii\base\Exception;
+use concepture\yii2logic\forms\Model;
+use concepture\yii2logic\models\ActiveRecord;
 
 /**
  * Треит сервиса содержащий методы для модификации данных
@@ -25,10 +25,10 @@ trait ModifyTrait
     /**
      * Добавление записи в бд
      *
-     * @param Form $form
+     * @param Model $form
      * @return ActiveRecord
      */
-    public function create(Form $form)
+    public function create(Model $form)
     {
         $this->beforeCreate($form);
         $model = $this->save($form);
@@ -43,11 +43,11 @@ trait ModifyTrait
     /**
      * обновление записи в бд
      *
-     * @param Form $form
+     * @param Model $form
      * @param ActiveRecord $model
      * @return ActiveRecord
      */
-    public function update(Form $form, ActiveRecord $model)
+    public function update(Model $form, ActiveRecord $model)
     {
         $this->beforeUpdate($form, $model);
         $model = $this->save($form, $model);
@@ -64,12 +64,12 @@ trait ModifyTrait
      *
      * Сохранение формы
      *
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      * @param ActiveRecord $model модель данных - передается при редактировании
      * @return ActiveRecord | boolean
      * @throws
      */
-    protected function save(Form $form , ActiveRecord $model = null)
+    protected function save(Model $form , ActiveRecord $model = null)
     {
         $modelClass = $this->getRelatedModelClass();
         if($model === null){
@@ -128,10 +128,10 @@ trait ModifyTrait
 
     /**
      * Выставляем полученные примари ключи в форму
-     * @param Form $form
+     * @param Model $form
      * @param ActiveRecord $model
      */
-    protected function setPrimaryKeysToFrom(Form $form, ActiveRecord $model)
+    protected function setPrimaryKeysToFrom(Model $form, ActiveRecord $model)
     {
         $primaryKeys = $model::primaryKey();
         foreach ($primaryKeys as $attribute) {
@@ -186,44 +186,44 @@ trait ModifyTrait
 
     /**
      * Дополнительные действия с моделью перед сохранением
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      * @param ActiveRecord $model
      * @param boolean $is_new_record
      */
-    protected function beforeModelSave(Form $form , ActiveRecord $model, $is_new_record){}
+    protected function beforeModelSave(Model $form , ActiveRecord $model, $is_new_record){}
 
     /**
      * Дополнительные действия с моделью после сохранения
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      * @param ActiveRecord $model
      * @param boolean $is_new_record
      */
-    protected function afterModelSave(Form $form , ActiveRecord $model, $is_new_record){}
+    protected function afterModelSave(Model $form , ActiveRecord $model, $is_new_record){}
 
     /**
      * Дополнительные действия с моделью перед созданием
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      */
-    protected function beforeCreate(Form $form){}
+    protected function beforeCreate(Model $form){}
 
     /**
      * Дополнительные действия с моделью после создания
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      */
-    protected function afterCreate(Form $form){}
+    protected function afterCreate(Model $form){}
 
     /**
      * Дополнительные действия с моделью перед обновлением
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      * @param ActiveRecord $model
      */
-    protected function beforeUpdate(Form $form, ActiveRecord $model){}
+    protected function beforeUpdate(Model $form, ActiveRecord $model){}
 
     /**
      * Дополнительные действия с моделью после обновления
-     * @param Form $form класс для работы
+     * @param Model $form класс для работы
      * @param ActiveRecord $model
      */
-    protected function afterUpdate(Form $form, ActiveRecord $model){}
+    protected function afterUpdate(Model $form, ActiveRecord $model){}
 }
 
