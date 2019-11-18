@@ -171,18 +171,23 @@ trait HasLocalizationTrait
     {
         $locClass = static::getLocalizationModelClass();
         $localization = $locClass::find()->where(['locale' => static::currentLocale(), 'entity_id' => $this->id])->one();
-        if ($localization){
-            $localization->load($this->getLocalized($localization), "");
-            if(!$localization->save()){
-                throw new Exception("localization not saved");
-            }
-
-            return false;
+        if (! $localization){
+            $localization = new $locClass();
+            $localization->entity_id = $this->id;
         }
 
-        $localization = new $locClass();
-        $localization->load($this->getLocalized($localization), '');
-        $localization->entity_id = $this->id;
+        foreach ($localization->attributes() as $attribute){
+            if (in_array($attribute, ['id', 'entity_id'])){
+                continue;
+            }
+
+            if ($localization->{$attribute} == $this->{$attribute}){
+                continue;
+            }
+
+            $localization->{$attribute} = $this->{$attribute};
+        }
+
         if(!$localization->save()){
             throw new Exception("localization not saved");
         }
