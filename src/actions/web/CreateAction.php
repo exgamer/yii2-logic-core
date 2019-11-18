@@ -15,7 +15,7 @@ use yii\db\Exception;
 class CreateAction extends Action
 {
     public $view = 'create';
-    public $redirect = 'view';
+    public $redirect = 'index';
     public $serviceMethod = 'create';
     
     public function run()
