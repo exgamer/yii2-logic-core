@@ -54,4 +54,16 @@ class StringHelper extends BaseHelper
     {
         return preg_split('/(?<=[a-z])(?=[A-Z])/u', $string);
     }
+
+    /**
+     * Генерация случайно строки заданной длинны
+     *
+     * @param integer $length
+     *
+     * @return string
+     */
+    public static function generateRandomString($length = 8)
+    {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
 }

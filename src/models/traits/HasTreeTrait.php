@@ -57,12 +57,12 @@ trait HasTreeTrait
     }
 
     /**
-     * метод должен вызываться в afterDelete модели для удаления дерева
+     * метод должен вызываться в beforeDelete модели для удаления дерева
      *
-     *   public function afterDelete()
+     *   public function beforeDelete()
      *   {
      *       $this->removeTree();
-     *       return parent::afterDelete();
+     *       return parent::beforeDelete();
      *   }
      *
      */

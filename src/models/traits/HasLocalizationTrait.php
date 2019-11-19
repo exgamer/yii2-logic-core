@@ -196,12 +196,12 @@ trait HasLocalizationTrait
     }
 
     /**
-     * метод должен вызываться в afterDelete модели для удаления локализаций
+     * метод должен вызываться в beforeDelete модели для удаления локализаций
      *
-     *   public function afterDelete()
+     *   public function beforeDelete()
      *   {
      *       $this->deleteLocalizations();
-     *       return parent::afterDelete();
+     *       return parent::beforeDelete();
      *   }
      *
      */

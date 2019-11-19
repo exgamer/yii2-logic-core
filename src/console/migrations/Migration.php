@@ -62,7 +62,7 @@ abstract class Migration extends Base
     protected function addForeign($column, $refTable, $refColumn, $delete = null, $update = null)
     {
         $tableName = $this->getTableName();
-        $name = "foreign_key_{$tableName}_{$column}_{$refTable}_{$refColumn}";
+        $name = "fk_{$tableName}_{$column}_{$refTable}_{$refColumn}";
         $this->addForeignKey($name, $tableName, $column, $refTable, $refColumn, $delete, $update);
     }
 

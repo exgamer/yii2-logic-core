@@ -16,7 +16,7 @@ use yii\db\Exception;
 class UpdateAction extends Action
 {
     public $view = 'update';
-    public $redirect = 'view';
+    public $redirect = 'index';
     public $serviceMethod = 'update';
 
     public function run($id)

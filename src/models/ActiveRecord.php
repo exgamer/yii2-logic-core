@@ -23,6 +23,19 @@ abstract class ActiveRecord extends Base
     use NonPhysicalDeleteTrait;
 
     /**
+     * Врубаем транзакции по уолчнию для всех случаев модификации данных для сценария default
+     * Для использования в стандартном методе AR   ::isTransactional($operation)
+     *
+     * @return array
+     */
+    public function transactions()
+    {
+        return [
+            'default' => self::OP_ALL
+        ];
+    }
+
+    /**
      * Возвращает DataProvider с учетом параметров
      *
      * Пример использования из concepture\yii2logic\services\traits\ReadTrait.php
@@ -149,28 +162,5 @@ abstract class ActiveRecord extends Base
     public static function getListSearchAttribute()
     {
         return null;
-    }
-
-    /**
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return mixed
-     * @throws Throwable
-     */
-    public function save($runValidation = true, $attributeNames = null)
-    {
-        $transaction = $this->getDb()->beginTransaction();
-        try {
-            $r = parent::save($runValidation, $attributeNames);
-            $transaction->commit();
-
-            return $r;
-        } catch (Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        } catch (Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
     }
 }
