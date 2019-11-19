@@ -1,4 +1,5 @@
 <?php
+
 namespace concepture\yii2logic\helpers;
 
 use Swift_Message;
