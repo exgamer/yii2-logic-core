@@ -11,7 +11,7 @@
 
 
 1. Создаем модель AR унаследованную от *concepture\yii2logic\models\ActiveRecord* и подключаем треит concepture\yii2logic\models\traits\HasLocalizationTrait
-   и реализовать поведения afterSave, afterDelete, afterFind
+   и реализовать поведения afterSave, beforeDelete, afterFind
 
 ```php
 
@@ -150,11 +150,11 @@ class StaticBlock extends ActiveRecord
         return parent::afterSave($insert, $changedAttributes);
     }
 
-    public function afterDelete()
+    public function beforeDelete()
     {
        $this->deleteLocalizations();
 
-       return parent::afterDelete();
+       return parent::beforeDelete();
     }
 
     public function afterFind()
