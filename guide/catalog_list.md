@@ -15,6 +15,27 @@
 
 ```
 
+!!!!
+Если нужно в getListSearchAttribute вызвать метод, в модели 
+создаем метод например 
+```php
+    public function getLabel()
+    {
+        return $this->domain."-".$this->id;
+    }
+
+```
+и в методе getListSearchAttribute прописываем название метода без get и с маленькой буквы
+```php
+
+    public static function getListSearchAttribute()
+    {
+        return 'label';
+    }
+
+```
+!!!!!
+
 2. для получения записей таблицы как массива ключ=> значение 
 вызываем Yii::$app->someService->catalog();
 
