@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2logic\traits;
+namespace concepture\yii2logic\widgets;
 
 use Yii;
 

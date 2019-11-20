@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2logic\base;
+namespace concepture\yii2logic\exceptions;
 
 /**
  * Базовое исключение
