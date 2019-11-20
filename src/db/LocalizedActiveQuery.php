@@ -6,6 +6,8 @@ use yii\db\ActiveQuery as Base;
 use yii\db\Connection;
 
 /**
+ * ActiveQuery для сущностей с локализациями
+ *
  * Class LocalizedActiveQuery
  * @package concepture\yii2logic\db
  * @author Olzhas Kulzhambekov <exgamer@live.ru>

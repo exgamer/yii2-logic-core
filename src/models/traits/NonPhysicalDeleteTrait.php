@@ -5,6 +5,8 @@ use Exception;
 
 /**
  * Содержит методы реализующие нефизическое удаление записей
+ * Треит содержит методы для использования моделей
+ * которые используют атрибут is_deleted
  *
  * Trait NonPhysicalDeleteTrait
  * @package concepture\yii2logic\models\traits

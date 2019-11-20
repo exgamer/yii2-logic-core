@@ -13,6 +13,13 @@ use concepture\yii2logic\services\traits\CatalogTrait;
 /**
  * Базовый класс сервиса для реализации бизнес логики
  *
+ * Для реализации бизнес логики с помощью сервиса
+ * сущность должна иметь
+ * ActiveRecord
+ * Form
+ * Search
+ * Service
+ *
  * Class Service
  * @package concepture\yii2logic\services
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
