@@ -157,10 +157,6 @@ abstract class ActiveRecord extends Base
      *       return 'username';
      *   }
      *
-     *   таким способом можно вызывать методы модели
-     *   например если в модели сделать метод  getLabel()
-     *   если метод getListSearchAttribute вернет 'label'
-     *   будет вызван метод getLabel() модели
      *
      * @return string
      */

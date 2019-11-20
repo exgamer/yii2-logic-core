@@ -24,6 +24,12 @@ trait CatalogTrait
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
      *
+     *   таким способом можно вызывать методы модели
+     *   например если в модели сделать метод  getLabel()
+     *   если метод getListSearchAttribute вернет 'label'
+     *   будет вызван метод getLabel() модели
+     *
+     *
      * @return array
      * @throws Exception
      */
@@ -88,6 +94,11 @@ trait CatalogTrait
     /**
      * Возвращает данные для исползования с виджетом \yii\jui\AutoComplete
      *
+     *   таким способом можно вызывать методы модели
+     *   например если в модели сделать метод  getLabel()
+     *   если метод getListSearchAttribute вернет 'label'
+     *   будет вызван метод getLabel() модели
+     *
      * @param null $term
      * @return array []
      * @throws Exception
@@ -128,6 +139,12 @@ trait CatalogTrait
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
      *
+     *   таким способом можно вызывать методы модели
+     *   например если в модели сделать метод  getLabel()
+     *   если метод getListSearchAttribute вернет 'label'
+     *   будет вызван метод getLabel() модели
+     *
+     *
      * @param array $queryParams
      * @return array
      * @throws Exception
@@ -147,6 +164,11 @@ trait CatalogTrait
 
     /**
      * Возвращает массив записей таблицы для выпадающих списков
+     *
+     *   таким способом можно вызывать методы модели
+     *   например если в модели сделать метод  getLabel()
+     *   если метод getListSearchAttribute вернет 'label'
+     *   будет вызван метод getLabel() модели
      *
      * @param string $from
      * @param $to
