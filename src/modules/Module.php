@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2logic\base;
+namespace concepture\yii2logic\modules;
 
 use Yii;
 use yii\base\Module as YiiModule;

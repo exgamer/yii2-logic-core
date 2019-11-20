@@ -4,7 +4,7 @@ namespace concepture\yii2logic\components\jwt\services;
 
 use Yii;
 use yii\web\Request;
-use concepture\yii2logic\base\Exception;
+use concepture\yii2logic\exceptions\Exception;
 use concepture\yii2logic\services\Service;
 use Firebase\JWT\JWT;
 use concepture\yii2logic\components\jwt\interfaces\ITokenService;
