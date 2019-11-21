@@ -168,10 +168,7 @@ trait CatalogTrait
      *
      * @param ActiveQuery $query
      */
-    public function extendCatalogTraitQuery(ActiveQuery $query)
-    {
-
-    }
+    public function extendCatalogTraitQuery(ActiveQuery $query){}
 
     /**
      * Возвращает массив моделей для выпадающих списков
