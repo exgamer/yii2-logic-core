@@ -53,7 +53,7 @@ abstract class Migration extends Base
     protected function addUniqueIndex($columns)
     {
         $index_name = implode("_", $columns);
-        $this->createIndex('index_unique'.$index_name,
+        $this->createIndex('uni_'.$index_name,
             '{{%'.$this->getTableName().'}}',
             $columns,
             true);
