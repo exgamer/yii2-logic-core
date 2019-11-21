@@ -18,7 +18,7 @@ class DataLoadHelper
      * Загружает данные из одного в другое
      *
      * @param object|array|json $from
-     * @param object|array $to
+     * @param object|array|json $to
      * @param bool $ignoreEmpty
      * @return mixed
      */
@@ -50,9 +50,25 @@ class DataLoadHelper
             $fromKeys = array_keys($from);
         }
 
+        $returnJson = false;
+        /**
+         * Чтобы можно было загружать данные в json строку
+         */
+        if(
+            is_string($to)
+            && StringHelper::isJson($to)
+        ) {
+            $to = StringHelper::jsonToArray($to);
+            $returnJson = true;
+        }
 
         foreach ($fromKeys as $key){
             $to = static::loadByKey($from, $to, $key, $ignoreEmpty);
+        }
+
+        if ($returnJson){
+
+            return json_encode($to);
         }
 
         return  $to;
