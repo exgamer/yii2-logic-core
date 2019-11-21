@@ -3,6 +3,8 @@
 namespace concepture\yii2logic\helpers;
 
 
+use yii\db\ActiveRecord;
+
 /**
  * Вспомогательный класс для действии с данными между обьектами
  *
@@ -24,12 +26,20 @@ class DataLoadHelper
     {
         $fromKeys = [];
         if (is_object($from)){
-            $fromKeys = get_object_vars($from);
+            if ($from instanceof ActiveRecord){
+                $fromKeys = $from->attributes();
+            }else {
+                /**
+                 * TODO Можно будет добавить другие варианты
+                 */
+                $fromKeys = get_object_vars($from);
+            }
         }
 
         if (is_array($from)){
             $fromKeys = array_keys($from);
         }
+
 
         foreach ($fromKeys as $key){
             $to = static::loadByKey($from, $to, $key, $ignoreEmpty);
@@ -51,16 +61,10 @@ class DataLoadHelper
     {
         $newValue = null;
         if (is_object($from)){
-            /**
-             * Наличие свойства специально не проверяется, чтобы видеть ошибки
-             */
             $newValue =  $from->{$key};
         }
 
         if (is_array($from)){
-            /**
-             * Наличие ключа специально не проверяется, чтобы видеть ошибки
-             */
             $newValue =  $from[$key];
         }
 
@@ -70,11 +74,15 @@ class DataLoadHelper
         }
 
         if (is_object($to)){
-            $to->{$key} =  $newValue;
+            if (property_exists($to, $key)) {
+                $to->{$key} = $newValue;
+            }
         }
 
         if (is_array($to)){
-            $to[$key] =  $newValue;
+            if (isset($to[$key])) {
+                $to[$key] = $newValue;
+            }
         }
 
         return  $to;
