@@ -17,9 +17,9 @@ class DataLoadHelper
     /**
      * Загружает данные из одного в другое
      *
-     * @param object|array|json $from
-     * @param object|array|json $to
-     * @param bool $ignoreEmpty
+     * @param $from - откуда
+     * @param $to - куда
+     * @param bool $ignoreEmpty - если true пустые данные будут проигнорены
      * @return mixed
      */
     public static function loadData($from, $to, $ignoreEmpty = false)
@@ -77,10 +77,10 @@ class DataLoadHelper
     /**
      * Загружкет куда либо данные по ключу или аттрибуту
      *
-     * @param $from
-     * @param $to
+     * @param $from - откуда
+     * @param $to - куда
      * @param $key
-     * @param bool $ignoreEmpty
+     * @param bool $ignoreEmpty - если true пустые данные будут проигнорены
      * @return array
      */
     public static function loadByKey($from, $to, $key, $ignoreEmpty = false)
