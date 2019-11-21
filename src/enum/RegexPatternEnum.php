@@ -15,4 +15,8 @@ class RegexPatternEnum extends Enum
     const CDN_STATIC_PATH = '/^\/[0-9]{2}\/[0-9]{2}\/[0-9a-z]+_[a-z0-9]+.[a-z]+$/';
     # абсолютная ссылка
     const ABSOLUTE_URL = '/(?:http|https):\/\/((?:[\w-]+)(?:\.[\w-]+)+)(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/';
+    /**
+     * Только цифры, латинские маленькие буквы и подчеркивания
+     */
+    const DIGITS_UNDERSCORE_LETTERS = '/^[a-z]\w*$/i';
 }
