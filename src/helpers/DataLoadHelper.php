@@ -32,7 +32,7 @@ class DataLoadHelper
         }
 
         foreach ($fromKeys as $key){
-            $to = static::loadByKey($from, $to, $key);
+            $to = static::loadByKey($from, $to, $key, $ignoreEmpty);
         }
 
         return  $to;
