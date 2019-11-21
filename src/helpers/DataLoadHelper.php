@@ -51,10 +51,16 @@ class DataLoadHelper
     {
         $newValue = null;
         if (is_object($from)){
+            /**
+             * Наличие свойства специально не проверяется, чтобы видеть ошибки
+             */
             $newValue =  $from->{$key};
         }
 
         if (is_array($from)){
+            /**
+             * Наличие ключа специально не проверяется, чтобы видеть ошибки
+             */
             $newValue =  $from[$key];
         }
 
