@@ -162,6 +162,17 @@ trait CatalogTrait
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }
 
+
+    /**
+     * Для расширения запроса для вывода каталога и списка для выпадашек
+     *
+     * @param ActiveQuery $query
+     */
+    public function extendCatalogTraitQuery(ActiveQuery $query)
+    {
+
+    }
+
     /**
      * Возвращает массив моделей для выпадающих списков
      *
@@ -182,7 +193,10 @@ trait CatalogTrait
             }
         }
 
-        return $this->getQuery()->andWhere($where)->all();
+        $query = $this->getQuery()->andWhere($where);
+        $this->extendCatalogTraitQuery($query);
+
+        return $query->all();
     }
 
     /**
