@@ -17,13 +17,23 @@ class DataLoadHelper
     /**
      * Загружает данные из одного в другое
      *
-     * @param $from
-     * @param $to
+     * @param object|array|json $from
+     * @param object|array $to
      * @param bool $ignoreEmpty
      * @return mixed
      */
     public static function loadData($from, $to, $ignoreEmpty = false)
     {
+        /**
+         * Чтобы можно было загружать данные из json строки
+         */
+        if(
+            is_string($from)
+            && StringHelper::isJson($from)
+        ) {
+            $from = StringHelper::jsonToArray($from);
+        }
+
         $fromKeys = [];
         if (is_object($from)){
             if ($from instanceof ActiveRecord){
