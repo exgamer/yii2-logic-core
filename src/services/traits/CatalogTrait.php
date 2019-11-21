@@ -163,6 +163,29 @@ trait CatalogTrait
     }
 
     /**
+     * Возвращает массив моделей для выпадающих списков
+     *
+     * @param array $where
+     * @param bool $excludeDefault
+     * @return mixed
+     */
+    public function getAllModelsForList($where = [], $excludeDefault = false)
+    {
+        if ($excludeDefault === false) {
+            $modelClass = $this->getRelatedModelClass();
+            $model = new $modelClass();
+            if ($model->hasAttribute('status')) {
+                $where['status'] = StatusEnum::ACTIVE;
+            }
+            if ($model->hasAttribute('is_deleted')) {
+                $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+            }
+        }
+
+        return $this->getQuery()->andWhere($where)->all();
+    }
+
+    /**
      * Возвращает массив записей таблицы для выпадающих списков
      *
      *   таким способом можно вызывать методы модели
@@ -178,17 +201,7 @@ trait CatalogTrait
      */
     public function getAllList($from = 'id', $to, $where = [], $excludeDefault = false)
     {
-        if ($excludeDefault === false) {
-            $modelClass = $this->getRelatedModelClass();
-            $model = new $modelClass();
-            if ($model->hasAttribute('status')) {
-                $where['status'] = StatusEnum::ACTIVE;
-            }
-            if ($model->hasAttribute('is_deleted')) {
-                $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
-            }
-        }
-        $models = $this->getQuery()->andWhere($where)->all();
+        $models = $this->getAllModelsForList($where, $excludeDefault);
 
         return ArrayHelper::map($models, $from , $to);
     }
