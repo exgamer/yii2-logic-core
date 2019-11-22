@@ -3,6 +3,7 @@ namespace concepture\yii2logic\models;
 
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
 use concepture\yii2logic\models\traits\NonPhysicalDeleteTrait;
+use concepture\yii2logic\models\traits\SearchTrait;
 use Exception;
 use Throwable;
 use yii\db\ActiveRecord as Base;
@@ -21,6 +22,7 @@ abstract class ActiveRecord extends Base
 {
     use ModelScenarioTrait;
     use NonPhysicalDeleteTrait;
+    use SearchTrait;
 
     /**
      * Врубаем транзакции по уолчнию для всех случаев модификации данных для сценария default
