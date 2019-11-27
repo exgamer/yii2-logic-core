@@ -165,6 +165,8 @@ abstract class Form extends Model
 
     /**
      * метод для заполнения формы кастомными данными из модели
+     * например используется для заполнения данных в UpdateAction
+     *
      * @param \yii\db\ActiveRecord $model
      */
     public function customizeForm(\yii\db\ActiveRecord $model)
