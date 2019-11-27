@@ -169,7 +169,7 @@ abstract class Form extends Model
      *
      * @param ActiveRecord $model
      */
-    public function customizeForm(ActiveRecord $model)
+    public function customizeForm($model)
     {
 
     }
