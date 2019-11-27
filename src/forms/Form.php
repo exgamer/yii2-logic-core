@@ -162,4 +162,13 @@ abstract class Form extends Model
 
         return !$this->hasErrors();
     }
+
+    /**
+     * метод для заполнения формы кастомными данными из модели
+     * @param \yii\db\ActiveRecord $model
+     */
+    public function customizeForm(\yii\db\ActiveRecord $model)
+    {
+
+    }
 }
