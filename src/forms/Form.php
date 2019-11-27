@@ -145,7 +145,15 @@ abstract class Form extends Model
             $validationModel = $model;
         }
         foreach ($this->getActiveValidators() as $validator) {
-            $validator->validateAttributes($validationModel, $attributeNames);
+            /**
+             * @todo костылище, для обруливания ситуации когда в форме есть атрибуты которых нет в модели
+             * @todo придумать что нибудь
+             */
+            try{
+                $validator->validateAttributes($validationModel, $attributeNames);
+            }catch (\Exception $ex){
+
+            }
         }
         if ($validationModel->hasErrors()){
             $this->addErrors($validationModel->getErrors());
