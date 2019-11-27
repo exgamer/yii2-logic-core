@@ -1,8 +1,7 @@
 <?php
 namespace concepture\yii2logic\forms;
 
-use yii\db\ActiveRecord as YiiAr;
-use concepture\yii2core\models\ActiveRecord;
+use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
 use Yii;
@@ -15,7 +14,7 @@ use yii\db\Connection;
  * Базовая форма сущности связанной с  моделью AR
  *
  * Class Form
- * @package cconcepture\yii2logic\forms
+ * @package concepture\yii2logic\forms
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 abstract class Form extends Model
@@ -168,9 +167,9 @@ abstract class Form extends Model
      * метод для заполнения формы кастомными данными из модели
      * например используется для заполнения данных в UpdateAction
      *
-     * @param YiiAr $model
+     * @param ActiveRecord $model
      */
-    public function customizeForm(YiiAr $model)
+    public function customizeForm(ActiveRecord $model)
     {
 
     }
