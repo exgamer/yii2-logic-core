@@ -23,6 +23,27 @@ trait ModifyTrait
     private $oldData = [];
 
     /**
+     * Мультивставка записей если их нет
+     *
+     * поля которые нужно встатвить
+     * @param $fields
+     *
+     * данные
+     * @param $rows
+     * @return boolean
+     */
+    public function batchInsert($fields, $rows)
+    {
+        $db = $this->getDb();
+        $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
+        $update = [];
+        foreach ($fields as $field){
+            $update[] = $field."=".$field;
+        }
+        return $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+    }
+
+    /**
      * Добавление записи в бд
      *
      * @param Model $form
