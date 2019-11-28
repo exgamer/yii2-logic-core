@@ -116,22 +116,22 @@ trait CatalogTrait
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
         $where = [];
-        $model = new $searchClass();
-        if ($model->hasAttribute('status')){
-            $where['status'] = StatusEnum::ACTIVE;
-        }
-        if ($model->hasAttribute('is_deleted')){
-            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
-        }
+//        $model = new $searchClass();
+//        if ($model->hasAttribute('status')){
+//            $where['status'] = StatusEnum::ACTIVE;
+//        }
+//        if ($model->hasAttribute('is_deleted')){
+//            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+//        }
 
-        $data = $this->getQuery()
+        $query = $this->getQuery()
             ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
             ->where(['like', $searchAttr, $term])
             ->andWhere($where)
-            ->asArray()
-            ->all();
+            ->asArray();
+        $this->extendCatalogTraitQuery($query);
 
-        return $data;
+        return $query->all();
     }
 
     /**
