@@ -41,4 +41,11 @@ class ClassHelper
 
         return  $class;
     }
+
+    public static function getShortClassName($objectOrClass)
+    {
+        $reflection = new ReflectionClass($objectOrClass);
+
+        return $reflection->getShortName();
+    }
 }
