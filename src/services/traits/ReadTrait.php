@@ -21,7 +21,6 @@ trait ReadTrait
     public function getQuery()
     {
         $class = $this->getRelatedModelClass();
-
         $query = $class::find();
         $this->extendQuery($query);
 
@@ -35,7 +34,7 @@ trait ReadTrait
      */
     private function extendQuery(ActiveQuery $query)
     {
-        $extendFindCondition = static::extendFindCondition();
+        $extendFindCondition = $this->extendFindCondition();
         if (empty($extendFindCondition) || ! is_array($extendFindCondition)){
             return;
         }
@@ -58,7 +57,7 @@ trait ReadTrait
      *
      * @return array
      */
-    protected static function extendFindCondition()
+    protected function extendFindCondition()
     {
         return [];
     }
