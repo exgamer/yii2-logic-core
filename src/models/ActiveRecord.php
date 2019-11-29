@@ -98,8 +98,6 @@ abstract class ActiveRecord extends Base
      * применяетсяв методе getDataProvider в concepture\yii2logic\services\traits\ReadTrait.php
      *
      *
-     *
-     *
      * Пример
      *   protected function extendQuery(ActiveQuery $query)
      *   {
