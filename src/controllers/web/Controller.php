@@ -13,7 +13,6 @@ use Yii;
 use yii\web\Controller as Base;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use ReflectionClass;
 
 /**
  * Базовый веб контроллер
