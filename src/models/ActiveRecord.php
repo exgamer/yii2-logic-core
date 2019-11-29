@@ -93,7 +93,12 @@ abstract class ActiveRecord extends Base
 
     /**
      * Метод для расширения ActiveQuery
-     * используетсяв Search модели
+     * определяется в Search модели
+     *
+     * применяетсяв методе getDataProvider в concepture\yii2logic\services\traits\ReadTrait.php
+     *
+     *
+     *
      *
      * Пример
      *   protected function extendQuery(ActiveQuery $query)
