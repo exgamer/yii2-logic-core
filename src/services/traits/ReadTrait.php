@@ -46,7 +46,7 @@ trait ReadTrait
     {
         $searchClass = $this->getRelatedSearchModelClass();
         $searchModel = new $searchClass();
-        $query = $searchClass::find();
+        $query = $this->getQuery();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
