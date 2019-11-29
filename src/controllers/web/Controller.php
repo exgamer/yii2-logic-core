@@ -6,6 +6,7 @@ use concepture\yii2logic\actions\web\DeleteAction;
 use concepture\yii2logic\actions\web\IndexAction;
 use concepture\yii2logic\actions\web\UpdateAction;
 use concepture\yii2logic\actions\web\ViewAction;
+use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\Service;
 use ReflectionException;
 use Yii;
@@ -76,15 +77,10 @@ abstract class Controller extends Base
      * Возвращает сервис сущности
      *
      * @return Service
-     * @throws ReflectionException
      */
     public function getService()
     {
-        $reflection = new ReflectionClass($this);
-        $name = $reflection->getShortName();
-        $name = str_replace("Controller", "", $name);
-        $name = $name."Service";
-        $name = lcfirst($name);
+        $name = ClassHelper::getServiceName($this, "Controller");
 
         return Yii::$app->{$name};
     }
