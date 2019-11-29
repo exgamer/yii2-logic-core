@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\validators;
 
 use concepture\yii2logic\forms\Form;
+use concepture\yii2logic\helpers\ClassHelper;
 use Yii;
 use yii\base\Exception;
 use yii\validators\Validator;
@@ -31,8 +32,8 @@ class UniquePropertyValidator extends Validator
             $model::$current_locale = $model->locale;
             $model::$by_locale_hard_search = true;
         }
-
-        $result = $model::find()->all();
+        $serviceName = ClassHelper::getServiceName($model, "Form");
+        $result = Yii::$app->{$serviceName}->getQuery()->all();
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
             return false;
