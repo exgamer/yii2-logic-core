@@ -125,7 +125,6 @@ trait HasLocalizationTrait
                 }
             }
         ]);
-        static::extendFind($query);
 
 
         return $query;
