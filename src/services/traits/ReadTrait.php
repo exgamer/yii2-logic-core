@@ -78,7 +78,7 @@ trait ReadTrait
         if (! empty($with)){
             $q->with($with);
         }
-        $q->where(["{$this->getTableName()}.id" => $id]);
+        $q->andWhere(["{$this->getTableName()}.id" => $id]);
 
         return $q->one();
     }
