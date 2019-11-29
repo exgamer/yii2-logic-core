@@ -29,38 +29,11 @@ trait ReadTrait
 
     /**
      * Метод для расширения find()
+     * !! ВНимание эти данные будут поставлены в find по умолчанию все всех случаях
      *
      * @param ActiveQuery $query
      */
-    private function extendQuery(ActiveQuery $query)
-    {
-        $extendFindCondition = $this->extendFindCondition();
-        if (empty($extendFindCondition) || ! is_array($extendFindCondition)){
-            return;
-        }
-
-        foreach ($extendFindCondition as $condition){
-            $query->andWhere($condition);
-        }
-    }
-
-    /**
-     * Возвращает массив для автоматической подстановки в запрос
-     * !! ВНимание эти данные будут поставлены в find по умолчанию все всех случаях
-     *
-     * [
-     *       ['domain_id' => [3, null]],
-     *       [locale' => 1],
-     *      'is_deleted = 0',
-     *      ['is_deleted = :is_deleted', [':is_deleted' => 0]],
-     * ]
-     *
-     * @return array
-     */
-    protected function extendFindCondition()
-    {
-        return [];
-    }
+    protected function extendQuery(ActiveQuery $query){}
 
     /**
      * Возвращает DataProvider
