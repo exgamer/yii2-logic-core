@@ -25,6 +25,26 @@ abstract class ActiveRecord extends Base
     use SearchTrait;
 
     /**
+     * Переопределяем find для расширения
+     *
+     * @return ActiveQuery
+     */
+    public static function find()
+    {
+        $query = parent::find();
+        static::extendFind($query);
+
+        return $query;
+    }
+
+    /**
+     * Метод для расширения find()
+     *
+     * @param ActiveQuery $query
+     */
+    protected static function extendFind(ActiveQuery $query){}
+
+    /**
      * Врубаем транзакции по уолчнию для всех случаев модификации данных для сценария default
      * Для использования в стандартном методе AR   ::isTransactional($operation)
      *
