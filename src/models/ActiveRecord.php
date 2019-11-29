@@ -59,7 +59,7 @@ abstract class ActiveRecord extends Base
      *
      *
      * Пример
-     *   protected function extendQuery(ActiveQuery $query)
+     *   public function extendQuery(ActiveQuery $query)
      *   {
      *         $query->andFilterWhere([
      *            'id' => $this->id
@@ -71,14 +71,14 @@ abstract class ActiveRecord extends Base
      *
      * @param ActiveQuery $query
      */
-    protected function extendQuery(ActiveQuery $query){}
+    public function extendQuery(ActiveQuery $query){}
 
     /**
      * Метод для расширения DataProvider
      * используетсяв Search модели
      *
      * Пример
-     *   protected function extendDataProvider(ActiveDataProvider $dataProvider)
+     *   public function extendDataProvider(ActiveDataProvider $dataProvider)
      *   {
      *       $dataProvider->sort->attributes['username'] = [
      *           'asc' => [User::tableName().'.username' => SORT_ASC],
@@ -92,7 +92,7 @@ abstract class ActiveRecord extends Base
      *
      * @param ActiveDataProvider $dataProvider
      */
-    protected function extendDataProvider(ActiveDataProvider $dataProvider){}
+    public function extendDataProvider(ActiveDataProvider $dataProvider){}
 
     /**
      * Аттрибут модели который будет использован для ключа в выпадающих списках
