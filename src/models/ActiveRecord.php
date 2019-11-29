@@ -37,45 +37,45 @@ abstract class ActiveRecord extends Base
         ];
     }
 
-    /**
-     * Возвращает DataProvider с учетом параметров
-     *
-     * Пример использования из concepture\yii2logic\services\traits\ReadTrait.php
-     *
-     *   public function getDataProvider($queryParams = [])
-     *   {
-     *       $searchClass = $this->getRelatedSearchModelClass();
-     *       $searchModel = new $searchClass();
-     *
-     *       return $searchModel->search($queryParams);
-     *   }
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params)
-    {
-        $query = static::find();
-
-        // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            $query->where('0=1');
-            return $dataProvider;
-        }
-        $this->extendQuery($query);
-        $this->extendDataProvider($dataProvider);
-
-        return $dataProvider;
-    }
+//    /**
+//     * Возвращает DataProvider с учетом параметров
+//     *
+//     * Пример использования из concepture\yii2logic\services\traits\ReadTrait.php
+//     *
+//     *   public function getDataProvider($queryParams = [])
+//     *   {
+//     *       $searchClass = $this->getRelatedSearchModelClass();
+//     *       $searchModel = new $searchClass();
+//     *
+//     *       return $searchModel->search($queryParams);
+//     *   }
+//     *
+//     * @param array $params
+//     *
+//     * @return ActiveDataProvider
+//     */
+//    public function search($params)
+//    {
+//        $query = static::find();
+//
+//        // add conditions that should always apply here
+//
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => $query,
+//        ]);
+//
+//        $this->load($params);
+//
+//        if (!$this->validate()) {
+//            // uncomment the following line if you do not want to return any records when validation fails
+//            $query->where('0=1');
+//            return $dataProvider;
+//        }
+//        $this->extendQuery($query);
+//        $this->extendDataProvider($dataProvider);
+//
+//        return $dataProvider;
+//    }
 
     /**
      * Добавляет в Дата провайдер сортировку по атрибуту связанной таблицы

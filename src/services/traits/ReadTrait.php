@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -45,8 +46,22 @@ trait ReadTrait
     {
         $searchClass = $this->getRelatedSearchModelClass();
         $searchModel = new $searchClass();
+        $query = $searchClass::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $searchModel->load($queryParams);
+        if (!$searchModel->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            $query->where('0=1');
+            
+            return $dataProvider;
+        }
 
-        return $searchModel->search($queryParams);
+        $searchModel->extendQuery($query);
+        $searchModel->extendDataProvider($dataProvider);
+
+        return $dataProvider;
     }
 
     /**
