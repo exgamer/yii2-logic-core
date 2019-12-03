@@ -173,4 +173,24 @@ abstract class Form extends Model
     {
 
     }
+
+    /**
+     * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
+     *
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function __call($method, $parameters)
+    {
+        $modelClass = static::getModelClass();
+        $model = new $modelClass();
+        $model->load($this->attributes, '');
+        if (! method_exists($this, $method)){
+            return call_user_func_array([$model, $method], $parameters);
+        }
+
+        parent::__call($method, $parameters);
+    }
 }
