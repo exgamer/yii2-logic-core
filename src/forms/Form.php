@@ -193,4 +193,16 @@ abstract class Form extends Model
 
         parent::__call($method, $parameters);
     }
+
+    /**
+     * Метод для тог очтобы можно было установить метку для сущности
+     * @return string
+     * @throws ReflectionException
+     */
+    public static function label()
+    {
+        $modelClass = static::getModelClass();
+
+        return $modelClass::label();
+    }
 }
