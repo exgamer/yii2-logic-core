@@ -134,4 +134,13 @@ abstract class ActiveRecord extends Base
     {
         return null;
     }
+
+    /**
+     * Метод для тог очтобы можно было установить метку для сущности
+     * @return string
+     */
+    public static function label()
+    {
+        return static::class;
+    }
 }
