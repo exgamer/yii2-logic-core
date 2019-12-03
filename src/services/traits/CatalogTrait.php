@@ -126,7 +126,7 @@ trait CatalogTrait
 
         $query = $this->getQuery()
             ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
-            ->where(['like', $searchAttr, $term])
+            ->andWhere(['like', $searchAttr, $term])
             ->andWhere($where)
             ->asArray();
         $this->extendCatalogTraitQuery($query);

@@ -32,7 +32,7 @@ class UniquePropertyValidator extends Validator
             $model::$current_locale = $model->locale;
             $model::$by_locale_hard_search = true;
         }
-        
+
         $serviceName = ClassHelper::getServiceName($model, "Form");
         $result = Yii::$app->{$serviceName}->getQuery()->all();
         if (count($result)>0){
