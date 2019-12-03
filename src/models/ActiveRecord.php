@@ -150,11 +150,7 @@ abstract class ActiveRecord extends Base
      */
     public function toString()
     {
-        $name = static::getListSearchAttribute();
-        if ($name){
-            return $this->{$name};
-        }
-        
+
         return null;
     }
 }
