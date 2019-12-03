@@ -143,4 +143,18 @@ abstract class ActiveRecord extends Base
     {
         return static::class;
     }
+
+    /**
+     * Метод для тог очтобы можно было установить метку для сущности
+     * @return string
+     */
+    public function toString()
+    {
+        $name = static::getListSearchAttribute();
+        if ($name){
+            return $this->{$name};
+        }
+        
+        return null;
+    }
 }
