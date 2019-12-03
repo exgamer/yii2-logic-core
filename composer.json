@@ -1,6 +1,6 @@
 {
     "name": "concepture/yii2-logic-core",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "type": "yii2-extension",
     "description": "package under development",
     "require": {
