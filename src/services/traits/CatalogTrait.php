@@ -53,6 +53,19 @@ trait CatalogTrait
     }
 
     /**
+     * Возвращает воличество элементов каталога
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function catalogCount()
+    {
+        $catalog = $this->catalog();
+
+        return count($catalog);
+    }
+
+    /**
      * Возвращает ключ из каталога по значению
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
