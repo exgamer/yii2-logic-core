@@ -61,7 +61,7 @@ trait LocalizedReadTrait
 
         $data = $this->getQuery()
             ->select(["p.{$searchAttr} as value", "p.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])
-            ->where(['like', "p.".$searchAttr, $term])
+            ->andWhere(['like', "p.".$searchAttr, $term])
             ->andWhere($where)
             ->asArray()
             ->all();
