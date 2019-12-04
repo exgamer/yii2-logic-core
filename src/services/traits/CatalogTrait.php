@@ -123,6 +123,7 @@ trait CatalogTrait
         }
 
         $searchClass = $this->getRelatedSearchModelClass();
+        $tableName = $searchClass::tableName();
         $searchKey = $searchClass::getListSearchKeyAttribute();
         $searchAttr = $searchClass::getListSearchAttribute();
         if (! $searchKey || ! $searchAttr){
@@ -138,7 +139,7 @@ trait CatalogTrait
 //        }
 
         $query = $this->getQuery()
-            ->select(["{$searchAttr} as value", "{$searchAttr} as  label","{$searchKey} as id"])
+            ->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])
             ->andWhere(['like', $searchAttr, $term])
             ->andWhere($where)
             ->asArray();
