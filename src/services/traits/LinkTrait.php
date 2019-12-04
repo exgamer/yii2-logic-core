@@ -26,7 +26,7 @@ trait LinkTrait
     {
         $relatedIds = array_unique($selectedLinkedIds);
         $modelClass = $this->getRelatedModelClass();
-        if (! $modelClass instanceof LinkActiveRecord){
+        if (! new $modelClass() instanceof LinkActiveRecord){
             throw new Exception($modelClass . " must be instance of " . LinkActiveRecord::class);
         }
 
