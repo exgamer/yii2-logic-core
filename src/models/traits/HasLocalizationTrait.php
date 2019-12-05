@@ -3,7 +3,6 @@ namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
 use concepture\yii2logic\db\LocalizedActiveQuery;
-use concepture\yii2logic\helpers\ClassHelper;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
@@ -281,8 +280,7 @@ trait HasLocalizationTrait
      */
     public static function getLocalizationModelClass()
     {
-        $me = Yii::createObject(static::class);
-        $class =  ClassHelper::getRelatedClass($me);
+        $class = static::class;
         $class = str_replace("search", "models", $class);
         $class = str_replace("Search", "", $class);
 
