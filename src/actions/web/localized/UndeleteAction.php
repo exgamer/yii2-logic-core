@@ -1,18 +1,19 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use yii\db\ActiveRecord;
 use ReflectionException;
+use concepture\yii2logic\actions\web\UndeleteAction as Base;
 
 /**
- * Экшен для удаления сущности с локализацией
+ * Экшен для восстановления нефизически удаленной сущности с локализацией
  *
- * Class DeleteLocalizedAction
+ * Class UndeleteLocalizedAction
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class DeleteLocalizedAction extends DeleteAction
+class UndeleteAction extends Base
 {
     use LocalizedTrait;
 

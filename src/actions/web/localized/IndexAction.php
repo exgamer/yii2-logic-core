@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
@@ -14,7 +14,7 @@ use concepture\yii2logic\actions\Action;
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class IndexLocalizedAction extends Action
+class IndexAction extends Action
 {
     use LocalizedTrait;
 

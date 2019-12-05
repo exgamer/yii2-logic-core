@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use concepture\yii2logic\actions\Action;
 use Yii;
@@ -55,7 +55,7 @@ use yii\web\ServerErrorHttpException;
  *
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class LocalizedAutocompleteListAction extends Action
+class AutocompleteListAction extends Action
 {
 
     public function run($term = null)

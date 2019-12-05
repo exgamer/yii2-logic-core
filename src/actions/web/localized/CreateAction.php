@@ -1,7 +1,8 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use concepture\yii2logic\actions\traits\LocalizedTrait;
+use concepture\yii2logic\actions\web\CreateAction as Base;
 
 /**
  * Экшен для создания сущности с локализацией
@@ -11,7 +12,7 @@ use concepture\yii2logic\actions\traits\LocalizedTrait;
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class CreateLocalizedAction extends CreateAction
+class CreateAction extends Base
 {
     use LocalizedTrait;
 

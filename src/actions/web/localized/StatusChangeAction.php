@@ -1,9 +1,10 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use yii\db\ActiveRecord;
 use ReflectionException;
+use concepture\yii2logic\actions\web\StatusChangeAction as Base;
 
 /**
  * Экшен для смены статуса сущности с локализацией
@@ -12,7 +13,7 @@ use ReflectionException;
  * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class StatusChangeLocalizedAction extends StatusChangeAction
+class StatusChangeAction extends Base
 {
     use LocalizedTrait;
 

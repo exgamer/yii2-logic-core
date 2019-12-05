@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\localized;
 
 use ReflectionException;
 use yii\db\ActiveRecord;
@@ -7,6 +7,7 @@ use yii\web\NotFoundHttpException;
 use Yii;
 use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
+use concepture\yii2logic\actions\web\UpdateAction as Base;
 
 /**
  * Экшон для обновления сущностей с локализациями
@@ -14,7 +15,7 @@ use concepture\yii2logic\actions\traits\LocalizedTrait;
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class UpdateLocalizedAction extends UpdateAction
+class UpdateAction extends Base
 {
     use LocalizedTrait;
 
