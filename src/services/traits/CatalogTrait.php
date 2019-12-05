@@ -71,10 +71,7 @@ trait CatalogTrait
      * @param $catalog
      * @return mixed
      */
-    public function catalogKeyPreAction($value, &$catalog)
-    {
-        return $value;
-    }
+    public function catalogKeyPreAction(&$value, &$catalog){}
 
     /**
      * Возвращает ключ из каталога по значению
@@ -87,10 +84,9 @@ trait CatalogTrait
      */
     public function catalogKey($value)
     {
-
         $catalog = $this->catalog();
         $catalog = array_flip($catalog);
-        $value = $this->catalogKeyPreAction($value, $catalog);
+        $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
             return $catalog[$value];
         }
