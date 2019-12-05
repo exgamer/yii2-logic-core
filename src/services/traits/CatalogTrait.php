@@ -90,7 +90,7 @@ trait CatalogTrait
 
         $catalog = $this->catalog();
         $catalog = array_flip($catalog);
-        $this->catalogKeyPreAction($value, $catalog);
+        $value = $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
             return $catalog[$value];
         }
