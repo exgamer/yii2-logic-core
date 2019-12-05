@@ -7,7 +7,7 @@ use yii\web\NotFoundHttpException;
 use Yii;
 use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
-use concepture\yii2logic\actions\web\UpdateAction as Base;
+use concepture\yii2logic\actions\Action;
 
 /**
  * Экшон для обновления сущностей с локализациями
@@ -15,25 +15,44 @@ use concepture\yii2logic\actions\web\UpdateAction as Base;
  * @package concepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class UpdateAction extends Base
+class UpdateAction extends Action
 {
     use LocalizedTrait;
 
-    /**
-     * Устанавливаем модели локаль и загружаем локализованные атрибуты
-     * @param $model
-     * @param $originModel
-     */
-    protected function processModel($model, $originModel)
+    public $view = 'update';
+    public $redirect = 'index';
+    public $serviceMethod = 'update';
+
+    public function run($id, $locale = null)
     {
-        $model->locale = $this->getConvertedLocale();
+        $originModel = $this->getModel($id);
+        if (!$originModel){
+            throw new NotFoundHttpException();
+        }
+        $model = $this->getForm();
+        $model->locale = $this->getConvertedLocale($locale);
         $model->setAttributes($originModel->attributes, false);
         $model->setAttributes($originModel->getLocalized(null, true), false);
-    }
+        $model->setAttributes($originModel->attributes, false);
+        if (method_exists($model, 'customizeForm')) {
+            $model->customizeForm($originModel);
+        }
 
-    protected function extendRedirectParams(&$redirectParams)
-    {
-        $redirectParams['locale'] = $this->getConvertedLocale();
+        if ($model->load(Yii::$app->request->post())) {
+            $originModel->setAttributes($model->attributes);
+            if ($model->validate(null, true, $originModel)  && !$this->isReload()) {
+                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
+
+                    return $this->redirect( [$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale]);
+                }
+            }
+            $model->addErrors($originModel->getErrors());
+        }
+
+        return $this->render($this->view, [
+            'model' => $model,
+            'originModel' => $originModel,
+        ]);
     }
 
     /**

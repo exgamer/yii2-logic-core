@@ -170,7 +170,7 @@ trait HasLocalizationTrait
     public function saveLocalizations()
     {
         $locClass = static::getLocalizationModelClass();
-        $localization = $locClass::find()->where(['locale' => static::currentLocale(), 'entity_id' => $this->id])->one();
+        $localization = $locClass::find()->where(['locale' => $this->locale, 'entity_id' => $this->id])->one();
         if (! $localization){
             $localization = new $locClass();
             $localization->entity_id = $this->id;
