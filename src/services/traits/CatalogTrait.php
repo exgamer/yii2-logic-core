@@ -3,7 +3,7 @@ namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
-use concepture\yii2logic\helpers\ClassHelper;
+use Yii;
 use Exception;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
