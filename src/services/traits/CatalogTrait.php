@@ -71,7 +71,7 @@ trait CatalogTrait
      * @param $catalog
      * @return mixed
      */
-    public function catalogKeyPreAction(&$value, &$catalog){}
+    protected function catalogKeyPreAction(&$value, &$catalog){}
 
     /**
      * Возвращает ключ из каталога по значению
