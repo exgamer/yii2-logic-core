@@ -40,17 +40,25 @@ trait ReadTrait
      * Возвращает DataProvider
      *
      * @param array $queryParams
-     * @return mixed
+     *
+     * Конфиг DataProvider
+     * @param array $config
+     * @param ActiveRecord $searchModel
+     * @param string $formName
+     *
+     * @return ActiveDataProvider
      */
-    public function getDataProvider($queryParams = [])
+    public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null)
     {
-        $searchClass = $this->getRelatedSearchModelClass();
-        $searchModel = new $searchClass();
+        if ($searchModel === null) {
+            $searchClass = $this->getRelatedSearchModelClass();
+            $searchModel = new $searchClass();
+        }
+
         $query = $this->getQuery();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-        $searchModel->load($queryParams);
+        $config['query'] = $query;
+        $dataProvider = new ActiveDataProvider($config);
+        $searchModel->load($queryParams, $formName);
         if (!$searchModel->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
