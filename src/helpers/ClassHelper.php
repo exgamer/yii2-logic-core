@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\helpers;
 
+use Yii;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
@@ -27,16 +28,36 @@ class ClassHelper
     {
         $reflection = new ReflectionClass($object);
         $name = $reflection->getShortName();
+        $nameSpace = $reflection->getNamespaceName();
+//        $originClass = $nameSpace."\\".$name;
+//        $definitions = Yii::$container->getDefinitions();
+//        foreach ($definitions as $alias => $definition){
+//            if (! isset($definition['class'])){
+//                continue;
+//            }
+//            if ($definition['class'] == $originClass){
+//                $obj = new $alias();
+//                $ref = new ReflectionClass($obj);
+//                $nameSpace = $ref->getNamespaceName();
+//            }
+//        }
         foreach ($replacedClassNameParts as $from => $to){
             $name = str_replace($from, $to, $name);
         }
-        $nameSpace = $reflection->getNamespaceName();
+
         foreach ($replacedNamespaceParts as $from => $to){
             $nameSpace = str_replace($from, $to, $nameSpace);
         }
         $class = $nameSpace."\\".$name;
+
         if (! class_exists($class)){
-            throw new Exception("related class {$class} does not exists");
+            /**
+             * @todo Тут возможно костылек если связанный класс не найден начинаем копать вниз
+             */
+            $parentClass = get_parent_class($object);
+            $class = static::getRelatedClass(new $parentClass, $replacedClassNameParts, $replacedNamespaceParts);
+
+            //throw new Exception("related class {$class} does not exists" . $parentClass);
         }
 
         return  $class;
