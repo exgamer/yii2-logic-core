@@ -3,6 +3,7 @@ namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
+use concepture\yii2logic\helpers\ClassHelper;
 use Exception;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
@@ -175,7 +176,7 @@ trait CatalogTrait
     public function getDropDownList($queryParams = [])
     {
         $searchClass = $this->getRelatedSearchModelClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchAttribute = $searchClass::getListSearchAttribute();
         if (! $searchAttribute){
             throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
@@ -204,7 +205,7 @@ trait CatalogTrait
     {
         if ($excludeDefault === false) {
             $modelClass = $this->getRelatedModelClass();
-            $model = new $modelClass();
+            $model = Yii::createObject($modelClass);
             if ($model->hasAttribute('status')) {
                 $where['status'] = StatusEnum::ACTIVE;
             }

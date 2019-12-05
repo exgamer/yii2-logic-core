@@ -114,7 +114,7 @@ abstract class Action extends Base
     {
         $formClass = $this->getController()->getFormClass();
 
-        return new $formClass();
+        return Yii::createObject($formClass);
     }
 
     /**

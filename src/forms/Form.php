@@ -27,7 +27,7 @@ abstract class Form extends Model
     public function rules()
     {
         $modelClass = $this->getModelClass();
-        $model = new $modelClass();
+        $model = Yii::createObject($modelClass);
 
         return array_merge($this->formRules(), $model->rules());
     }
@@ -40,7 +40,7 @@ abstract class Form extends Model
     public function attributeLabels()
     {
         $modelClass = static::getModelClass();
-        $model = new $modelClass();
+        $model = Yii::createObject($modelClass);
 
         return array_merge($model->attributeLabels(), $this->formAttributeLabels());
     }
@@ -74,7 +74,7 @@ abstract class Form extends Model
      */
     public static function getModelClass()
     {
-        $me = new static();
+        $me = Yii::createObject(static::class);
 
         return ClassHelper::getRelatedClass($me, ["Form" => ""], ["forms" => "models"]);
     }
@@ -185,7 +185,7 @@ abstract class Form extends Model
     public function __call($method, $parameters)
     {
         $modelClass = static::getModelClass();
-        $model = new $modelClass();
+        $model = Yii::createObject($modelClass);
         $model->load($this->attributes, '');
         if (! method_exists($this, $method)){
             return call_user_func_array([$model, $method], $parameters);

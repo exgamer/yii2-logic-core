@@ -107,7 +107,7 @@ class ModelValidator extends Validator
      */
     protected function validateModel($value)
     {
-        $validatorModel = new $this->modelClass();
+        $validatorModel = Yii::createObject($this->modelClass);
         $validatorModel->load($value, '');
         if (! $validatorModel->validate()) {
             $this->errors[] = $validatorModel->getErrors();

@@ -52,7 +52,7 @@ trait ReadTrait
     {
         if ($searchModel === null) {
             $searchClass = $this->getRelatedSearchModelClass();
-            $searchModel = new $searchClass();
+            $searchModel = Yii::createObject($searchClass);
         }
 
         $query = $this->getQuery();

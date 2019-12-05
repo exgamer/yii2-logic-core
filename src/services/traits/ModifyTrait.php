@@ -95,7 +95,7 @@ trait ModifyTrait
     {
         $modelClass = $this->getRelatedModelClass();
         if($model === null){
-            $model = new $modelClass();
+            $model = Yii::createObject($modelClass);
         }
         #флаг для понимания операции создания/редактирования
         $is_new_record = $model->isNewRecord;

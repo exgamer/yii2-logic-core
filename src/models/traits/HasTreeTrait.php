@@ -1,6 +1,8 @@
 <?php
 namespace concepture\yii2logic\models\traits;
 
+use concepture\yii2logic\helpers\ClassHelper;
+
 /**
  * Треит для моделей у которых есть таблица с деревом
  *
@@ -83,7 +85,8 @@ trait HasTreeTrait
      */
     public static function getTreeModelClass()
     {
-        $class = static::class;
+        $me = Yii::createObject(static::class);
+        $class =  ClassHelper::getRelatedClass($me);
 
         return $class."Tree";
     }
