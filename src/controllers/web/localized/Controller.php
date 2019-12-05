@@ -1,11 +1,11 @@
 <?php
 namespace concepture\yii2logic\controllers\web\localized;
 
-use concepture\yii2logic\actions\web\CreateAction;
-use concepture\yii2logic\actions\web\DeleteAction;
-use concepture\yii2logic\actions\web\IndexAction;
-use concepture\yii2logic\actions\web\UpdateAction;
-use concepture\yii2logic\actions\web\ViewAction;
+use concepture\yii2logic\actions\web\localized\CreateAction;
+use concepture\yii2logic\actions\web\localized\DeleteAction;
+use concepture\yii2logic\actions\web\localized\IndexAction;
+use concepture\yii2logic\actions\web\localized\UpdateAction;
+use concepture\yii2logic\actions\web\localized\ViewAction;
 use concepture\yii2logic\controllers\web\Controller as Base;
 
 /**
