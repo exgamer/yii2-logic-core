@@ -66,6 +66,17 @@ trait CatalogTrait
     }
 
     /**
+     * Доп действия перед получением ключа по значению
+     * @param $value
+     * @param $catalog
+     * @return mixed
+     */
+    public function catalogKeyPreAction($value, &$catalog)
+    {
+        return $value;
+    }
+
+    /**
      * Возвращает ключ из каталога по значению
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
@@ -76,8 +87,10 @@ trait CatalogTrait
      */
     public function catalogKey($value)
     {
+
         $catalog = $this->catalog();
         $catalog = array_flip($catalog);
+        $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
             return $catalog[$value];
         }
