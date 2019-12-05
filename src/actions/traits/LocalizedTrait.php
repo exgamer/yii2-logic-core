@@ -28,11 +28,14 @@ trait LocalizedTrait
     /**
      * Возвращает конвертированную локаль для сущности
      *
+     * @param string $locale
      * @return mixed
      */
-    protected function getConvertedLocale()
+    protected function getConvertedLocale($locale = null)
     {
-        $locale = $this->getLocale();
+        if ($locale === null) {
+            $locale = $this->getLocale();
+        }
         $modelClass = $this->getService()->getRelatedModelClass();
         $localeConverterClass = $modelClass::getLocaleConverterClass();
 
