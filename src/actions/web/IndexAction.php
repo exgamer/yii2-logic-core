@@ -19,7 +19,7 @@ class IndexAction extends Action
     public function run()
     {
         $searchClass = $this->getSearchClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);

@@ -19,7 +19,7 @@ class IndexAction extends Action
     public function run($parent_id = null)
     {
         $searchClass = $this->getSearchClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchModel->parent_id = $parent_id;
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);

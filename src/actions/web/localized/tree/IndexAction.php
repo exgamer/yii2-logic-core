@@ -23,7 +23,7 @@ class IndexAction extends Action
     public function run($locale = null, $parent_id = null)
     {
         $searchClass = $this->getSearchClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchModel->load(Yii::$app->request->queryParams);
         $searchModel::$current_locale = $this->getConvertedLocale($locale);
         $searchModel->parent_id = $parent_id;
