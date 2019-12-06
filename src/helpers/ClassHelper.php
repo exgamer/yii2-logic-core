@@ -74,6 +74,9 @@ class ClassHelper
     {
         $name = static::getShortClassName($objectOrClass);
         $name = lcfirst($name);
+        if (! is_array($replacedNamePart)){
+            $replacedNamePart = [$replacedNamePart];
+        }
         foreach ($replacedNamePart as $part){
             $name = str_replace($part, "", $name);
         }
