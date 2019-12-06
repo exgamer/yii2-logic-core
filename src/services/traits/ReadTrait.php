@@ -59,7 +59,9 @@ trait ReadTrait
         $query = $this->getQuery();
         $config['query'] = $query;
         $dataProvider = new ActiveDataProvider($config);
-        $searchModel->load($queryParams, $formName);
+        if (! empty($queryParams)) {
+            $searchModel->load($queryParams, $formName);
+        }
         if (!$searchModel->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
