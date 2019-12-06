@@ -27,7 +27,7 @@ class IndexAction extends Action
         $searchModel->load(Yii::$app->request->queryParams);
         $searchModel::$current_locale = $this->getConvertedLocale($locale);
         $searchModel->parent_id = $parent_id;
-        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams);
+        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams, [], $searchModel);
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,

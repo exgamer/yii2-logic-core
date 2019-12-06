@@ -23,7 +23,7 @@ class IndexAction extends Action
         $searchModel->parent_id = $parent_id;
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
-        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams);
+        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams, [], $searchModel);
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,
