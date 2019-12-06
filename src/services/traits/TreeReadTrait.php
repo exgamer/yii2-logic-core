@@ -47,9 +47,8 @@ trait TreeReadTrait
     public function getChildsByTree($id)
     {
         $treeModel = $this->getTreeModelClass();
-        $childs = $treeModel::find()->andWhere(['parent_id' => $id])->indexBy('child_id')->all();
 
-        return $childs;
+        return $treeModel::find()->andWhere(['parent_id' => $id])->indexBy('child_id')->all();
     }
 
     /**
