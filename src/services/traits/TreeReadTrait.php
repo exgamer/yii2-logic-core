@@ -17,6 +17,27 @@ use Yii;
 trait TreeReadTrait
 {
     /**
+     * Получение предков объекта
+     * @param $id
+     * @return array
+     */
+    public function getParentByTree($id)
+    {
+        $treeModelClass = $this->getTreeModelClass();
+        $sql =
+            "
+            SELECT * FROM {$this->getTableName()} o
+            JOIN {$treeModelClass::tableName()} ot ON (o.id = ot.parent_id)
+            WHERE ot.child_id = :ID
+            ORDER BY ot.level DESC
+        ";
+        $command = $this->getDb()->createCommand($sql);
+        $command->bindValue(':ID', $id);
+
+        return $command->queryAll();
+    }
+
+    /**
      * Возвращает дочерние записи по дереву
      *
      * @param $id
