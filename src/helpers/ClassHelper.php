@@ -70,11 +70,13 @@ class ClassHelper
         return $reflection->getShortName();
     }
 
-    public static function getServiceName($objectOrClass, $replacedNamePart = "")
+    public static function getServiceName($objectOrClass, $replacedNamePart = [])
     {
         $name = static::getShortClassName($objectOrClass);
         $name = lcfirst($name);
-        $name = str_replace($replacedNamePart, "", $name);
+        foreach ($replacedNamePart as $part){
+            $name = str_replace($part, "", $name);
+        }
 
         return $name."Service";
     }
