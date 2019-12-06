@@ -22,7 +22,7 @@ class IndexAction extends Action
         $searchModel = new $searchClass();
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
-        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams);
+        $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,
