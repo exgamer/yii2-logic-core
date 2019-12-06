@@ -1,7 +1,6 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
-use concepture\yii2logic\models\traits\HasLocalizationTrait;
 use concepture\yii2logic\models\traits\HasTreeTrait;
 use Exception;
 use yii\helpers\ArrayHelper;
@@ -21,6 +20,7 @@ trait TreeReadTrait
      * Получение предков объекта
      * @param $id
      * @return array
+     * @throws Exception
      */
     public function getParentsByTree($id)
     {
