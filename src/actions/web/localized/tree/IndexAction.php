@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web\tree;
+namespace concepture\yii2logic\actions\web\localized\tree;
 
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
@@ -9,11 +9,11 @@ use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
 
 /**
- * Class IndexLocalizedTreeAction
- * @package concepture\yii2logic\actions\web
+ * Class IndexAction
+ * @package concepture\yii2logic\actions\web\tree
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class IndexLocalizedAction extends Action
+class IndexAction extends Action
 {
     use LocalizedTrait;
 
