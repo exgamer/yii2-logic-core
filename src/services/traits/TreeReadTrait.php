@@ -20,6 +20,7 @@ trait TreeReadTrait
      * Получение предков объекта
      * @param $id
      * @return array
+     * @throws Exception
      */
     public function getParentByTree($id)
     {
