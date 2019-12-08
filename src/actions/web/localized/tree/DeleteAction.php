@@ -39,7 +39,7 @@ class DeleteAction extends Action
     protected function getModel($id)
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::$current_locale = $this->getConvertedLocale();
+        $originModelClass::setLocale($this->getLocale());
         $originModelClass::$by_locale_hard_search = false;
 
         return $this->getService()->findById($id);

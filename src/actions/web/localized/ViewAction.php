@@ -30,7 +30,7 @@ class ViewAction extends Base
     protected function getModel($id)
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::$current_locale = $this->getConvertedLocale();
+        $originModelClass::setLocale($this->getLocale());
 
         return $this->getService()->findById($id);
     }

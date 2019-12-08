@@ -62,6 +62,16 @@ trait HasLocalizationTrait
     }
 
     /**
+     * Установка локали
+     *
+     * @param $locale
+     */
+    public static function setLocale($locale)
+    {
+        static::$current_locale = $locale;
+    }
+    
+    /**
      * Возвращает текущий язык модели
      * локаль для запросов нужно плучать имеено с помощью этого метода
      * т.к. он учитывает правила конвертации

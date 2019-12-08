@@ -26,7 +26,7 @@ class IndexAction extends Action
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $searchModel->load(Yii::$app->request->queryParams);
-        $searchModel::$current_locale = $this->getConvertedLocale($locale);
+        $searchModel::setLocale($locale);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
 
         return $this->render($this->view, [

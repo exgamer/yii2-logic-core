@@ -59,11 +59,11 @@ class UniqueLocalizedValidator extends Validator
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
             $arClass::$search_by_locale_callable = $qFunc;
-            $arClass::$current_locale = $model->locale;
+            $arClass::setLocale($model->locale);
             $arClass::$by_locale_hard_search = true;
         }else{
             $model::$search_by_locale_callable = $qFunc;
-            $model::$current_locale = $model->locale;
+            $model::setLocale($model->locale);
             $model::$by_locale_hard_search = true;
         }
 
