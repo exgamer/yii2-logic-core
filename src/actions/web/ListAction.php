@@ -20,7 +20,7 @@ class ListAction extends Action
             return [];
         }
         $searchClass = $this->getSearchClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchAttribute = $searchClass::getListSearchAttribute();
         $searchModel->{$searchAttribute} = $term;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

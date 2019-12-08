@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web\tree;
+namespace concepture\yii2logic\actions\web\localized\tree;
 
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
@@ -9,11 +9,11 @@ use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
 
 /**
- * Class IndexLocalizedTreeAction
- * @package concepture\yii2logic\actions\web
+ * Class IndexAction
+ * @package concepture\yii2logic\actions\web\tree
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class IndexLocalizedAction extends Action
+class IndexAction extends Action
 {
     use LocalizedTrait;
 
@@ -23,11 +23,11 @@ class IndexLocalizedAction extends Action
     public function run($locale = null, $parent_id = null)
     {
         $searchClass = $this->getSearchClass();
-        $searchModel = new $searchClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchModel->load(Yii::$app->request->queryParams);
         $searchModel::$current_locale = $this->getConvertedLocale($locale);
         $searchModel->parent_id = $parent_id;
-        $dataProvider =  $this->getService()->{$this->serviceMethod}(Yii::$app->request->queryParams);
+        $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,

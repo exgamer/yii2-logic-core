@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web;
+namespace concepture\yii2logic\actions\web\tree;
 
 use concepture\yii2logic\actions\Action;
 use Yii;
@@ -8,7 +8,7 @@ use Yii;
  * Экшен для вывода списка
  *
  * Class IndexAction
- * @package cconcepture\yii2logic\actions\web
+ * @package cconcepture\yii2logic\actions\web\tree
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class IndexAction extends Action
@@ -16,10 +16,11 @@ class IndexAction extends Action
     public $view = 'index';
     public $serviceMethod = 'getDataProvider';
 
-    public function run()
+    public function run($parent_id = null)
     {
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
+        $searchModel->parent_id = $parent_id;
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);

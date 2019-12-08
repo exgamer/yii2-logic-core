@@ -17,6 +17,27 @@ use Yii;
 trait TreeReadTrait
 {
     /**
+     * Получение предков объекта
+     * @param $id
+     * @return array
+     * @throws Exception
+     */
+    public function getParentsByTree($id)
+    {
+        $modelClass = $this->getRelatedModelClass();
+        $treeModelClass = $this->getTreeModelClass();
+        $traits = class_uses($modelClass);
+        if (! isset($traits[HasTreeTrait::class])){
+            throw new Exception($modelClass . " must use " . HasTreeTrait::class);
+        }
+
+        return $this->getAllByCondition(function (ActiveQuery $query) use ($id, $treeModelClass){
+            $query->join("JOIN", $treeModelClass::tableName() . " ot", "{$this->getTableName()}. id = ot.parent_id");
+            $query->andWhere("ot.child_id = :ID", [':ID' => $id]);
+        });
+    }
+
+    /**
      * Возвращает дочерние записи по дереву
      *
      * @param $id
@@ -26,9 +47,8 @@ trait TreeReadTrait
     public function getChildsByTree($id)
     {
         $treeModel = $this->getTreeModelClass();
-        $childs = $treeModel::find()->andWhere(['parent_id' => $id])->indexBy('child_id')->all();
 
-        return $childs;
+        return $treeModel::find()->andWhere(['parent_id' => $id])->indexBy('child_id')->all();
     }
 
     /**
