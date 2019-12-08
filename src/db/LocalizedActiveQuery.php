@@ -6,6 +6,7 @@ use yii\db\ActiveQuery as Base;
 use yii\db\Connection;
 
 /**
+ * @deprecated
  * ActiveQuery для сущностей с локализациями
  *
  * Class LocalizedActiveQuery
