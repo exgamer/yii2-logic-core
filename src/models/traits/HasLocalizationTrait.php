@@ -87,6 +87,16 @@ trait HasLocalizationTrait
     }
 
     /**
+     * Поиск по локализациям
+     *
+     * @param $callable
+     */
+    public static function searchByLocalization($callable)
+    {
+        static::$search_by_locale_callable = $callable;
+    }
+
+    /**
      * Возвращает текущий язык модели
      * локаль для запросов нужно плучать имеено с помощью этого метода
      * т.к. он учитывает правила конвертации
