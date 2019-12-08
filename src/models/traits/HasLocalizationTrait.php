@@ -2,7 +2,6 @@
 namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
-use concepture\yii2logic\db\LocalizedActiveQuery;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
