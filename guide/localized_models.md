@@ -4,7 +4,7 @@
 Для изменения выборки по языку нужно сделать следующее:
 
 ```php
-        Post::$current_locale = "ru";
+        Post::setLocale("ru");
         Post::find()->where(['id' => $id])->one();
 
 ```
