@@ -66,6 +66,23 @@ trait TreeReadTrait
     }
 
     /**
+     * Проверка на существование дочерних элементов
+     *
+     * @param $id
+     * @return bool
+     * @throws Exception
+     */
+    public function hasChilds($id)
+    {
+        $childsIds = $this->getChildsIdsByTree($id);
+        if (empty($childsIds)){
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Возвращает класс модели дерева
      *
      * return string
