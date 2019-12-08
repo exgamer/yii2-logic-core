@@ -108,7 +108,8 @@ trait HasLocalizationTrait
      */
     public static function find()
     {
-        $query = Yii::createObject(LocalizedActiveQuery::className(), [get_called_class()]);
+//        $query = Yii::createObject(LocalizedActiveQuery::className(), [get_called_class()]);
+        $query = Yii::createObject(ActiveQuery::className(), [get_called_class()]);
         $query->with('localizations');
         $joinType = "with";
         /**
