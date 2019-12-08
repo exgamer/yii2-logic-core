@@ -24,7 +24,7 @@ trait HasLocalizationTrait
      *
      * Пример:
      *   $originModelClass = $this->getService()->getRelatedModelClass();
-     *   $originModelClass::$current_locale = $locale;
+     *   $originModelClass::setLocale($locale)
      *   $originModel = $originModelClass::find()->where(['id' => $id])->one();
      *
      * @var mixed
