@@ -60,11 +60,11 @@ class UniqueLocalizedValidator extends Validator
             $arClass = $model::getModelClass();
             $arClass::$search_by_locale_callable = $qFunc;
             $arClass::setLocale($model->locale);
-            $arClass::$by_locale_hard_search = true;
+            $arClass::enableLocaleHardSearch();
         }else{
             $model::$search_by_locale_callable = $qFunc;
             $model::setLocale($model->locale);
-            $model::$by_locale_hard_search = true;
+            $model::enableLocaleHardSearch();
         }
 
         $serviceName = ClassHelper::getServiceName($model, "Form");

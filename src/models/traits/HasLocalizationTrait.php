@@ -62,6 +62,22 @@ trait HasLocalizationTrait
     }
 
     /**
+     * Включает поиск будет вестись жестко по языку
+     */
+    public static function enableLocaleHardSearch()
+    {
+        static::$by_locale_hard_search = true;
+    }
+
+    /**
+     * Отключает поиск будет вестись жестко по языку
+     */
+    public static function disableLocaleHardSearch()
+    {
+        static::$by_locale_hard_search = false;
+    }
+
+    /**
      * Установка локали
      *
      * @param $locale
@@ -70,7 +86,7 @@ trait HasLocalizationTrait
     {
         static::$current_locale = $locale;
     }
-    
+
     /**
      * Возвращает текущий язык модели
      * локаль для запросов нужно плучать имеено с помощью этого метода
