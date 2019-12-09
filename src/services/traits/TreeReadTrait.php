@@ -70,13 +70,13 @@ trait TreeReadTrait
      * Возвращает массив даных дочерних элементов для выпадающих списков
      *
      * @param integer $parent_id
+     * @param string $formName
      * @return array
-     * @throws Exception
      */
-    public function getChildsDropDownList($parent_id)
+    public function getChildsDropDownList($parent_id, $formName = "")
     {
 
-        return $this->getDropDownList(['parent_id' => $parent_id]);
+        return $this->getDropDownList(["parent_id" => $parent_id], $formName);
     }
 
     /**

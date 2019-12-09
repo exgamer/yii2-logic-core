@@ -170,17 +170,19 @@ trait CatalogTrait
      *
      *
      * @param array $queryParams
+     * @param string $formName
      * @return array
      * @throws Exception
      */
-    public function getDropDownList($queryParams = [])
+    public function getDropDownList($queryParams = [], $formName = "")
     {
         $searchClass = $this->getRelatedSearchModelClass();
+        $searchModel = Yii::createObject($searchClass);
         $searchAttribute = $searchClass::getListSearchAttribute();
         if (! $searchAttribute){
             throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
         }
-        $dataProvider = $this->getDataProvider($queryParams);
+        $dataProvider = $this->getDataProvider($queryParams, [], null, $formName);
 
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }
