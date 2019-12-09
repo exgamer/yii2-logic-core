@@ -46,24 +46,32 @@ trait TreeReadTrait
      */
     public function getChildsByTree($id)
     {
-        $treeModel = $this->getTreeModelClass();
+        $modelClass = $this->getRelatedModelClass();
+        $treeModelClass = $this->getTreeModelClass();
+        $traits = class_uses($modelClass);
+        if (! isset($traits[HasTreeTrait::class])){
+            throw new Exception($modelClass . " must use " . HasTreeTrait::class);
+        }
 
-        return $treeModel::find()->andWhere(['parent_id' => $id])->indexBy('child_id')->all();
+        return $this->getAllByCondition(function (ActiveQuery $query) use ($id, $treeModelClass){
+            $query->join("JOIN", $treeModelClass::tableName() . " ot", "{$this->getTableName()}. id = ot.child_id");
+            $query->andWhere("ot.parent_id = :ID", [':ID' => $id]);
+        });
     }
 
-    /**
-     * Возвращает ID дочерних элементов по дереву
-     *
-     * @param $id
-     * @return mixed
-     * @throws Exception
-     */
-    public function getChildsIdsByTree($id)
-    {
-        $childs = $this->getChildsByTree($id);
-
-        return array_keys($childs);
-    }
+//    /**
+//     * Возвращает ID дочерних элементов по дереву
+//     *
+//     * @param $id
+//     * @return mixed
+//     * @throws Exception
+//     */
+//    public function getChildsIdsByTree($id)
+//    {
+//        $childs = $this->getChildsByTree($id);
+//
+//        return array_keys($childs);
+//    }
 
 
     /**
@@ -88,8 +96,8 @@ trait TreeReadTrait
      */
     public function hasChilds($id)
     {
-        $childsIds = $this->getChildsIdsByTree($id);
-        if (empty($childsIds)){
+        $childs = $this->getChildsIdsByTree($id);
+        if (empty($childs)){
             return false;
         }
 
@@ -112,4 +120,3 @@ trait TreeReadTrait
         return $modelClass::getTreeModelClass();
     }
 }
-
