@@ -38,6 +38,9 @@ class DataLoadHelper
         if (is_object($from)){
             if ($from instanceof ActiveRecord){
                 $fromKeys = $from->attributes();
+                $fromVars = get_object_vars($from);
+                $fromVars = array_keys($fromVars);
+                $fromKeys = array_merge($fromKeys, $fromVars);
             }else {
                 /**
                  * TODO Можно будет добавить другие варианты
