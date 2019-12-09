@@ -68,6 +68,12 @@ abstract class Migration extends Base
         $this->addForeignKey($name, $tableName, $column, $refTable, $refColumn, $delete, $update);
     }
 
+    protected function createColumn($column, $type)
+    {
+        $tableName = $this->getTableName();
+        $this->addColumn($tableName, $column, $type);
+    }
+
     protected function removeColumn($column)
     {
         $tableName = $this->getTableName();
