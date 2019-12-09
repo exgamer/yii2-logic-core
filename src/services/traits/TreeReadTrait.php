@@ -76,7 +76,7 @@ trait TreeReadTrait
     public function getChildsDropDownList($parent_id)
     {
 
-        return $this->getDataProvider(['parent_id' => $parent_id]);
+        return $this->getDropDownList(['parent_id' => $parent_id]);
     }
 
     /**
