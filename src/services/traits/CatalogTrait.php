@@ -181,7 +181,7 @@ trait CatalogTrait
         if (! $searchAttribute){
             throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
         }
-        $dataProvider = $searchModel->search($queryParams);
+        $dataProvider = $this->getDataProvider($queryParams);
 
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }
