@@ -176,7 +176,6 @@ trait CatalogTrait
     public function getDropDownList($queryParams = [])
     {
         $searchClass = $this->getRelatedSearchModelClass();
-        $searchModel = Yii::createObject($searchClass);
         $searchAttribute = $searchClass::getListSearchAttribute();
         if (! $searchAttribute){
             throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
