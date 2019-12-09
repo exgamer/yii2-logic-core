@@ -65,6 +65,20 @@ trait TreeReadTrait
         return array_keys($childs);
     }
 
+
+    /**
+     * Возвращает массив даных дочерних элементов для выпадающих списков
+     *
+     * @param integer $parent_id
+     * @return array
+     * @throws Exception
+     */
+    public function getChildsDropDownList($parent_id)
+    {
+
+        return $this->getDataProvider(['parent_id' => $parent_id]);
+    }
+
     /**
      * Проверка на существование дочерних элементов
      *
