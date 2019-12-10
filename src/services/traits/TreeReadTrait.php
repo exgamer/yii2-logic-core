@@ -35,6 +35,7 @@ trait TreeReadTrait
             $query->join("JOIN", $treeModelClass::tableName() . " ot", "{$this->getTableName()}. id = ot.parent_id");
             $query->andWhere("ot.child_id = :ID", [':ID' => $id]);
             $query->andWhere("ot.parent_id != ot.child_id");
+            $query->indexBy("id");
         });
     }
 
@@ -58,6 +59,7 @@ trait TreeReadTrait
             $query->join("JOIN", $treeModelClass::tableName() . " ot", "{$this->getTableName()}. id = ot.child_id");
             $query->andWhere("ot.parent_id = :ID", [':ID' => $id]);
             $query->andWhere("ot.parent_id != ot.child_id");
+            $query->indexBy("id");
         });
     }
 
