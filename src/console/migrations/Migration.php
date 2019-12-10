@@ -50,6 +50,11 @@ abstract class Migration extends Base
             $unique);
     }
 
+    protected function removeIndex($name)
+    {
+        $this->dropIndex($name, $this->getTableName());
+    }
+
     protected function addUniqueIndex($columns, $index_name = null)
     {
         if ($index_name === null) {
