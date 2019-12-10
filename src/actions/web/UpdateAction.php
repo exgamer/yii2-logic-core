@@ -25,6 +25,7 @@ class UpdateAction extends Action
         if (!$originModel){
             throw new NotFoundHttpException();
         }
+
         $model = $this->getForm();
         $this->processModel($model, $originModel);
         $model->setAttributes($originModel->attributes, false);
@@ -42,6 +43,7 @@ class UpdateAction extends Action
                     return $this->redirect($redirectParams);
                 }
             }
+
             $model->addErrors($originModel->getErrors());
         }
 

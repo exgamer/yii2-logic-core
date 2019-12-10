@@ -24,6 +24,7 @@ class StatusChangeAction extends Action
         if (!$model){
             throw new NotFoundHttpException();
         }
+
         $this->getService()->{$this->serviceMethod}($model, $status);
 
         return $this->redirect([$this->redirect, 'locale' => $this->getConvertedLocale($locale), 'parent_id' => $parent_id]);

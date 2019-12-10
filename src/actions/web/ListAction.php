@@ -19,6 +19,7 @@ class ListAction extends Action
         if(!$term){
             return [];
         }
+
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $searchAttribute = $searchClass::getListSearchAttribute();

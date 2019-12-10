@@ -24,6 +24,7 @@ class DeleteAction extends Action
         if (!$model){
             throw new NotFoundHttpException();
         }
+
         $this->getService()->{$this->serviceMethod}($model);
 
         return $this->redirect([$this->redirect]);

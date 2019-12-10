@@ -28,6 +28,7 @@ class UpdateAction extends Action
         if (!$originModel){
             throw new NotFoundHttpException();
         }
+
         $model = $this->getForm();
         $model->locale = $this->getConvertedLocale($locale);
         $model->setAttributes($originModel->attributes, false);
@@ -45,6 +46,7 @@ class UpdateAction extends Action
                     return $this->redirect( [$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale, 'parent_id' => $parent_id]);
                 }
             }
+
             $model->addErrors($originModel->getErrors());
         }
 

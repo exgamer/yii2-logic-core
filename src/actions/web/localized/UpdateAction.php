@@ -29,6 +29,7 @@ class UpdateAction extends Action
         if (!$originModel){
             throw new NotFoundHttpException();
         }
+
         $model = $this->getForm();
         $model->locale = $this->getConvertedLocale($locale);
         $model->setAttributes($originModel->attributes, false);
