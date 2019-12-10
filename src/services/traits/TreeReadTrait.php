@@ -98,7 +98,7 @@ trait TreeReadTrait
      */
     public function hasChilds($id)
     {
-        $childs = $this->getChildsIdsByTree($id);
+        $childs = $this->getChildsByTree($id);
         if (empty($childs)){
             return false;
         }
