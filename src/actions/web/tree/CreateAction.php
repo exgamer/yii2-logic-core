@@ -23,6 +23,10 @@ class CreateAction extends Action
         $model = $this->getForm();
         $this->processModel($model);
         $model->parent_id = $parent_id;
+        if (method_exists($model, 'customizeForm')) {
+            $model->customizeForm();
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()  && !$this->isReload()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
                 $redirectParams = [$this->redirect, 'id' => $result->id, 'parent_id' => $parent_id];

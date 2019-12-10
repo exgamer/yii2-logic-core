@@ -24,6 +24,10 @@ class CreateAction extends Action
         $model = $this->getForm();
         $model->locale = $localeId;
         $model->parent_id = $parent_id;
+        if (method_exists($model, 'customizeForm')) {
+            $model->customizeForm();
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()  && !$this->isReload()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
 
