@@ -152,6 +152,7 @@ trait HasLocalizationTrait
         if (static::$by_locale_hard_search) {
             $joinType = "innerJoinWith";
         }
+
         $query->{$joinType}([
             'localization' => function ($q) {
                 $callable = static::$search_by_locale_callable;
