@@ -161,8 +161,7 @@ trait HasLocalizationTrait
                 }
             }
         ]);
-
-
+        
         return $query;
     }
 
