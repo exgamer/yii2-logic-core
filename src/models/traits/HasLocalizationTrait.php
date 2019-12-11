@@ -145,7 +145,6 @@ trait HasLocalizationTrait
     {
 //        $query = Yii::createObject(LocalizedActiveQuery::className(), [get_called_class()]);
         $query = Yii::createObject(ActiveQuery::className(), [get_called_class()]);
-        $query->with('localizations');
         $joinType = "with";
         /**
          * Если true то поиск ведем жеско по языку и доп условиям
