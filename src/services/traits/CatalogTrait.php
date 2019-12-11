@@ -189,13 +189,13 @@ trait CatalogTrait
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
         $where = [];
-//        $model = new $searchClass();
-//        if ($model->hasAttribute('status')){
-//            $where['status'] = StatusEnum::ACTIVE;
-//        }
-//        if ($model->hasAttribute('is_deleted')){
-//            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
-//        }
+        $model = new $searchClass();
+        if ($model->hasAttribute('status')){
+            $where['status'] = StatusEnum::ACTIVE;
+        }
+        if ($model->hasAttribute('is_deleted')){
+            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+        }
 
         $query = $this->getQuery()
             ->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])
