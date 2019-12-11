@@ -26,7 +26,7 @@ trait CatalogTrait
      *  getListSearchKeyAttribute
      *
      *
-     * @param bool $resetModels
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение всех моделей
      * @return array
      * @throws Exception
      */
@@ -79,6 +79,7 @@ trait CatalogTrait
      *   будет вызван метод getLabel() модели
      *
      *
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение всех моделей
      * @return array
      * @throws Exception
      */
