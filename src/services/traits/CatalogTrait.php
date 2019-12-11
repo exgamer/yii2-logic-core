@@ -79,7 +79,7 @@ trait CatalogTrait
      *   будет вызван метод getLabel() модели
      *
      *
-     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение всех моделей
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
      * @return array
      * @throws Exception
      */
