@@ -47,15 +47,15 @@ class UniqueLocalizedValidator extends Validator
 
     public function validateAttribute($model, $attribute)
     {
-        $qFunc = function($q, $localizedAlias) use ($model){
-            foreach ($this->localizedFields as $field) {
-                $q->andWhere([$localizedAlias . "." . $field => $model->{$field}]);
-            }
-
-            if (isset($model->id)) {
-                $q->andWhere(['<>', 'entity_id', $model->id]);
-            }
-        };
+//        $qFunc = function($q, $localizedAlias) use ($model){
+//            foreach ($this->localizedFields as $field) {
+//                $q->andWhere([$localizedAlias . "." . $field => $model->{$field}]);
+//            }
+//
+//            if (isset($model->id)) {
+//                $q->andWhere(['<>', 'entity_id', $model->id]);
+//            }
+//        };
         $locAlias = "";
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
@@ -78,7 +78,9 @@ class UniqueLocalizedValidator extends Validator
         foreach ($this->localizedFields as $field) {
             $query->andWhere([$locAlias . "." . $field => $model->{$field}]);
         }
-
+        if (isset($model->id)) {
+            $query->andWhere(['<>', $locAlias . '.entity_id', $model->id]);
+        }
         $result = $query->all();
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
