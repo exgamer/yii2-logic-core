@@ -17,6 +17,18 @@ use Yii;
 trait LocalizedReadTrait
 {
     /**
+     * Получить локализованную сущность по md5 hash seo_name
+     *
+     * @param $seo_name
+     * @return array
+     */
+    public function getByLocalizedSeoNameMd5Hash($seo_name)
+    {
+
+        return $this->getByLocalized("seo_name_md5_hash", md5($seo_name));
+    }
+
+    /**
      * Получить локализованную сущность по локализованному аттрибуту
      *
      * @param $attribute
