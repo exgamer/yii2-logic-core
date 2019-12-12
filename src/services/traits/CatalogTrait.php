@@ -21,6 +21,54 @@ use yii\db\ActiveRecord;
 trait CatalogTrait
 {
     /**
+     * Возвращает массив с массивом  записей индексированным по $searchClass::getListSearchKeyAttribute
+     * Для использования у search модели должны быть определен метод
+     *  getListSearchKeyAttribute
+     *
+     *
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение всех моделей
+     * @return array
+     * @throws Exception
+     */
+    public function modelsCatalog($resetModels = true)
+    {
+        static $_catalog = null;
+        if (! empty($_catalog)){
+            return $_catalog;
+        }
+
+        $searchClass = $this->getRelatedSearchModelClass();
+        $searchKey = $searchClass::getListSearchKeyAttribute();
+        $models = ArrayHelper::index( $this->getAllModelsForList(), $searchKey);
+        if ($resetModels){
+            return $models;
+        }
+
+        $_catalog = $models;
+
+        return $_catalog;
+    }
+
+    /**
+     * Возвращает модель из каталога по ключу
+     *
+     * @param $id
+     * @return ActiveRecord|null
+     * @throws Exception
+     */
+    public function getCatalogModel($id)
+    {
+        $catalog = $this->modelsCatalog();
+
+        if (isset($catalog[$id])){
+
+            return $catalog[$id];
+        }
+
+        return null;
+    }
+
+    /**
      * Возвращает массив с каталогом записей
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
@@ -31,10 +79,11 @@ trait CatalogTrait
      *   будет вызван метод getLabel() модели
      *
      *
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
      * @return array
      * @throws Exception
      */
-    public function catalog()
+    public function catalog($resetModels = true)
     {
         static $_catalog = null;
         if (! empty($_catalog)){
@@ -47,8 +96,8 @@ trait CatalogTrait
         if (! $searchKey || ! $searchAttr){
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
-
-        $_catalog = $this->getAllList($searchKey, $searchAttr);
+        $models = $this->modelsCatalog($resetModels);
+        $_catalog = ArrayHelper::map($models, $searchKey , $searchAttr);
 
         return $_catalog;
     }
@@ -140,13 +189,13 @@ trait CatalogTrait
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
         $where = [];
-//        $model = new $searchClass();
-//        if ($model->hasAttribute('status')){
-//            $where['status'] = StatusEnum::ACTIVE;
-//        }
-//        if ($model->hasAttribute('is_deleted')){
-//            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
-//        }
+        $model = new $searchClass();
+        if ($model->hasAttribute('status')){
+            $where['status'] = StatusEnum::ACTIVE;
+        }
+        if ($model->hasAttribute('is_deleted')){
+            $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+        }
 
         $query = $this->getQuery()
             ->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])

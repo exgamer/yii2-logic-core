@@ -17,16 +17,32 @@ use Yii;
 trait LocalizedReadTrait
 {
     /**
-     * Получить локализованную сущность по seo_name
+     * Получить локализованную сущность по md5 hash seo_name
      *
      * @param $seo_name
-     * @return mixed
+     * @return array
      */
-    public function getBySeoName($seo_name)
+    public function getByLocalizedSeoNameMd5Hash($seo_name)
     {
-        return $this->getOneByCondition(function(ActiveQuery $query) use ($seo_name){
-            $query->andWhere(['p.seo_name' => $seo_name]);
-        });
+
+        return $this->getByLocalized("seo_name_md5_hash", md5($seo_name));
+    }
+
+    /**
+     * Получить локализованную сущность по локализованному аттрибуту
+     *
+     * @param $attribute
+     * @param $value
+     * @return array
+     */
+    public function getByLocalized($attribute, $value)
+    {
+        $modelClass = $this->getRelatedModelClass();
+        $modelClass::$search_by_locale_callable = function($q, $localizedAlias) use ($attribute, $value) {
+            $q->andWhere(["{$localizedAlias}." . $attribute => $value]);
+        };
+
+        return $this->getOneByCondition();
     }
 
     /**
