@@ -56,14 +56,17 @@ class UniqueLocalizedValidator extends Validator
                 $q->andWhere(['<>', 'entity_id', $model->id]);
             }
         };
+        $locAlias = "";
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
 //            $arClass::$search_by_locale_callable = $qFunc;
             $arClass::setLocale($model->locale);
+            $locAlias = $arClass::localizationAlias();
 //            $arClass::enableLocaleHardSearch();
         }else{
 //            $model::$search_by_locale_callable = $qFunc;
             $model::setLocale($model->locale);
+            $locAlias = $model::localizationAlias();
 //            $model::enableLocaleHardSearch();
         }
 
@@ -73,7 +76,7 @@ class UniqueLocalizedValidator extends Validator
             $query->andWhere([$field => $model->{$field}]);
         }
         foreach ($this->localizedFields as $field) {
-            $query->andWhere([$model::localizationAlias() . "." . $field => $model->{$field}]);
+            $query->andWhere([$locAlias . "." . $field => $model->{$field}]);
         }
 
         $result = $query->all();

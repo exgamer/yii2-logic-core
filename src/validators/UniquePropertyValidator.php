@@ -22,22 +22,25 @@ class UniquePropertyValidator extends Validator
 //                $q->andWhere(['<>', 'entity_id', $model->id]);
 //            }
 //        };
+        $locAlias = "";
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
 //            $arClass::$search_by_locale_callable = $qFunc;
             $arClass::setLocale($model->locale);
+            $locAlias = $arClass::localizationAlias();
 //            $arClass::enableLocaleHardSearch();
         }else{
 //            $model::$search_by_locale_callable = $qFunc;
             $model::setLocale($model->locale);
+            $locAlias = $model::localizationAlias();
 //            $model::enableLocaleHardSearch();
         }
 
         $serviceName = ClassHelper::getServiceName($model, "Form");
         $query = Yii::$app->{$serviceName}->getQuery();
-        $query->andWhere([$model::localizationAlias() .".". $attribute => $model->{$attribute}]);
+        $query->andWhere([$locAlias.".". $attribute => $model->{$attribute}]);
         if (isset($model->id)) {
-            $query->andWhere(['<>', $model::localizationAlias() . "." . 'entity_id', $model->id]);
+            $query->andWhere(['<>', $locAlias . "." . 'entity_id', $model->id]);
         }
         $result = $query->all();
         if (count($result)>0){
