@@ -152,12 +152,15 @@ trait HasLocalizationTrait
             $joinType = "innerJoinWith";
         }
 
+        static::$by_locale_hard_search = true;
         $query->{$joinType}([
             'localization' => function ($q) {
                 $callable = static::$search_by_locale_callable;
                 if (is_callable($callable)) {
                     call_user_func($callable, $q, "p");
                 }
+
+                static::$search_by_locale_callable = null;
             }
         ]);
 
