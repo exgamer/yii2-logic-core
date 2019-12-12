@@ -20,18 +20,32 @@ class ViewAction extends Base
 {
     use LocalizedTrait;
 
+    public $view = 'view';
+
+    public function run($id, $locale = null)
+    {
+        $modelClass = $this->getModelClass();
+        $modelClass::setLocale($locale);
+        $model = $this->getModel($id);
+        if (!$model){
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render($this->view, [
+            'model' => $model,
+        ]);
+    }
+
     /**
-     * Возвращает локализованную сущность с учетом локали
+     * Возвращает модель для редактирования
      *
      * @param $id
      * @return ActiveRecord
      * @throws ReflectionException
+     * @throws ReflectionException
      */
     protected function getModel($id)
     {
-        $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::setLocale($this->getLocale());
-
         return $this->getService()->findById($id);
     }
 }

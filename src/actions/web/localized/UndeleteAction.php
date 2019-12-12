@@ -44,7 +44,7 @@ class UndeleteAction extends Action
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
         $originModelClass::setLocale($this->getLocale());
-        $originModelClass::disableLocaleHardSearch();
+//        $originModelClass::disableLocaleHardSearch();
 
         return $this->getService()->findById($id);
     }
