@@ -58,19 +58,22 @@ class UniqueLocalizedValidator extends Validator
         };
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
-            $arClass::$search_by_locale_callable = $qFunc;
+//            $arClass::$search_by_locale_callable = $qFunc;
             $arClass::setLocale($model->locale);
-            $arClass::enableLocaleHardSearch();
+//            $arClass::enableLocaleHardSearch();
         }else{
-            $model::$search_by_locale_callable = $qFunc;
+//            $model::$search_by_locale_callable = $qFunc;
             $model::setLocale($model->locale);
-            $model::enableLocaleHardSearch();
+//            $model::enableLocaleHardSearch();
         }
 
         $serviceName = ClassHelper::getServiceName($model, "Form");
         $query = Yii::$app->{$serviceName}->getQuery();
         foreach ($this->fields as $field){
             $query->andWhere([$field => $model->{$field}]);
+        }
+        foreach ($this->localizedFields as $field) {
+            $query->andWhere([$model::localizationAlias() . "." . $field => $model->{$field}]);
         }
 
         $result = $query->all();
