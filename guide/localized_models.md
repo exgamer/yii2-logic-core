@@ -156,13 +156,6 @@ class StaticBlock extends ActiveRecord
 
        return parent::beforeDelete();
     }
-
-    public function afterFind()
-    {
-        $this->setLocalizations();
-
-       return parent::afterFind();
-    }
 }
 
 
@@ -271,10 +264,8 @@ class StaticBlockSearch extends StaticBlock
         $query->andFilterWhere([
             'status' => $this->status
         ]);
-        static::$search_by_locale_callable = function($q, $localizedAlias){
-            $q->andFilterWhere(['like', "{$localizedAlias}.seo_name", $this->seo_name]);
-            $q->andFilterWhere(['like', "{$localizedAlias}.title", $this->title]);
-        };
+
+        $query->andFilterWhere(['like', static::localizationAlias() . ".title", $this->title]);
     }
 
     protected function extendDataProvider(ActiveDataProvider $dataProvider)
