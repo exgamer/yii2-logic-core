@@ -294,33 +294,33 @@ trait HasLocalizationTrait
      * @param bool $fromLocalized
      * @return array
      */
-//    public function getLocalized($localization = null, $fromLocalized = false)
-//    {
-//        if (! $localization){
-//            $localization = $this->localization;
-//        }
-//
-//        $data = [];
-//        if (!$localization){
-//
-//            return $data;
-//        }
-//
-//        foreach ($localization->attributes as $f => $v){
-//            if (in_array($f, ['id', 'entity_id'])){
-//                continue;
-//            }
-//
-//            if ($fromLocalized){
-//                $data[$f] = $v;
-//
-//                continue;
-//            }
-//            $data[$f] = $this->{$f};
-//        }
-//
-//        return $data;
-//    }
+    public function getLocalized($localization = null, $fromLocalized = false)
+    {
+        if (! $localization){
+            $localization = $this->localization;
+        }
+
+        $data = [];
+        if (!$localization){
+
+            return $data;
+        }
+
+        foreach ($localization->attributes as $f => $v){
+            if (in_array($f, ['id', 'entity_id'])){
+                continue;
+            }
+
+            if ($fromLocalized){
+                $data[$f] = $v;
+
+                continue;
+            }
+            $data[$f] = $this->{$f};
+        }
+
+        return $data;
+    }
 
     /**
      * метод для получения модели с локализациями
