@@ -17,16 +17,20 @@ use Yii;
 trait LocalizedReadTrait
 {
     /**
-     * Получить локализованную сущность по seo_name
+     * Получить локализованную сущность по локализованному аттрибуту
      *
-     * @param $seo_name
-     * @return mixed
+     * @param $attribute
+     * @param $value
+     * @return array
      */
-    public function getBySeoName($seo_name)
+    public function getByLocalized($attribute, $value)
     {
-        return $this->getOneByCondition(function(ActiveQuery $query) use ($seo_name){
-            $query->andWhere(['p.seo_name' => $seo_name]);
-        });
+        $modelClass = $this->getRelatedModelClass();
+        $modelClass::$search_by_locale_callable = function($q, $localizedAlias) use ($attribute, $value) {
+            $q->andWhere(["{$localizedAlias}." . $attribute => $value]);
+        };
+
+        return $this->getOneByCondition();
     }
 
     /**
