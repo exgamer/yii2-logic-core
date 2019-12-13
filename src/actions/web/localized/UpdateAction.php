@@ -25,7 +25,7 @@ class UpdateAction extends Action
 
     public function run($id, $locale = null)
     {
-        $originModel = $this->getModel($id);
+        $originModel = $this->getModel($id, $locale);
         if (!$originModel){
             throw new NotFoundHttpException();
         }
@@ -64,12 +64,16 @@ class UpdateAction extends Action
      * @return ActiveRecord
      * @throws ReflectionException
      */
-    protected function getModel($id)
+    protected function getModel($id, $locale = null)
     {
         $originModelClass = $this->getService()->getRelatedModelClass();
-        $originModelClass::setLocale($this->getLocale());
-//        $originModelClass::disableLocaleHardSearch();
+        $originModelClass::setLocale($locale);
+        $model = $this->getService()->findById($id);
+        if (! $model){
 
-        return $this->getService()->findById($id);
+            return $originModelClass::clearFind()->where(['id' => $id])->one();
+        }
+
+        return $model;
     }
 }

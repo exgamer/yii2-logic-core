@@ -91,11 +91,16 @@ trait HasLocalizationTrait
         return $l;
     }
 
-
+    /**
+     * Возвращает альяс для локализации
+     *
+     * @return string
+     */
     public static function localizationAlias()
     {
         return "p";
     }
+
     /**
      * Переопределяем find чтобы подцепить локализации
      *
@@ -110,6 +115,16 @@ trait HasLocalizationTrait
         $query->andWhere([static::localizationAlias() . '.locale' => static::currentLocale()]);
 
         return $query;
+    }
+
+    /**
+     * Возвращает оригинальный find()
+     *
+     * @return ActiveQuery
+     */
+    public static function clearFind()
+    {
+        return parent::find();
     }
 
     /**
