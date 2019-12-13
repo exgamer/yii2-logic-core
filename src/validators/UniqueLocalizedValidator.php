@@ -47,27 +47,13 @@ class UniqueLocalizedValidator extends Validator
 
     public function validateAttribute($model, $attribute)
     {
-//        $qFunc = function($q, $localizedAlias) use ($model){
-//            foreach ($this->localizedFields as $field) {
-//                $q->andWhere([$localizedAlias . "." . $field => $model->{$field}]);
-//            }
-//
-//            if (isset($model->id)) {
-//                $q->andWhere(['<>', 'entity_id', $model->id]);
-//            }
-//        };
-        $locAlias = "";
         if ($model instanceof Form){
             $arClass = $model::getModelClass();
-//            $arClass::$search_by_locale_callable = $qFunc;
             $arClass::setLocale($model->locale);
             $locAlias = $arClass::localizationAlias();
-//            $arClass::enableLocaleHardSearch();
         }else{
-//            $model::$search_by_locale_callable = $qFunc;
             $model::setLocale($model->locale);
             $locAlias = $model::localizationAlias();
-//            $model::enableLocaleHardSearch();
         }
 
         $serviceName = ClassHelper::getServiceName($model, "Form");
@@ -75,12 +61,15 @@ class UniqueLocalizedValidator extends Validator
         foreach ($this->fields as $field){
             $query->andWhere([$field => $model->{$field}]);
         }
+
         foreach ($this->localizedFields as $field) {
             $query->andWhere([$locAlias . "." . $field => $model->{$field}]);
         }
+
         if (isset($model->id)) {
             $query->andWhere(['<>', $locAlias . '.entity_id', $model->id]);
         }
+        
         $result = $query->all();
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
