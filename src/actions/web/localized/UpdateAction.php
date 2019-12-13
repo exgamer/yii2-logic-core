@@ -61,6 +61,7 @@ class UpdateAction extends Action
      *
      *
      * @param $id
+     * @param null $locale
      * @return ActiveRecord
      * @throws ReflectionException
      */
