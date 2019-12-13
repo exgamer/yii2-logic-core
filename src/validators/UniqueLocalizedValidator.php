@@ -18,13 +18,13 @@ class UniqueLocalizedValidator extends Validator
      * Поля для валидации
      * @var array
      */
-    public $fields;
+    public $fields = [];
 
     /**
      * Локализованные поля для валидации
      * @var array
      */
-    public $localizedFields;
+    public $localizedFields = [];
 
     /**
      * @inheritDoc
