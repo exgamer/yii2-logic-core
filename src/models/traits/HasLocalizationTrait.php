@@ -30,25 +30,6 @@ trait HasLocalizationTrait
      */
     public static $current_locale;
 
-//    /**
-//     * Возвращает анонимку для расширения выборки по локализации
-//     *
-//     *   static::$search_by_locale_callable = function($q, $localizedAlias){
-//     *       $q->andFilterWhere(['like', "{$localizedAlias}.seo_name", $this->seo_name]);
-//     *       $q->andFilterWhere(['like', "{$localizedAlias}.title", $this->title]);
-//     *   };
-//     *
-//     * @var callable|null
-//     */
-//    public static $search_by_locale_callable;
-//
-//    /**
-//     * true означает что поиск будет вестись жестко по языку
-//     * false означает что будет искаться запись, но язык необязателен
-//     * @var bool
-//     */
-//    public static $by_locale_hard_search = true;
-
     /**
      * Возвращает конвертер для локали
      * с помощью этого можно управлять типом данных аттрибута локаль сущности
@@ -60,22 +41,6 @@ trait HasLocalizationTrait
         return LocaleConverter::class;
     }
 
-//    /**
-//     * Включает поиск будет вестись жестко по языку
-//     */
-//    public static function enableLocaleHardSearch()
-//    {
-//        static::$by_locale_hard_search = true;
-//    }
-//
-//    /**
-//     * Отключает поиск будет вестись жестко по языку
-//     */
-//    public static function disableLocaleHardSearch()
-//    {
-//        static::$by_locale_hard_search = false;
-//    }
-
     /**
      * Установка локали
      *
@@ -85,17 +50,6 @@ trait HasLocalizationTrait
     {
         static::$current_locale = $locale;
     }
-
-//    /**
-//     * Поиск по локализациям
-//     *
-//     * @param $callable
-//     */
-//    public static function searchByLocalization($callable)
-//    {
-//        d($callable);
-//        static::$search_by_locale_callable = $callable;
-//    }
 
     /**
      * Возвращает текущий язык модели
@@ -153,29 +107,7 @@ trait HasLocalizationTrait
         $m = static::getLocalizationModelClass();
         $query->select([static::tableName(). ".*", static::localizationAlias() . '.*']);
         $query->innerJoin($m::tableName() . " ". static::localizationAlias(), static::localizationAlias() . '.entity_id = '. static::tableName().'.id');
-//        $callable = static::$search_by_locale_callable;
-//        if (is_callable($callable)) {
-//            call_user_func($callable, $query, "p");
-//        }
-//        $joinType = "with";
-//        /**
-//         * Если true то поиск ведем жеско по языку и доп условиям
-//         */
-//        if (static::$by_locale_hard_search) {
-//            $joinType = "innerJoinWith";
-//        }
-//
-//        static::$by_locale_hard_search = true;
-//        $query->{$joinType}([
-//            'localization' => function ($q) {
-//                $callable = static::$search_by_locale_callable;
-//                if (is_callable($callable)) {
-//                    call_user_func($callable, $q, "p");
-//                }
-//
-//                static::$search_by_locale_callable = null;
-//            }
-//        ]);
+        $query->andWhere([static::localizationAlias() . '.locale' => static::currentLocale()]);
 
         return $query;
     }
@@ -262,26 +194,6 @@ trait HasLocalizationTrait
             'entity_id' => $this->id
         ]);
     }
-
-//    /**
-//     * метод должен вызываться в afterFind модели для удаления локализаций
-//     *
-//     *   public function afterFind()
-//     *   {
-//     *       $this->setLocalizations();
-//     *       return parent::afterFind();
-//     *   }
-//     *
-//     */
-//    public function setLocalizations()
-//    {
-//        if (isset($this->localization)){
-//            $localizationData = $this->getLocalized($this->localization, true);
-//            foreach ($localizationData as $attribute => $value){
-//                $this->{$attribute} = $value;
-//            }
-//        }
-//    }
 
     /**
      * Возвращает массив с локализациями
