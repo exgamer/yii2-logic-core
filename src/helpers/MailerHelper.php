@@ -12,12 +12,12 @@ use Yii;
  */
 class MailerHelper
 {
-    const USERNAME = "cMailerUsername";
-    const PASSWORD = "cMailerPassword";
-    const HOST = "cMailerHost";
-    const PORT = "cMailerPort";
-    const ENCRYPTION = "cMailerEncryption";
-    const FROM = "cMailerFrom";
+    const USERNAME = "username";
+    const PASSWORD = "password";
+    const HOST = "host";
+    const PORT = "port";
+    const ENCRYPTION = "encryption";
+    const FROM = "from";
 
     /**
      * отправка
@@ -29,12 +29,12 @@ class MailerHelper
     public static function send($to, $subject, $body)
     {
         $transport = self::createTransport(
-            Yii::$app->params[self::HOST],
-            Yii::$app->params[self::PORT],
-            Yii::$app->params[self::ENCRYPTION]
+            Yii::$app->params['concepture']['mailer'][self::HOST],
+            Yii::$app->params['concepture']['mailer'][self::PORT],
+            Yii::$app->params['concepture']['mailer'][self::ENCRYPTION]
         );
         $message = self::createMessage(
-            Yii::$app->params[self::FROM],
+            Yii::$app->params['concepture']['mailer'][self::FROM],
             $to,
             $subject,
             $body
@@ -54,8 +54,8 @@ class MailerHelper
     private static  function  createTransport($host = 'localhost', $port = 25, $encryption = null)
     {
         $transport = new \Swift_SmtpTransport($host, $port, $encryption);
-        $transport->setUsername(Yii::$app->params[self::USERNAME]);
-        $transport->setPassword(Yii::$app->params[self::PASSWORD]);
+        $transport->setUsername(Yii::$app->params['concepture']['mailer'][self::USERNAME]);
+        $transport->setPassword(Yii::$app->params['concepture']['mailer'][self::PASSWORD]);
 
         return $transport;
     }
