@@ -37,12 +37,9 @@ trait LocalizedReadTrait
      */
     public function getByLocalized($attribute, $value)
     {
-        $modelClass = $this->getRelatedModelClass();
-        $modelClass::$search_by_locale_callable = function($q, $localizedAlias) use ($attribute, $value) {
-            $q->andWhere(["{$localizedAlias}." . $attribute => $value]);
-        };
-
-        return $this->getOneByCondition();
+        return $this->getOneByCondition([
+            "p." . $attribute => $value
+        ]);
     }
 
     /**
