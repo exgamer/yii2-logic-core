@@ -146,5 +146,26 @@ trait ReadTrait
 
         return $query->all();
     }
+
+    /**
+     * Возвращает количество записей
+     *
+     * @param null $condition
+     * @return int|string
+     */
+    public function getCount($condition = null)
+    {
+        $query = $this->getQuery();
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
+
+        return $query->count();
+    }
 }
 
