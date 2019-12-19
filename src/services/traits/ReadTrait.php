@@ -40,6 +40,7 @@ trait ReadTrait
     /**
      * Возвращает DataProvider
      *
+     *
      * @param array $queryParams
      *
      * Конфиг DataProvider
@@ -47,9 +48,14 @@ trait ReadTrait
      * @param ActiveRecord $searchModel
      * @param string $formName
      *
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
+     * @param callable|array $condition
+     *
      * @return ActiveDataProvider
      */
-    public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null)
+    public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null, $condition = null)
     {
         if ($searchModel === null) {
             $searchClass = $this->getRelatedSearchModelClass();
@@ -57,6 +63,14 @@ trait ReadTrait
         }
 
         $query = $this->getQuery();
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
         $config['query'] = $query;
         $dataProvider = new ActiveDataProvider($config);
         if (! empty($queryParams)) {
