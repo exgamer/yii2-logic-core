@@ -51,6 +51,7 @@ trait ReadTrait
      * function(ActiveQuery $query) {
      *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
      * }
+     * 
      * @param callable|array $condition
      *
      * @return ActiveDataProvider
