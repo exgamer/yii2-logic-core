@@ -14,11 +14,6 @@ abstract class Migration extends Base
 {
     protected $tableName;
 
-    public function down()
-    {
-        $this->dropTable('{{%'.$this->getTableName().'}}');
-    }
-
     protected function getTableOptions()
     {
         $tableOptions = null;
