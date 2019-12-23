@@ -69,7 +69,7 @@ class UniqueLocalizedValidator extends Validator
         if (isset($model->id)) {
             $query->andWhere(['<>', $locAlias . '.entity_id', $model->id]);
         }
-        
+
         $result = $query->all();
         if (count($result)>0){
             $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
