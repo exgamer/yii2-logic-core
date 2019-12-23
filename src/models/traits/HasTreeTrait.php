@@ -90,7 +90,7 @@ trait HasTreeTrait
 
     public function getParent()
     {
-        return $this->hasOne(static::className(), ['id' => 'parent_id'])->from(['parent' => static::tableName()]);
+        return $this->hasOne(static::class, ['id' => 'parent_id']);
     }
 }
 
