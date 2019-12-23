@@ -108,7 +108,7 @@ trait HasLocalizationTrait
      */
     public static function find()
     {
-        $query = Yii::createObject(ActiveQuery::className(), [get_called_class()]);
+        $query = Yii::createObject(ActiveQuery::class, [get_called_class()]);
         $m = static::getLocalizationModelClass();
         $query->select([static::tableName(). ".*", static::localizationAlias() . '.*']);
         $query->innerJoin($m::tableName() . " ". static::localizationAlias(), static::localizationAlias() . '.entity_id = '. static::tableName().'.id');
