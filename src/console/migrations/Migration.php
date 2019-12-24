@@ -32,14 +32,16 @@ abstract class Migration extends Base
 
     protected function addPK($columns, $unique = false)
     {
-        $key_name = implode("_", $columns)."_pk";
+        $tableName = $this->getTableName();
+        $key_name = implode("_", $columns)."_pk". "_" . $tableName;
         $this->addPrimaryKey( $key_name, '{{%'.$this->getTableName().'}}', $columns);
     }
 
     protected function addIndex($columns, $unique = false)
     {
+        $tableName = $this->getTableName();
         $index_name = 'ind_'. implode("_", $columns);
-        $this->createIndex($index_name,
+        $this->createIndex($index_name. "_" . $tableName,
             '{{%'.$this->getTableName().'}}',
             $columns,
             $unique);
@@ -52,10 +54,11 @@ abstract class Migration extends Base
 
     protected function addUniqueIndex($columns, $index_name = null)
     {
+        $tableName = $this->getTableName();
         if ($index_name === null) {
             $index_name = 'uni_' . implode("_", $columns);
         }
-        $this->createIndex($index_name,
+        $this->createIndex($index_name. "_" . $tableName,
             '{{%'.$this->getTableName().'}}',
             $columns,
             true);
