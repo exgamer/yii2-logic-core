@@ -14,6 +14,29 @@ abstract class Migration extends Base
 {
     protected $tableName;
 
+    protected function isMysql()
+    {
+        if ($this->getDbType() == 'mysql'){
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isPostgres()
+    {
+        if ($this->getDbType() == 'pgsql'){
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getDbType()
+    {
+        return Yii::$app->db->getDriverName();
+    }
+
     protected function getTableOptions()
     {
         $tableOptions = null;
