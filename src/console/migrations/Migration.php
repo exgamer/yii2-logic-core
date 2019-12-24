@@ -34,7 +34,7 @@ abstract class Migration extends Base
 
     protected function getDbType()
     {
-        return Yii::$app->db->getDriverName();
+        return \Yii::$app->db->getDriverName();
     }
 
     protected function getTableOptions()
