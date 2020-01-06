@@ -24,7 +24,7 @@ trait ViewsTrait
         $cache = Yii::$app->cache;
         $data = $cache->get($key);
         if ($data === false) {
-            $cache->set($key, [$model->id], 20);
+            $cache->set($key, [$model->id], 86400);
             $model->views++;
             $model->save(false);
         }
