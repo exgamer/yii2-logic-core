@@ -54,6 +54,33 @@ trait CacheTrait
     }
 
     /**
+     * @todo протестить
+     * Кеширование dataProvider
+     *
+     * @param $dataProvider
+     * @param int $duration
+     * @param array $tags
+     */
+    public function cacheDataProvider($dataProvider, $duration = 3600, $tags = [])
+    {
+        if (! $this->cacheQuery)
+        {
+            return;
+        }
+
+        $tags = $this->getAliasedTags($tags);
+        $tags = array_merge([$this->getCacheTagsDependency()], $tags);
+        $dependency = new TagDependency(['tags' => $tags]);
+        $this->getDb()->cache(function ($db) use ($dataProvider) {
+            $dataProvider->prepare();
+        }, $duration, $dependency);
+
+        return $dataProvider;
+    }
+
+
+
+    /**
      * Добавляет к тегам префикс таблицы
      *
      * @param $tags
