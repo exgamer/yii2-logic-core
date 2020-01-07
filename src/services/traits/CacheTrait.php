@@ -16,7 +16,7 @@ trait CacheTrait
      *
      * @var bool
      */
-    protected $cache = false;
+    protected $cacheQuery = false;
 
     /**
      * сброс кеша по тегам
@@ -24,7 +24,7 @@ trait CacheTrait
      */
     public function invalidateQueryCacheByTags($tags = [])
     {
-        if (! $this->cache)
+        if (! $this->cacheQuery)
         {
             return;
         }
@@ -43,7 +43,7 @@ trait CacheTrait
      */
     public function queryCacheByTags($query, $duration = 3600, $tags = [])
     {
-        if (! $this->cache)
+        if (! $this->cacheQuery)
         {
             return;
         }
