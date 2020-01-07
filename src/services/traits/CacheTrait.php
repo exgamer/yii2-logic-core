@@ -86,6 +86,10 @@ trait CacheTrait
      */
     protected function getAliasedTags($tags)
     {
+        if (empty($tags)){
+            return $tags;
+        }
+        
         $table =$this->getTableName();
         $allyTags = [];
         foreach ($tags as $tag){
