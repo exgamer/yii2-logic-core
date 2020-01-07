@@ -25,6 +25,7 @@ trait ReadTrait
         $class = $this->getRelatedModelClass();
         $query = $class::find();
         $this->extendQuery($query);
+        $this->queryCacheByTags($query);
 
         return $query;
     }
@@ -127,6 +128,7 @@ trait ReadTrait
         if (is_callable($condition)){
             call_user_func($condition, $query);
         }
+
         if (is_array($condition)){
             foreach ($condition as $name => $value){
                 $query->andWhere([$name => $value]);
@@ -153,6 +155,7 @@ trait ReadTrait
         if (is_callable($condition)){
             call_user_func($condition, $query);
         }
+
         if (is_array($condition)){
             foreach ($condition as $name => $value){
                 $query->andWhere([$name => $value]);
@@ -174,6 +177,7 @@ trait ReadTrait
         if (is_callable($condition)){
             call_user_func($condition, $query);
         }
+
         if (is_array($condition)){
             foreach ($condition as $name => $value){
                 $query->andWhere([$name => $value]);

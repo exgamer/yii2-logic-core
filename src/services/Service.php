@@ -3,6 +3,7 @@ namespace concepture\yii2logic\services;
 
 
 use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\services\traits\CacheTrait;
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
@@ -29,6 +30,7 @@ abstract class Service extends Component
     use ModifyTrait;
     use ReadTrait;
     use CatalogTrait;
+    use CacheTrait;
 
     /**
      * Возвращает соединение к БД

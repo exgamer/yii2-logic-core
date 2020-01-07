@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\enum\CacheTagsEnum;
 use Yii;
 use yii\helpers\Json;
 use yii\base\Exception;
@@ -118,6 +119,7 @@ trait ModifyTrait
         }
         $this->setPrimaryKeysToFrom($form, $model);
         $this->afterModelSave($form, $model, $is_new_record);
+        $this->invalidateQueryCacheByTags();
 
         return $model;
     }
@@ -179,6 +181,8 @@ trait ModifyTrait
                 ])
             );
         }
+
+        $this->invalidateQueryCache();
     }
 
     /**
@@ -197,6 +201,8 @@ trait ModifyTrait
                 ])
             );
         }
+
+        $this->invalidateQueryCache();
     }
 
 

@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\enum\CacheTagsEnum;
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
 use Yii;
@@ -272,6 +273,7 @@ trait CatalogTrait
 
         $query = $this->getQuery()->andWhere($where);
         $this->extendCatalogTraitQuery($query);
+        $this->queryCacheByTags($query);
 
         return $query->all();
     }
@@ -285,7 +287,7 @@ trait CatalogTrait
      *   будет вызван метод getLabel() модели
      *
      * @param string $from
-     * @param $to
+     * @param string $to
      * @param array $where
      * @param boolean $excludeDefault
      * @return mixed

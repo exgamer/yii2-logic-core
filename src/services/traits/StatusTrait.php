@@ -17,6 +17,7 @@ trait StatusTrait
         $this->beforeStatusChange($model, $status);
         $model->status = $status;
         $model->save(false);
+        $this->invalidateQueryCache();
     }
 
     protected function beforeStatusChange(ActiveRecord $model, $status){}
