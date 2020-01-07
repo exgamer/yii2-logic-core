@@ -77,7 +77,7 @@ trait CacheTrait
 
         return $dataProvider;
     }
-    
+
     /**
      * Добавляет к тегам префикс таблицы
      *
