@@ -14,4 +14,5 @@ class CacheTagsEnum extends Enum
     const CATALOG = 'catalog';
     const ALL = 'all';
     const ONE = 'one';
+    const COUNT = 'count';
 }

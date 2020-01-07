@@ -273,7 +273,6 @@ trait CatalogTrait
 
         $query = $this->getQuery()->andWhere($where);
         $this->extendCatalogTraitQuery($query);
-        $this->queryCacheByTags($query);
 
         return $query->all();
     }

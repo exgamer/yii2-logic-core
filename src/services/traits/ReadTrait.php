@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\enum\CacheTagsEnum;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -25,7 +26,6 @@ trait ReadTrait
         $class = $this->getRelatedModelClass();
         $query = $class::find();
         $this->extendQuery($query);
-        $this->queryCacheByTags($query);
 
         return $query;
     }

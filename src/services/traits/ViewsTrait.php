@@ -29,8 +29,6 @@ trait ViewsTrait
             $model->save(false);
         }
 
-        $this->invalidateQueryCache();
-
         return true;
     }
 }

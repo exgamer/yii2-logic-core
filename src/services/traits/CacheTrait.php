@@ -29,6 +29,10 @@ trait CacheTrait
             return;
         }
 
+        if (empty($tags)){
+            return;
+        }
+
         $tags = $this->getAliasedTags($tags);
         $tags = array_merge([$this->getCacheTagsDependency()], $tags);
         TagDependency::invalidate(Yii::$app->cache, $tags);
@@ -47,6 +51,10 @@ trait CacheTrait
             return;
         }
 
+        if (empty($tags)){
+            return;
+        }
+
         $tags = $this->getAliasedTags($tags);
         $tags = array_merge([$this->getCacheTagsDependency()], $tags);
         $query->cache(3600, new TagDependency(['tags' => $tags]));
@@ -60,10 +68,12 @@ trait CacheTrait
      */
     protected function getAliasedTags($tags)
     {
-        $table =$this->getTableName();
+        $dependencies =$this->getCacheTagsDependency();
         $allyTags = [];
-        foreach ($tags as $tag){
-            $allyTags[] = $table ."_" . $tag;
+        foreach ($dependencies as $dependency) {
+            foreach ($tags as $tag) {
+                $allyTags[] = $dependency . "_" . $tag;
+            }
         }
 
         return $allyTags;

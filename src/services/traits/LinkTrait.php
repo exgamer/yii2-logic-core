@@ -47,8 +47,6 @@ trait LinkTrait
             }
             $this->batchInsert(['entity_id', 'linked_id'], $insertData);
         }
-
-        $this->invalidateQueryCache();
     }
 }
 
