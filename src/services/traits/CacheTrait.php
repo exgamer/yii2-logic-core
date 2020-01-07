@@ -38,9 +38,10 @@ trait CacheTrait
      * кеширование запроса
      *
      * @param ActiveQuery $query
+     * @param int $duration
      * @param array $tags
      */
-    public function queryCacheByTags($query, $tags = [])
+    public function queryCacheByTags($query, $duration = 3600, $tags = [])
     {
         if (! $this->cache)
         {
@@ -49,7 +50,7 @@ trait CacheTrait
 
         $tags = $this->getAliasedTags($tags);
         $tags = array_merge([$this->getCacheTagsDependency()], $tags);
-        $query->cache(3600, new TagDependency(['tags' => $tags]));
+        $query->cache($duration, new TagDependency(['tags' => $tags]));
     }
 
     /**
