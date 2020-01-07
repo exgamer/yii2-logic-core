@@ -6,6 +6,9 @@ use yii\caching\TagDependency;
 use yii\db\ActiveQuery;
 
 /**
+ * @todo  сделать чтобы можно было управлять логикой кеширования
+ * например сброс фаилового кеша сразу либо редис в очередь
+ *
  * Trait CacheTrait
  * @package concepture\yii2logic\services\traits
  */
