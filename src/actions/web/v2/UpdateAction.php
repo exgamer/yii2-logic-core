@@ -28,6 +28,9 @@ class UpdateAction extends Action
 
         $model = $this->getForm();
         $model->load($originModel, '');
+        if (method_exists($model, 'customizeForm')) {
+            $model->customizeForm($originModel);
+        }
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)  && !$this->isReload()) {

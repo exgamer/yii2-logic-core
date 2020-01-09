@@ -21,6 +21,9 @@ class CreateAction extends Action
     public function run()
     {
         $model = $this->getForm();
+        if (method_exists($model, 'customizeForm')) {
+            $model->customizeForm();
+        }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
 
