@@ -102,11 +102,11 @@ trait ModifyTrait
         $is_new_record = $model->isNewRecord;
         #заполнениe атрибутов
         $data = $form->attributes;
-        if($model !== null) {
-            #исключение атрибутов первичного ключа
-            $pk = $model::primaryKey();
-            $data = array_diff_key($data, array_flip($pk));
-        }
+//        if($model !== null) {
+//            #исключение атрибутов первичного ключа
+//            $pk = $model::primaryKey();
+//            $data = array_diff_key($data, array_flip($pk));
+//        }
         $model->load($data, '');
         if($model !== null) {
             $this->setOldData($model->getOldAttributes());
