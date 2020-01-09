@@ -27,7 +27,7 @@ class UpdateAction extends Action
         }
 
         $model = $this->getForm();
-        $model->load($originModel, '');
+        $model->load($originModel->attributes, '');
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }
