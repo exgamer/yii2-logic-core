@@ -27,13 +27,13 @@ class UpdateAction extends Action
         }
 
         $model = $this->getForm();
-        $model->load($originModel->attributes, '');
+        $model->setAttributes($originModel->attributes, false);
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
-            if ($model->validate(null, true, $originModel)  && !$this->isReload()) {
+            if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
 
                     return $this->redirect([$this->redirect, 'id' => $originModel->id]);

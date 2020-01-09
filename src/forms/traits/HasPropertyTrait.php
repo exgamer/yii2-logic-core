@@ -10,28 +10,20 @@ use Yii;
 trait HasPropertyTrait
 {
     /**
-     * Метод переопределен для загрузки в форму виртуальных полей
+     * Метод для загрузки и атрибутов и виртуальных полей
      *
      * @param $data
      * @param null $formName
      * @return bool
      */
-    public function load($data, $formName = null)
+
+    public function loadProperties($model, $formName = null)
     {
-        $result = parent::load($data, $formName);
-        if (! $result){
-            return $result;
-        }
-
-        if (is_array($data)){
-            return $result;
-        }
-
         $modelClass = static::getModelClass();
         $propertyModelClass = $modelClass::getPropertyModelClass();
         $propertyModel = new $propertyModelClass();
-        $excludedFields = $data->excludedPropertyFields();
-        $uniqueField = $data->uniqueField();
+        $excludedFields = $model->excludedPropertyFields();
+        $uniqueField = $model->uniqueField();
         if (($key = array_search($uniqueField, $excludedFields)) !== false) {
             unset($excludedFields[$key]);
         }
@@ -42,7 +34,7 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $this->{$attribute} = $data->{$attribute};
+            $this->{$attribute} = $model->{$attribute};
         }
 
         return true;
