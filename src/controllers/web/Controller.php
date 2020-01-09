@@ -1,11 +1,12 @@
 <?php
 namespace concepture\yii2logic\controllers\web;
 
-use concepture\yii2logic\actions\web\CreateAction;
-use concepture\yii2logic\actions\web\DeleteAction;
-use concepture\yii2logic\actions\web\IndexAction;
-use concepture\yii2logic\actions\web\UpdateAction;
-use concepture\yii2logic\actions\web\ViewAction;
+
+use concepture\yii2logic\actions\web\v2\CreateAction;
+use concepture\yii2logic\actions\web\v2\DeleteAction;
+use concepture\yii2logic\actions\web\v2\IndexAction;
+use concepture\yii2logic\actions\web\v2\UpdateAction;
+use concepture\yii2logic\actions\web\v2\ViewAction;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\Service;
 use ReflectionException;
