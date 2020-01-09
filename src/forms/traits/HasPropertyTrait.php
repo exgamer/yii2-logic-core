@@ -10,17 +10,14 @@ use Yii;
 trait HasPropertyTrait
 {
     /**
-     * Метод для загрузки и атрибутов и виртуальных полей
+     * Загрузка свойств из модели в форму
      *
-     * @param $data
-     * @param null $formName
+     * @param $model
      * @return bool
      */
-
-    public function loadProperties($model, $formName = null)
+    public function loadProperties($model)
     {
-        $modelClass = static::getModelClass();
-        $propertyModelClass = $modelClass::getPropertyModelClass();
+        $propertyModelClass = $model::getPropertyModelClass();
         $propertyModel = new $propertyModelClass();
         $excludedFields = $model->excludedPropertyFields();
         $uniqueField = $model->uniqueField();
