@@ -169,7 +169,7 @@ trait HasPropertyTrait
         $class = str_replace("search", "models", $class);
         $class = str_replace("Search", "", $class);
 
-        return $class."Domain";
+        return $class."Property";
     }
 
     /**
