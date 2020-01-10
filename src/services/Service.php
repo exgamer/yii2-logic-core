@@ -4,6 +4,7 @@ namespace concepture\yii2logic\services;
 
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\traits\CacheTrait;
+use concepture\yii2logic\services\traits\CopyTrait;
 use ReflectionException;
 use yii\base\Component;
 use yii\db\Connection;
@@ -30,6 +31,7 @@ abstract class Service extends Component
     use ModifyTrait;
     use ReadTrait;
     use CatalogTrait;
+    use CopyTrait;
     use CacheTrait;
 
     /**
