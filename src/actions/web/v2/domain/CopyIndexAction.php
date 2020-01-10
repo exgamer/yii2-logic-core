@@ -27,7 +27,7 @@ class CopyIndexAction extends Action
             $searchModel->domain_id = "empty";
         }
 
-        $models = $this->getService()->catalog();
+        $models = $this->getService()->catalog(false);
         $modelIds = array_keys($models);
         Yii::$app->domainService->setVirtualDomainId($searchModel->domain_id);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel, null , function (ActiveQuery $query) use ($modelIds){

@@ -31,7 +31,7 @@ trait CatalogTrait
      * @return array
      * @throws Exception
      */
-    public function modelsCatalog($resetModels = true)
+    public function modelsCatalog($excludeDefault = false, $resetModels = true)
     {
         static $_catalog = null;
         if (! empty($_catalog)){
@@ -40,7 +40,7 @@ trait CatalogTrait
 
         $searchClass = $this->getRelatedSearchModelClass();
         $searchKey = $searchClass::getListSearchKeyAttribute();
-        $models = ArrayHelper::index( $this->getAllModelsForList(), $searchKey);
+        $models = ArrayHelper::index( $this->getAllModelsForList([], $excludeDefault), $searchKey);
         if ($resetModels){
             return $models;
         }
@@ -84,7 +84,7 @@ trait CatalogTrait
      * @return array
      * @throws Exception
      */
-    public function catalog($resetModels = true)
+    public function catalog($excludeDefault = false, $resetModels = true)
     {
         static $_catalog = null;
         if (! empty($_catalog)){
@@ -97,7 +97,7 @@ trait CatalogTrait
         if (! $searchKey || ! $searchAttr){
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
         }
-        $models = $this->modelsCatalog($resetModels);
+        $models = $this->modelsCatalog($excludeDefault, $resetModels);
         $_catalog = ArrayHelper::map($models, $searchKey , $searchAttr);
 
         return $_catalog;
