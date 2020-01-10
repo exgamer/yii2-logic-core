@@ -63,6 +63,19 @@ abstract class Controller extends Base
     }
 
     /**
+     * Возвращает класс формы сущности
+     *
+     * @return mixed
+     * @throws ReflectionException
+     */
+    protected function getForm()
+    {
+        $formClass = $this->getFormClass();
+
+        return Yii::createObject($formClass);
+    }
+
+    /**
      * Возвращает класс формы сущности из сервиса
      *
      * @return string
