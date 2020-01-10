@@ -40,7 +40,7 @@ trait ModifyTrait
         $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
         $update = [];
         foreach ($fields as $field){
-            $update[] = $field."=".$field;
+            $update[] = $field."= VALUES($field)";
         }
         return $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
     }
