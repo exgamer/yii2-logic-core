@@ -40,7 +40,7 @@ class CopyAction extends Action
             if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
 
-                    return $this->redirect(['copy-index']);
+                    return $this->redirect(['index']);
                 }
             }
 
