@@ -15,10 +15,16 @@ use concepture\yii2logic\helpers\Transliterator;
 class TranslitValidator extends Validator
 {
     /**
-     * Атрибут источник для транслита
+     * Основной атрибут источник для транслита
      * @var string
      */
     public $source;
+
+    /**
+     * Второстепенный атрибут источник для транслита
+     * @var string
+     */
+    public $secondary_source;
 
     /**
      * Менять значение при изменениии
@@ -26,19 +32,21 @@ class TranslitValidator extends Validator
      */
     public $changeOnEdit = false;
     public $skipOnEmpty = false;
-    public function init()
-    {
-        parent::init();
-        if (! $this->source) {
-            throw new Exception(Yii::t('yii', 'Свойство {$source} должно быть установлено.'));
-        }
-    }
 
     public function validateAttribute($model, $attribute)
     {
         if($model->{$attribute} && ! $this->changeOnEdit){
             return;
         }
+
+        if (! $model->{$this->source}){
+            $model->{$this->source} = $model->{$this->secondary_source};
+        }
+
+        if (! $this->source) {
+            throw new Exception(Yii::t('yii', 'Свойство {$source} должно быть установлено.'));
+        }
+
         $result = $model->{$this->source};
         if(is_array($result)){
             $result = reset($result);

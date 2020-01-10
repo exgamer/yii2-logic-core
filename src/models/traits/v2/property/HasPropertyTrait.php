@@ -12,6 +12,7 @@ use Yii;
  *
  * Trait HasPropertyTrait
  * @package concepture\yii2logic\models\traits
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 trait HasPropertyTrait
 {
