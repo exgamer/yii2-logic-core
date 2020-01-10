@@ -1,5 +1,5 @@
 <?php
-namespace concepture\yii2logic\actions\web\v2;
+namespace concepture\yii2logic\actions\web\v2\domain;
 
 use concepture\yii2logic\actions\Action;
 use Yii;
