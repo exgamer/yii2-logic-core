@@ -68,7 +68,7 @@ abstract class Controller extends Base
      * @return mixed
      * @throws ReflectionException
      */
-    protected function getForm()
+    public function getForm()
     {
         $formClass = $this->getFormClass();
 
