@@ -91,6 +91,8 @@ trait HasPropertyTrait
                                        END as {$attribute}");
         }
 
+        $result[] = static::propertyAlias() . "." . static::uniqueField();
+
         return $result;
     }
 
@@ -149,7 +151,7 @@ trait HasPropertyTrait
     {
         $uniqueField = static::uniqueField();
         $propertyClass = static::getPropertyModelClass();
-        $property = $propertyClass::find()->where([$uniqueField => static::uniqueFieldValue(), 'entity_id' => $this->id])->one();
+        $property = $propertyClass::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
         if (! $property){
             $property = new $propertyClass();
             $property->entity_id = $this->id;
