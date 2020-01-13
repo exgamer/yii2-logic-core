@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\actions\web\v2;
 
 use concepture\yii2logic\actions\Action;
+use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 use ReflectionException;
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
@@ -39,8 +40,8 @@ class UpdateAction extends Action
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
-                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
-
+                $this->getService()->{$this->serviceMethod}($model, $originModel);
+                if(Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                     return $this->redirect([$this->redirect]);
                 }
             }
