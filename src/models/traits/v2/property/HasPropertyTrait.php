@@ -67,6 +67,7 @@ trait HasPropertyTrait
 
     /**
      * Возвращает массив с select для свойств
+     * с помощью этого для незполненных свойств текущей записи будет заполнена из записи где default = 1
      *
      * @return array
      * @throws Exception
