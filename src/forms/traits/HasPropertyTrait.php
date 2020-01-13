@@ -4,7 +4,7 @@ namespace concepture\yii2logic\forms\traits;
 use Yii;
 
 /**
- * Trait HasDomainPropertyTrait
+ * Trait HasPropertyTrait
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 trait HasPropertyTrait
