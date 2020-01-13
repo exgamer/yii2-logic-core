@@ -83,11 +83,11 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $result[] = new Expression("CASE d.{$attribute}
+            $result[] = new Expression("CASE {$propertyAlias}.{$attribute}
                                WHEN null
-                                   THEN {$propertyAlias}.{$attribute}
+                                   THEN d.{$attribute}
                                    ELSE
-                                       d.{$attribute}
+                                       {$propertyAlias}.{$attribute}
                                        END as {$attribute}");
         }
 
