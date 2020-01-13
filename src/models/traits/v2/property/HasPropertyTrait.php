@@ -91,6 +91,9 @@ trait HasPropertyTrait
                                        END as {$attribute}");
         }
 
+        /**
+         * Добавялем в выборку uniqueField
+         */
         $result[] = static::propertyAlias() . "." . static::uniqueField();
 
         return $result;
