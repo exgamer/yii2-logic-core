@@ -8,6 +8,7 @@ use Yii;
 use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
+use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 
 /**
  * Class UpdateAction
@@ -41,8 +42,8 @@ class UpdateAction extends Action
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)  && !$this->isReload()) {
-                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
-
+                $this->getService()->{$this->serviceMethod}($model, $originModel);
+                if(Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                     return $this->redirect( [$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale, 'parent_id' => $parent_id]);
                 }
             }

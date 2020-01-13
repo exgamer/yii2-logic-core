@@ -4,6 +4,7 @@ namespace concepture\yii2logic\actions\web\localized;
 use Yii;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
+use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 
 /**
  * Экшен для создания сущности с локализацией
@@ -31,9 +32,11 @@ class CreateAction extends Action
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()  && !$this->isReload()) {
-            if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
-
+            $result = $this->getService()->{$this->serviceMethod}($model);
+            if(Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                 return $this->redirect([$this->redirect, 'id' => $result->id, 'locale' => $localeId]);
+            }else{
+                return $this->redirect(['update', 'id' => $result->id, 'locale' => $localeId]);
             }
         }
 
