@@ -24,7 +24,7 @@ class CopyIndexAction extends Action
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         if(! $searchModel->domain_id){
-            $searchModel->domain_id = "empty";
+            $searchModel->domain_id = -1;
         }
 
         $models = $this->getService()->catalog(true);
