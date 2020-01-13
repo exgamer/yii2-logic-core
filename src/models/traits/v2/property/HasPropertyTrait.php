@@ -118,7 +118,7 @@ trait HasPropertyTrait
          */
         $query->innerJoin($m::tableName() . " ". static::propertyAlias(), static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND ' . static::propertyAlias() . '.' . static::uniqueField() .' = '. static::uniqueFieldValue());
         /**
-         * Выборка дефлотных свойств
+         * Выборка дефолтных свойств
          */
         $query->leftJoin($m::tableName() . " d", 'd.entity_id = '. static::tableName().'.id AND d.default = 1');
 

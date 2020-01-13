@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\actions\web\v2\domain;
 
+use concepture\yii2logic\helpers\ClassHelper;
 use Yii;
 use yii\web\NotFoundHttpException;
 use concepture\yii2logic\actions\Action;
@@ -31,11 +32,19 @@ class CopyAction extends Action
         if (method_exists($model, 'loadProperties')) {
             $model->loadProperties($originModel);
         }
+
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }
 
-        if ($model->load(Yii::$app->request->post())) {
+        $formName = ClassHelper::getShortClassName($model);
+        $post = Yii::$app->request->post();
+        $noCopyAttributes = $post['no_copy'] ?? [];
+        foreach ($noCopyAttributes as $attr => $v){
+            $post[$formName][$attr] = '';
+        }
+
+        if ($model->load($post)) {
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
