@@ -6,6 +6,7 @@ use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
+use yii\db\Expression;
 
 /**
  * Треит для работы с данными у которых свойства хранятся в другой таблице
@@ -22,7 +23,7 @@ trait HasPropertyTrait
      * @return array
      * @throws Exception
      */
-    public function excludedPropertyFields()
+    public static function excludedPropertyFields()
     {
         return [
             'id',
@@ -65,18 +66,49 @@ trait HasPropertyTrait
     }
 
     /**
+     * Возвращает массив с select для свойств
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function constructPropertySelect()
+    {
+        $propertyAlias = static::propertyAlias();
+        $propertyClass = static::getPropertyModelClass();
+        $property = new $propertyClass();
+        $result = [];
+        foreach ($property->attributes() as $attribute){
+            if (in_array($attribute, static::excludedPropertyFields())){
+                continue;
+            }
+
+            $result[] = new Expression("CASE d.{$attribute}
+                               WHEN null
+                                   THEN {$propertyAlias}.{$attribute}
+                                   ELSE
+                                       d.{$attribute}
+                                       END as {$attribute}");
+        }
+
+        return $result;
+    }
+
+    /**
      * Переопределяем find чтобы подцепить свойства
      *
      * @return ActiveQuery
      * @throws InvalidConfigException
+     * @throws Exception
      */
     public static function find()
     {
         $query = Yii::createObject(ActiveQuery::class, [get_called_class()]);
         $m = static::getPropertyModelClass();
-        $query->select([static::tableName(). ".*", static::propertyAlias() . '.*']);
-        $query->innerJoin($m::tableName() . " ". static::propertyAlias(), static::propertyAlias() . '.entity_id = '. static::tableName().'.id');
-        $query->andWhere([static::propertyAlias() . '.' . static::uniqueField() => static::uniqueFieldValue()]);
+        $selectArray = static::constructPropertySelect();
+        $selectArray[] = static::tableName(). ".*";
+        $query->select($selectArray);
+        $query->innerJoin($m::tableName() . " ". static::propertyAlias(), static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND ' . static::propertyAlias() . '.' . static::uniqueField() .' = '. static::uniqueFieldValue());
+        $query->leftJoin($m::tableName() . " d", 'd.entity_id = '. static::tableName().'.id AND d.default = 1');
 
         return $query;
     }
@@ -122,7 +154,7 @@ trait HasPropertyTrait
         }
 
         foreach ($property->attributes() as $attribute){
-            if (in_array($attribute, $this->excludedPropertyFields())){
+            if (in_array($attribute, static::excludedPropertyFields())){
                 continue;
             }
 

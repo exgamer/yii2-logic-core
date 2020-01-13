@@ -19,8 +19,8 @@ trait HasPropertyTrait
     {
         $propertyModelClass = $model::getPropertyModelClass();
         $propertyModel = new $propertyModelClass();
-        $excludedFields = $model->excludedPropertyFields();
-        $uniqueField = $model->uniqueField();
+        $excludedFields = $model::excludedPropertyFields();
+        $uniqueField = $model::uniqueField();
         if (($key = array_search($uniqueField, $excludedFields)) !== false) {
             unset($excludedFields[$key]);
         }
