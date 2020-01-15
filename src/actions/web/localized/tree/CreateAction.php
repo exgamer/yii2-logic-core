@@ -30,11 +30,12 @@ class CreateAction extends Action
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()  && !$this->isReload()) {
-            $result = $this->getService()->{$this->serviceMethod}($model);
-            if(Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                return $this->redirect([$this->redirect, 'id' => $result->id, 'locale' => $localeId, 'parent_id' => $parent_id]);
-            }else{
-                return $this->redirect(['update', 'id' => $result->id, 'locale' => $localeId]);
+            if ($result = $this->getService()->{$this->serviceMethod}($model) !== false) {
+                if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                    return $this->redirect([$this->redirect, 'id' => $result->id, 'locale' => $localeId, 'parent_id' => $parent_id]);
+                } else {
+                    return $this->redirect(['update', 'id' => $result->id, 'locale' => $localeId]);
+                }
             }
         }
 
