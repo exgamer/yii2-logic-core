@@ -7,11 +7,11 @@ use concepture\yii2logic\validators\SeoNameValidator;
 use concepture\yii2logic\validators\TranslitValidator;
 
 /**
- * Трейт для расширения seo атрибутов моделей
+ * Трейт для расширения seo  моделей
  *
  * @author kamaelkz <kamaelkz@yandex.kz>
  */
-trait SeoAttributesTrait
+trait SeoTrait
 {
     /**
      * Правила валидации по умолчанию
