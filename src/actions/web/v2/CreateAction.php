@@ -27,7 +27,7 @@ class CreateAction extends Action
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($result = $this->getService()->{$this->serviceMethod}($model) !== false) {
+            if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                     return $this->redirect([$this->redirect, 'id' => $result->id]);
                 } else {
