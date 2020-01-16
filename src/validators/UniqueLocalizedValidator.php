@@ -36,18 +36,21 @@ class UniqueLocalizedValidator extends Validator
             throw new Exception(Yii::t('yii', 'Свойство {$localizedFields} должно быть установлено.'));
         }
 
-        if (! is_array($this->localizedFields)){
+        if (! is_array($this->localizedFields)) {
             $this->localizedFields = [$this->localizedFields];
         }
 
-        if ($this->fields && ! is_array($this->localizedFields)){
+        if ($this->fields && ! is_array($this->localizedFields)) {
             $this->fields = [$this->fields];
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validateAttribute($model, $attribute)
     {
-        if ($model instanceof Form){
+        if ($model instanceof Form) {
             $arClass = $model::getModelClass();
             $arClass::setLocale($model->locale);
             $locAlias = $arClass::localizationAlias();
@@ -72,7 +75,9 @@ class UniqueLocalizedValidator extends Validator
 
         $result = $query->all();
         if (count($result)>0){
-            $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $attribute]));
+            $label = $model->getAttributeLabel($attribute);
+            $this->addError($model, $attribute,  Yii::t('core', 'Значение «{attribute}» должно быть уникальным.', ['attribute' => $label]));
+
             return false;
         }
 
