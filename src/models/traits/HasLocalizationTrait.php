@@ -129,9 +129,9 @@ trait HasLocalizationTrait
     }
 
     /**
-     * @todo
-     * Раскоментить и протестить
-     * для работы нужно убрать из модели публичные свойства из другой таблицы
+     * Подставляем в атрибуты поля из свойств
+     * @return array
+     * @throws Exception
      */
     public function attributes()
     {
@@ -146,6 +146,14 @@ trait HasLocalizationTrait
         return ArrayHelper::merge($attributes, $locAttributes);
     }
 
+    /**
+     * Перед сохранением удаляем из атрибутов свойства
+     *
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return mixed
+     * @throws Exception
+     */
     public function save($runValidation = true, $attributeNames = null)
     {
         if (! $attributeNames) {

@@ -167,6 +167,7 @@ trait HasPropertyTrait
      * @param bool $runValidation
      * @param null $attributeNames
      * @return mixed
+     * @throws Exception
      */
     public function save($runValidation = true, $attributeNames = null)
     {
