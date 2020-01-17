@@ -175,13 +175,22 @@ abstract class Form extends Model
     }
 
     /**
+     *
+     * @see yii\base\Model::load()
+     */
+    public function load($data, $formName = null)
+    {
+        $result = parent::load($data, $formName);
+        $this->afterLoad();
+
+        return $result;
+    }
+
+    /**
      * Действия с формой после загрузки в нее данных
      * используется в UpdateAction
      */
-    public function afterLoad()
-    {
-
-    }
+    public function afterLoad(){}
 
     /**
      * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
