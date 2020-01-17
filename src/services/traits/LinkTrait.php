@@ -37,9 +37,9 @@ trait LinkTrait
         $currentTagsIds = array_keys($currentLinks);
         $deletedTagsIds = array_diff($currentTagsIds, $relatedIds);
         $modelClass::deleteAll(['linked_id' => $deletedTagsIds, 'entity_id' => $entityId]);
-        if (! empty($tagIds)){
+        if (! empty($relatedIds)){
             $insertData = [];
-            foreach ($tagIds as $id){
+            foreach ($relatedIds as $id){
                 $insertData[] = [
                     $entityId,
                     $id
@@ -49,4 +49,3 @@ trait LinkTrait
         }
     }
 }
-
