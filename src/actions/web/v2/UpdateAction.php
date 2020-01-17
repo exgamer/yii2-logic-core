@@ -38,6 +38,7 @@ class UpdateAction extends Action
         }
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->afterLoad();
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
                 if ($this->getService()->{$this->serviceMethod}($model, $originModel) !== false) {

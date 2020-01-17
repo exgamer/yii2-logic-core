@@ -45,6 +45,7 @@ class CopyAction extends Action
         }
 
         if ($model->load($post)) {
+            $model->afterLoad();
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) != false) {
