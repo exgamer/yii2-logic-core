@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * Треит для работы с данными у которых свойства хранятся в другой таблице
@@ -133,6 +134,51 @@ trait HasPropertyTrait
     public static function clearFind()
     {
         return parent::find();
+    }
+
+    /**
+     * Подставляем в атрибуты поля из свойств
+     * @return array
+     * @throws Exception
+     */
+    public function attributes()
+    {
+        $attributes = parent::attributes();
+        $propertyModelClass = static::getPropertyModelClass();
+        $propertyModel = new $propertyModelClass();
+        $propertyAttributes = $propertyModel->attributes();
+        $propertyAttributes = array_flip($propertyAttributes);
+        foreach (static::excludedPropertyFields() as $field){
+            if ($field == static::uniqueField()){
+                continue;
+            }
+
+            unset ($propertyAttributes[$field]) ;
+        }
+
+        $propertyAttributes = array_flip($propertyAttributes);
+
+        return ArrayHelper::merge($attributes, $propertyAttributes);
+    }
+
+    /**
+     * Перед сохранением удаляем из атрибутов свойства
+     *
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return mixed
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if (! $attributeNames) {
+            $attributeNames = $this->attributes();
+            $propertyModelClass = static::getPropertyModelClass();
+            $propertyModel = new $propertyModelClass();
+            $propertyAttributes = $propertyModel->attributes();
+            $attributeNames = array_diff($attributeNames, $propertyAttributes);
+        }
+
+        return parent::save($runValidation, $attributeNames);
     }
 
     /**

@@ -33,8 +33,8 @@ class UpdateAction extends Action
         $model = $this->getForm();
         $model->locale = $this->getConvertedLocale($locale);
         $model->setAttributes($originModel->attributes, false);
-        $model->setAttributes($originModel->getLocalized(null, true), false);
-        $model->setAttributes($originModel->attributes, false);
+//        $model->setAttributes($originModel->getLocalized(null, true), false);
+//        $model->setAttributes($originModel->attributes, false);
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }

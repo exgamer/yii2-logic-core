@@ -5,6 +5,7 @@ use concepture\yii2logic\converters\LocaleConverter;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  *
@@ -125,6 +126,37 @@ trait HasLocalizationTrait
     public static function clearFind()
     {
         return parent::find();
+    }
+
+    /**
+     * @todo
+     * Раскоментить и протестить
+     * для работы нужно убрать из модели публичные свойства из другой таблицы
+     */
+    public function attributes()
+    {
+        $attributes = parent::attributes();
+        $locModelClass = static::getLocalizationModelClass();
+        $locModel = new $locModelClass();
+        $locAttributes = $locModel->attributes();
+        $locAttributes = array_flip($locAttributes);
+        unset ($locAttributes['entity_id']) ;
+        $locAttributes = array_flip($locAttributes);
+
+        return ArrayHelper::merge($attributes, $locAttributes);
+    }
+
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if (! $attributeNames) {
+            $attributeNames = $this->attributes();
+            $locModelClass = static::getLocalizationModelClass();
+            $locModel = new $locModelClass();
+            $locAttributes = $locModel->attributes();
+            $attributeNames = array_diff($attributeNames, $locAttributes);
+        }
+
+        return parent::save($runValidation, $attributeNames);
     }
 
     /**
