@@ -90,7 +90,7 @@ class Generator extends \yii\gii\generators\model\Generator
 
             if ($this->generateService) {
                 $serviceName = $modelClassName."Service";
-                $serviceNs = str_replace("models", 'service', $this->ns);
+                $serviceNs = str_replace("models", 'services', $this->ns);
                 $params['serviceNs'] = $serviceNs;
                 $params['serviceName'] = $serviceName;
                 $params['serviceBaseClass'] = 'concepture\yii2logic\services\Service';
