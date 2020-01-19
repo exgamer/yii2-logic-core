@@ -28,7 +28,7 @@ class Generator extends \yii\gii\generators\model\Generator
     public function requiredTemplates()
     {
         $tmp = parent::requiredTemplates();
-        
+
         return ArrayHelper::merge($tmp,[
             'form.php',
             'search.php',
