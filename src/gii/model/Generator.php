@@ -28,8 +28,7 @@ class Generator extends \yii\gii\generators\model\Generator
     public function requiredTemplates()
     {
         $tmp = parent::requiredTemplates();
-
-        // @todo make 'query.php' to be required before 2.1 release
+        
         return ArrayHelper::merge($tmp,[
             'form.php',
             'search.php',
