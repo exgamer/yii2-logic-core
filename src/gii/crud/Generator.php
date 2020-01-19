@@ -1,6 +1,6 @@
 <?php
 
-namespace common\gii\crud;
+namespace concepture\yii2logic\gii\crud;
 
 
 
