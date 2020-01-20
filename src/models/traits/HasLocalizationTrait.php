@@ -147,15 +147,65 @@ trait HasLocalizationTrait
     }
 
     /**
-     * Перед сохранением удаляем из атрибутов свойства
+     *  Перед сохранением удаляем из атрибутов свойства
+     *
+     * @param bool $runValidation
+     * @param null $attributes
+     * @return bool
+     * @throws \Throwable
+     */
+    public function insert($runValidation = true, $attributes = null)
+    {
+        if ($runValidation && !$this->validate($attributes)) {
+            Yii::info('Model not inserted due to validation error.', __METHOD__);
+            return false;
+        }
+
+        if (! $attributes) {
+            $attributes = $this->attributes();
+            $locModelClass = static::getLocalizationModelClass();
+            $locModel = new $locModelClass();
+            $locAttributes = $locModel->attributes();
+            $attributes = array_diff($attributes, $locAttributes);
+        }
+
+        if (!$this->isTransactional(self::OP_INSERT)) {
+            return $this->insertInternal($attributes);
+        }
+
+        $transaction = static::getDb()->beginTransaction();
+        try {
+            $result = $this->insertInternal($attributes);
+            if ($result === false) {
+                $transaction->rollBack();
+            } else {
+                $transaction->commit();
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     *  Перед сохранением удаляем из атрибутов свойства
      *
      * @param bool $runValidation
      * @param null $attributeNames
-     * @return mixed
-     * @throws Exception
+     * @return bool
+     * @throws \Throwable
      */
-    public function save($runValidation = true, $attributeNames = null)
+    public function update($runValidation = true, $attributeNames = null)
     {
+        if ($runValidation && !$this->validate($attributeNames)) {
+            return false;
+        }
+
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
             $locModelClass = static::getLocalizationModelClass();
@@ -164,7 +214,27 @@ trait HasLocalizationTrait
             $attributeNames = array_diff($attributeNames, $locAttributes);
         }
 
-        return parent::save($runValidation, $attributeNames);
+        if (!$this->isTransactional(self::OP_UPDATE)) {
+            return $this->updateInternal($attributeNames);
+        }
+
+        $transaction = static::getDb()->beginTransaction();
+        try {
+            $result = $this->updateInternal($attributeNames);
+            if ($result === false) {
+                $transaction->rollBack();
+            } else {
+                $transaction->commit();
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
     /**
