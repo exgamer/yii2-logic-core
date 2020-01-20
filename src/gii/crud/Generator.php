@@ -21,22 +21,13 @@ class Generator extends \yii\gii\generators\crud\Generator
     public $searchModelClass =  null;
     public $messageCategory = 'yii2admin';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
+    public function generate()
     {
-        parent::init();
-
         if ($this->modelClass) {
             $modelClassName = ClassHelper::getShortClassName($this->modelClass);
             $this->controllerClass = "backend\controllers" . '\\' . $modelClassName;
             $this->viewPath = "@backend\\views\\" . Inflector::slug($modelClassName);
         }
-    }
-
-    public function generate()
-    {
         $controllerFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->controllerClass, '\\')) . '.php');
 
         $files = [
