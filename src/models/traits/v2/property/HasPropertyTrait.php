@@ -100,7 +100,9 @@ trait HasPropertyTrait
         return $result;
     }
 
-    public static $propertyJoin = 'innerJoin';
+    protected static function getPropertyJoin(){
+        return 'innerJoin';
+    }
 
     /**
      * Переопределяем find чтобы подцепить свойства
@@ -127,7 +129,7 @@ trait HasPropertyTrait
             $uniVal = [$uniVal];
         }
 
-        $propertyJoin = static::$propertyJoin;
+        $propertyJoin = static::getPropertyJoin();
         $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
             static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
             . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $uniVal) .")");
