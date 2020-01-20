@@ -100,6 +100,12 @@ trait HasPropertyTrait
         return $result;
     }
 
+    /**
+     * Определяет будет ли в выборке только сущности с текущим уникальным полем
+     * или если leftJoin то будут выбраны все записи и подставлены дефолтные значения
+     *
+     * @return string
+     */
     protected static function getPropertyJoin(){
         return 'innerJoin';
     }
