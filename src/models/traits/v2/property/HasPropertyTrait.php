@@ -162,27 +162,6 @@ trait HasPropertyTrait
     }
 
     /**
-     * Перед сохранением удаляем из атрибутов свойства
-     *
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return mixed
-     * @throws Exception
-     */
-    public function save($runValidation = true, $attributeNames = null)
-    {
-        if (! $attributeNames) {
-            $attributeNames = $this->attributes();
-            $propertyModelClass = static::getPropertyModelClass();
-            $propertyModel = new $propertyModelClass();
-            $propertyAttributes = $propertyModel->attributes();
-            $attributeNames = array_diff($attributeNames, $propertyAttributes);
-        }
-
-        return parent::save($runValidation, $attributeNames);
-    }
-
-    /**
      *  Перед сохранением удаляем из атрибутов свойства
      *
      * @param bool $runValidation
