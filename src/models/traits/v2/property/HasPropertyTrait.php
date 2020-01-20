@@ -84,8 +84,8 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $result[] = new Expression("CASE {$propertyAlias}.{$attribute}
-                               WHEN null
+            $result[] = new Expression("CASE 
+                               WHEN {$propertyAlias}.{$attribute} IS NULL
                                    THEN d.{$attribute}
                                    ELSE
                                        {$propertyAlias}.{$attribute}
@@ -100,6 +100,8 @@ trait HasPropertyTrait
         return $result;
     }
 
+    public static $propertyJoin = 'innerJoin';
+
     /**
      * Переопределяем find чтобы подцепить свойства
      *
@@ -109,6 +111,9 @@ trait HasPropertyTrait
      */
     public static function find()
     {
+        /**
+         * @var ActiveQuery $query
+         */
         $query = Yii::createObject(ActiveQuery::class, [get_called_class()]);
         $m = static::getPropertyModelClass();
         $selectArray = static::constructPropertySelect();
@@ -117,7 +122,15 @@ trait HasPropertyTrait
         /**
          * Выборка свойств для текущего uniqueField
          */
-        $query->innerJoin($m::tableName() . " ". static::propertyAlias(), static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND ' . static::propertyAlias() . '.' . static::uniqueField() .' = '. static::uniqueFieldValue());
+        $uniVal = static::uniqueFieldValue();
+        if (! is_array($uniVal)){
+            $uniVal = [$uniVal];
+        }
+
+        $propertyJoin = static::$propertyJoin;
+        $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
+            static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
+            . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $uniVal) .")");
         /**
          * Выборка дефолтных свойств
          */
