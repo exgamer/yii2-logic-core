@@ -1,7 +1,9 @@
 <?php
 namespace concepture\yii2logic\services;
 
-
+use concepture\yii2logic\forms\Form;
+use concepture\yii2logic\models\ActiveRecord;
+use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\traits\CacheTrait;
 use concepture\yii2logic\services\traits\CopyTrait;
@@ -91,5 +93,44 @@ abstract class Service extends Component
     public function getRelatedSearchModelClass()
     {
         return ClassHelper::getRelatedClass($this, ["Service" => "Search"], ["services" => "search"]);
+    }
+
+    /**
+     * Получить новый обьект модели
+     *
+     * @return ActiveRecord
+     * @throws ReflectionException
+     */
+    public function getRelatedModel()
+    {
+        $class = $this->getRelatedModelClass();
+
+        return Yii::createObject($class);
+    }
+
+    /**
+     * Получить новый обьект формы
+     *
+     * @return Form
+     * @throws ReflectionException
+     */
+    public function getRelatedForm()
+    {
+        $class = $this->getRelatedFormClass();
+
+        return Yii::createObject($class);
+    }
+
+    /**
+     * Получить новый обьект серч формы
+     *
+     * @return ActiveRecord
+     * @throws ReflectionException
+     */
+    public function getRelatedSearchModel()
+    {
+        $class = $this->getRelatedSearchModelClass();
+
+        return Yii::createObject($class);
     }
 }

@@ -60,8 +60,7 @@ trait ReadTrait
     public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null, $condition = null)
     {
         if ($searchModel === null) {
-            $searchClass = $this->getRelatedSearchModelClass();
-            $searchModel = Yii::createObject($searchClass);
+            $searchModel = $this->getRelatedSearchModel();
         }
 
         $query = $this->getQuery();

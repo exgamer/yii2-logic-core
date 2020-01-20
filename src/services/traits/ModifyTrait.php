@@ -94,9 +94,8 @@ trait ModifyTrait
      */
     protected function save(Model $form , ActiveRecord $model = null)
     {
-        $modelClass = $this->getRelatedModelClass();
         if($model === null){
-            $model = Yii::createObject($modelClass);
+            $model = $this->getRelatedModel();
         }
         #флаг для понимания операции создания/редактирования
         $is_new_record = $model->isNewRecord;
