@@ -106,7 +106,8 @@ trait HasPropertyTrait
      *
      * @return string
      */
-    protected static function getPropertyJoin(){
+    protected static function getPropertyJoin()
+    {
         return 'innerJoin';
     }
 
