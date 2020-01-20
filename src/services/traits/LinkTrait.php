@@ -19,11 +19,16 @@ trait LinkTrait
      * Создаем связки сущности и привязанной сущности
      *
      * @param integer $entityId
-     * @param array $selectedLinkedIds
+     * @param integer|array $selectedLinkedIds
+     * @return bool
      * @throws Exception
      */
     public function link($entityId, $selectedLinkedIds)
     {
+        if (! is_array($selectedLinkedIds)){
+            $selectedLinkedIds = [$selectedLinkedIds];
+        }
+
         $relatedIds = array_unique($selectedLinkedIds);
         $modelClass = $this->getRelatedModelClass();
         if (! new $modelClass() instanceof LinkActiveRecord){
@@ -47,5 +52,7 @@ trait LinkTrait
             }
             $this->batchInsert(['entity_id', 'linked_id'], $insertData);
         }
+
+        return true;
     }
 }
