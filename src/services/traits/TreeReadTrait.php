@@ -19,6 +19,7 @@ trait TreeReadTrait
     /**
      * Получение предков объекта
      * @param $id
+     * @param bool $includeCurrent
      * @return array
      * @throws Exception
      */
