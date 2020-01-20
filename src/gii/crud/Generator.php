@@ -25,7 +25,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     {
         if ($this->modelClass) {
             $modelClassName = ClassHelper::getShortClassName($this->modelClass);
-            $this->controllerClass = "backend\controllers" . '\\' . $modelClassName;
+            $this->controllerClass = "backend\controllers" . '\\' . $modelClassName . "Controller";
             $this->viewPath = "@backend\\views\\" . Inflector::slug($modelClassName);
         }
         $controllerFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->controllerClass, '\\')) . '.php');
