@@ -32,12 +32,15 @@ namespace <?= StringHelper::dirname(ltrim($generator->controllerClass, '\\')) ?>
 use Yii;
 use <?= ltrim($generator->baseControllerClass, '\\') ?>;
 use concepture\yii2user\enum\UserRoleEnum;
+use kamaelkz\yii2admin\v1\controllers\traits\ControllerTrait;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
 class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
+    use ControllerTrait;
+
     /**
     * @return array
     */
