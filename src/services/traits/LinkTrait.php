@@ -20,7 +20,6 @@ trait LinkTrait
      *
      * @param integer $entityId
      * @param integer|array $selectedLinkedIds
-     * @return bool
      * @throws Exception
      */
     public function link($entityId, $selectedLinkedIds)
@@ -52,6 +51,31 @@ trait LinkTrait
             }
             $this->batchInsert(['entity_id', 'linked_id'], $insertData);
         }
+
+        return true;
+    }
+
+    /**
+     * Удаляет связки сущности и привязанной сущности
+     *
+     * @param integer $entityId
+     * @param integer|array $selectedLinkedIds
+     * @return bool
+     * @throws Exception
+     */
+    public function unlink($entityId, $selectedLinkedIds)
+    {
+        if (! is_array($selectedLinkedIds)){
+            $selectedLinkedIds = [$selectedLinkedIds];
+        }
+
+        $relatedIds = array_unique($selectedLinkedIds);
+        $modelClass = $this->getRelatedModelClass();
+        if (! new $modelClass() instanceof LinkActiveRecord){
+            throw new Exception($modelClass . " must be instance of " . LinkActiveRecord::class);
+        }
+
+        $modelClass::deleteAll(['linked_id' => $relatedIds, 'entity_id' => $entityId]);
 
         return true;
     }
