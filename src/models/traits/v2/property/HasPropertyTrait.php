@@ -84,8 +84,8 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $result[] = new Expression("CASE {$propertyAlias}.{$attribute}
-                               WHEN null
+            $result[] = new Expression("CASE 
+                               WHEN {$propertyAlias}.{$attribute} IS NULL
                                    THEN d.{$attribute}
                                    ELSE
                                        {$propertyAlias}.{$attribute}
@@ -101,6 +101,17 @@ trait HasPropertyTrait
     }
 
     /**
+     * Определяет будет ли в выборке только сущности с текущим уникальным полем
+     * или если leftJoin то будут выбраны все записи и подставлены дефолтные значения
+     *
+     * @return string
+     */
+    protected static function getPropertyJoin()
+    {
+        return 'innerJoin';
+    }
+
+    /**
      * Переопределяем find чтобы подцепить свойства
      *
      * @return ActiveQuery
@@ -109,6 +120,9 @@ trait HasPropertyTrait
      */
     public static function find()
     {
+        /**
+         * @var ActiveQuery $query
+         */
         $query = Yii::createObject(ActiveQuery::class, [get_called_class()]);
         $m = static::getPropertyModelClass();
         $selectArray = static::constructPropertySelect();
@@ -117,7 +131,15 @@ trait HasPropertyTrait
         /**
          * Выборка свойств для текущего uniqueField
          */
-        $query->innerJoin($m::tableName() . " ". static::propertyAlias(), static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND ' . static::propertyAlias() . '.' . static::uniqueField() .' = '. static::uniqueFieldValue());
+        $uniVal = static::uniqueFieldValue();
+        if (! is_array($uniVal)){
+            $uniVal = [$uniVal];
+        }
+
+        $propertyJoin = static::getPropertyJoin();
+        $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
+            static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
+            . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $uniVal) .")");
         /**
          * Выборка дефолтных свойств
          */
@@ -162,15 +184,65 @@ trait HasPropertyTrait
     }
 
     /**
-     * Перед сохранением удаляем из атрибутов свойства
+     *  Перед сохранением удаляем из атрибутов свойства
+     *
+     * @param bool $runValidation
+     * @param null $attributes
+     * @return bool
+     * @throws \Throwable
+     */
+    public function insert($runValidation = true, $attributes = null)
+    {
+        if ($runValidation && !$this->validate($attributes)) {
+            Yii::info('Model not inserted due to validation error.', __METHOD__);
+            return false;
+        }
+
+        if (! $attributes) {
+            $attributes = $this->attributes();
+            $propertyModelClass = static::getPropertyModelClass();
+            $propertyModel = new $propertyModelClass();
+            $propertyAttributes = $propertyModel->attributes();
+            $attributes = array_diff($attributes, $propertyAttributes);
+        }
+
+        if (!$this->isTransactional(self::OP_INSERT)) {
+            return $this->insertInternal($attributes);
+        }
+
+        $transaction = static::getDb()->beginTransaction();
+        try {
+            $result = $this->insertInternal($attributes);
+            if ($result === false) {
+                $transaction->rollBack();
+            } else {
+                $transaction->commit();
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     *  Перед сохранением удаляем из атрибутов свойства
      *
      * @param bool $runValidation
      * @param null $attributeNames
-     * @return mixed
-     * @throws Exception
+     * @return bool
+     * @throws \Throwable
      */
-    public function save($runValidation = true, $attributeNames = null)
+    public function update($runValidation = true, $attributeNames = null)
     {
+        if ($runValidation && !$this->validate($attributeNames)) {
+            return false;
+        }
+
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
             $propertyModelClass = static::getPropertyModelClass();
@@ -179,7 +251,27 @@ trait HasPropertyTrait
             $attributeNames = array_diff($attributeNames, $propertyAttributes);
         }
 
-        return parent::save($runValidation, $attributeNames);
+        if (!$this->isTransactional(self::OP_UPDATE)) {
+            return $this->updateInternal($attributeNames);
+        }
+
+        $transaction = static::getDb()->beginTransaction();
+        try {
+            $result = $this->updateInternal($attributeNames);
+            if ($result === false) {
+                $transaction->rollBack();
+            } else {
+                $transaction->commit();
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
     /**

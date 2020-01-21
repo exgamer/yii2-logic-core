@@ -19,10 +19,11 @@ trait TreeReadTrait
     /**
      * Получение предков объекта
      * @param $id
+     * @param bool $includeCurrent
      * @return array
      * @throws Exception
      */
-    public function getParentsByTree($id)
+    public function getParentsByTree($id, $includeCurrent = false)
     {
         $modelClass = $this->getRelatedModelClass();
         $treeModelClass = $this->getTreeModelClass();
@@ -31,10 +32,12 @@ trait TreeReadTrait
             throw new Exception($modelClass . " must use " . HasTreeTrait::class);
         }
 
-        return $this->getAllByCondition(function (ActiveQuery $query) use ($id, $treeModelClass){
+        return $this->getAllByCondition(function (ActiveQuery $query) use ($id, $treeModelClass, $includeCurrent){
             $query->join("JOIN", $treeModelClass::tableName() . " ot", "{$this->getTableName()}. id = ot.parent_id");
             $query->andWhere("ot.child_id = :ID", [':ID' => $id]);
-            $query->andWhere("ot.parent_id != ot.child_id");
+            if (! $includeCurrent) {
+                $query->andWhere("ot.parent_id != ot.child_id");
+            }
             $query->indexBy("id");
         });
     }
