@@ -33,11 +33,6 @@ abstract class Action extends Base
     protected function setQueryParams($model)
     {
         foreach ($this->queryParams as $param){
-            if (! Yii::$app->getRequest()->getQueryParam($param)){
-                throw new BadRequestHttpException("no {$param}");
-
-            }
-
             if (Yii::$app->getRequest()->getQueryParam($param) && $model->hasAttribute($param)){
                 $model->{$param} = Yii::$app->getRequest()->getQueryParam($param);
             }
