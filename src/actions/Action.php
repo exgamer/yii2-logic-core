@@ -19,6 +19,42 @@ abstract class Action extends Base
     public $view;
     public $redirect;
     public $serviceMethod;
+    public $redirectParams = [];
+    public $queryParams = [];
+
+
+
+    /**
+     * мапит параметры запроса в модель
+     *
+     * @param $model
+     */
+    protected function setQueryParams($model)
+    {
+        foreach ($this->queryParams as $param){
+            if (Yii::$app->getRequest()->getQueryParam($param) && $model->hasAttribute($param)){
+                $model->{$param} = Yii::$app->getRequest()->getQueryParam($param);
+            }
+        }
+    }
+
+    /**
+     * Возвращает параметры для редиректа
+     *
+     * @param $model
+     * @return array
+     */
+    protected function getRedirectParams($model)
+    {
+        $redirectParams = [$this->redirect];
+        foreach ($this->redirectParams as $param){
+            if ($model->hasAttribute($param)){
+                $redirectParams[$param] = $model->{$param};
+            }
+        }
+
+        return $redirectParams;
+    }
 
     /**
      * Возвращает аргументы переданные в метод run
@@ -98,6 +134,7 @@ abstract class Action extends Base
      *
      * @return Service
      * @throws ReflectionException
+     * @throws \Exception
      */
     protected function getService()
     {
@@ -140,6 +177,7 @@ abstract class Action extends Base
     }
 
     /**
+     * @deprecated
      * Метод для определния нужно ли просто перезагрузить форму/вьюшку
      *
      * @param string $method

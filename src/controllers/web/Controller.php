@@ -99,6 +99,7 @@ abstract class Controller extends Base
     }
 
     /**
+     * @deprecated
      * Метод для определния нужно ли просто перезагрузить форму/вьюшку
      *
      * @param string $method
