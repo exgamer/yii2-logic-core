@@ -35,7 +35,7 @@ class <?= $formName ?> extends <?= '\\' . ltrim($formBaseClass, '\\') . "\n" ?>
     /**
     * {@inheritdoc}
     */
-    public function rules()
+    public function formRules()
     {
         return [
 
