@@ -221,10 +221,11 @@ trait CatalogTrait
      *
      * @param array $queryParams
      * @param string $formName
+     * @param null $condition
      * @return array
      * @throws Exception
      */
-    public function getDropDownList($queryParams = [], $formName = "")
+    public function getDropDownList($queryParams = [],  $formName = "", $condition = null)
     {
         $searchClass = $this->getRelatedSearchModelClass();
         $searchModel = Yii::createObject($searchClass);
@@ -232,13 +233,16 @@ trait CatalogTrait
         if (! $searchAttribute){
             throw new Exception("please realize  getListSearchAttribute() in ".$searchClass);
         }
+
         if ($searchModel->hasAttribute('status')) {
-            $queryParams['status'] = StatusEnum::ACTIVE;
+            $queryParams[$searchClass::tableName() . '.status'] = StatusEnum::ACTIVE;
         }
+        
         if ($searchModel->hasAttribute('is_deleted')) {
-            $queryParams['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+            $queryParams[$searchClass::tableName() . '.is_deleted'] = IsDeletedEnum::NOT_DELETED;
         }
-        $dataProvider = $this->getDataProvider($queryParams, [], null, $formName);
+
+        $dataProvider = $this->getDataProvider($queryParams, [], null, $formName, $condition);
 
         return ArrayHelper::map($dataProvider->getModels(), $searchClass::getListSearchKeyAttribute(), $searchAttribute);
     }

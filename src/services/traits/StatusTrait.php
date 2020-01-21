@@ -21,4 +21,3 @@ trait StatusTrait
 
     protected function beforeStatusChange(ActiveRecord $model, $status){}
 }
-

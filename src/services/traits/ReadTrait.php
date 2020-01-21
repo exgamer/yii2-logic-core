@@ -72,7 +72,11 @@ trait ReadTrait
                 $query->andWhere([$name => $value]);
             }
         }
-        $config['query'] = $query;
+
+        if (! isset($config['query'])) {
+            $config['query'] = $query;
+        }
+
         $dataProvider = new ActiveDataProvider($config);
         if (! empty($queryParams)) {
             $searchModel->load($queryParams, $formName);
