@@ -20,6 +20,7 @@ trait UpdateColumnTrait
      */
     public function updateColumn(ActiveRecord $model, $column, $value)
     {
+        # todo : поишграться
         $event = new Event();
         $event->data = [
             'model' => $model,
