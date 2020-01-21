@@ -53,7 +53,7 @@ abstract class Action extends Base
     {
         $redirectParams = [$this->redirect];
         foreach ($this->redirectParams as $param){
-            if ($model->hasAttribute($param)){
+            if ($model->hasAttribute($param) || property_exists($model, $param)){
                 $redirectParams[$param] = $model->{$param};
             }
         }
