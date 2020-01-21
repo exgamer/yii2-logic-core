@@ -136,6 +136,11 @@ trait HasPropertyTrait
             $uniVal = [$uniVal];
         }
 
+        $cleanVals = [];
+        foreach ($uniVal as $val){
+            $cleanVals[] = (int) $val;
+        }
+
         $propertyJoin = static::getPropertyJoin();
         $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
             static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
