@@ -220,12 +220,12 @@ trait CatalogTrait
      *
      *
      * @param array $queryParams
-     * @param null $condition
      * @param string $formName
+     * @param null $condition
      * @return array
      * @throws Exception
      */
-    public function getDropDownList($queryParams = [], $condition = null,  $formName = "")
+    public function getDropDownList($queryParams = [],  $formName = "", $condition = null)
     {
         $searchClass = $this->getRelatedSearchModelClass();
         $searchModel = Yii::createObject($searchClass);
