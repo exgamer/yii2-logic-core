@@ -70,15 +70,14 @@ trait CatalogTrait
      *   если метод getListSearchAttribute вернет 'label'
      *   будет вызван метод getLabel() модели
      *
-     *
-     * @param bool $excludeDefault
-     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
      * @param string $from
      * @param string $to
+     * @param bool $excludeDefault
+     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
      * @return array
      * @throws Exception
      */
-    public function catalog($excludeDefault = false, $resetModels = true, $from = null, $to = null)
+    public function catalog($from = null, $to = null, $excludeDefault = false, $resetModels = true)
     {
         static $_catalog = null;
 
