@@ -20,20 +20,8 @@ use yii\helpers\Html;
 use kamaelkz\yii2admin\v1\widgets\formelements\Pjax;
 use kamaelkz\yii2admin\v1\widgets\formelements\activeform\ActiveForm;
 
-$saveRedirectButton = Html::submitButton(
-    '<b><i class="icon-list"></i></b>' . Yii::t('yii2admin', 'Сохранить и перейти к списку'),
-    [
-        'class' => 'btn bg-info btn-labeled btn-labeled-left ml-1',
-        'name' => \kamaelkz\yii2admin\v1\helpers\RequestHelper::REDIRECT_BTN_PARAM,
-        'value' => 'index'
-    ]
-);
-$saveButton = Html::submitButton(
-    '<b><i class="icon-checkmark3"></i></b>' . Yii::t('yii2admin', 'Сохранить'),
-    [
-        'class' => 'btn bg-success btn-labeled btn-labeled-left ml-1'
-    ]
-);
+$saveRedirectButton = Html::saveRedirectButton();
+$saveButton = Html::saveButton();
 ?>
 
 <?= "<?php " ?> Pjax::begin(['formSelector' => '#active-form']); ?>
