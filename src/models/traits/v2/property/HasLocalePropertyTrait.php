@@ -30,4 +30,28 @@ trait HasLocalePropertyTrait
     {
         return Yii::$app->localeService->getCurrentLocaleId();
     }
+
+    /**
+     * Возвращает массив с существующими локализациями
+     * @param bool $flip
+     * @return array
+     */
+    public function locales($flip = false)
+    {
+        $locales = Yii::$app->localeService->catalog();
+        $l = [];
+        $attrName = static::uniqueField();
+        if (isset($this->properties)){
+            foreach ($this->properties as $property){
+                $v = $property->{$attrName};
+                $l[$v] = $locales[$v] ?? 'unknown';
+            }
+        }
+        if ($flip){
+
+            return array_flip($l);
+        }
+
+        return $l;
+    }
 }
