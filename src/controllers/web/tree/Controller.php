@@ -34,44 +34,4 @@ abstract class Controller extends Base
             'delete' => DeleteAction::class,
         ];
     }
-
-    /**
-     * Возвращает класс формы сущности из сервиса
-     *
-     * @return string
-     * @throws ReflectionException
-     */
-    public function getFormClass()
-    {
-        return $this->getService()->getRelatedFormClass();
-    }
-
-    /**
-     * Возвращает сервис сущности
-     *
-     * @return Service
-     */
-    public function getService()
-    {
-        $name = ClassHelper::getServiceName($this, "Controller");
-
-        return Yii::$app->{$name};
-    }
-
-    /**
-     * Метод для определния нужно ли просто перезагрузить форму/вьюшку
-     *
-     * @param string $method
-     * @return bool
-     */
-    public function isReload($method = "post")
-    {
-        $reload = Yii::$app->request->{$method}('reload');
-        if ($reload){
-
-            return true;
-        }
-
-        return false;
-    }
 }
