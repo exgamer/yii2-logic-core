@@ -27,27 +27,18 @@ trait CatalogTrait
      *  getListSearchKeyAttribute
      *
      *
-     * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение всех моделей
+     * @param bool $excludeDefault
+     * @param null $searchKey
      * @return array
-     * @throws Exception
      */
-    public function modelsCatalog($excludeDefault = false, $resetModels = true)
+    public function modelsCatalog($excludeDefault = false, $searchKey = null)
     {
-        static $_catalog = null;
-        if (! empty($_catalog)){
-            return $_catalog;
+        if (! $searchKey) {
+            $searchClass = $this->getRelatedSearchModelClass();
+            $searchKey = $searchClass::getListSearchKeyAttribute();
         }
 
-        $searchClass = $this->getRelatedSearchModelClass();
-        $searchKey = $searchClass::getListSearchKeyAttribute();
-        $models = ArrayHelper::index( $this->getAllModelsForList([], $excludeDefault), $searchKey);
-        if ($resetModels){
-            return $models;
-        }
-
-        $_catalog = $models;
-
-        return $_catalog;
+        return ArrayHelper::index( $this->getAllModelsForList([], $excludeDefault), $searchKey);
     }
 
     /**
@@ -80,27 +71,34 @@ trait CatalogTrait
      *   будет вызван метод getLabel() модели
      *
      *
+     * @param bool $excludeDefault
      * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
+     * @param string $from
+     * @param string $to
      * @return array
      * @throws Exception
      */
-    public function catalog($excludeDefault = false, $resetModels = true)
+    public function catalog($excludeDefault = false, $resetModels = true, $from = null, $to = null)
     {
         static $_catalog = null;
-        if (! empty($_catalog)){
-            return $_catalog;
-        }
 
         $searchClass = $this->getRelatedSearchModelClass();
-        $searchKey = $searchClass::getListSearchKeyAttribute();
-        $searchAttr = $searchClass::getListSearchAttribute();
-        if (! $searchKey || ! $searchAttr){
-            throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute() in ".$searchClass);
+        if (! $from && ! $to){
+            $from = $searchClass::getListSearchKeyAttribute();
+            $to = $searchClass::getListSearchAttribute();
         }
-        $models = $this->modelsCatalog($excludeDefault, $resetModels);
-        $_catalog = ArrayHelper::map($models, $searchKey , $searchAttr);
 
-        return $_catalog;
+        if (! $from || ! $to){
+            throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute()  ".$searchClass . ' OR pass $from and $to in method');
+        }
+
+        $models =  $_catalog;
+        if (empty($models) || ! $resetModels){
+            $models = $this->modelsCatalog($excludeDefault, $from);
+            $_catalog = $models;
+        }
+
+        return ArrayHelper::map($models, $from , $to);
     }
 
     /**
@@ -130,12 +128,14 @@ trait CatalogTrait
      * getListSearchAttribute и getListSearchKeyAttribute
      *
      * @param $value
+     * @param null $from
+     * @param null $to
      * @return mixed|null
      * @throws Exception
      */
-    public function catalogKey($value)
+    public function catalogKey($value, $from = null, $to = null)
     {
-        $catalog = $this->catalog();
+        $catalog = $this->catalog(false, true, $from, $to);
         $catalog = array_flip($catalog);
         $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
@@ -151,12 +151,14 @@ trait CatalogTrait
      * getListSearchAttribute и getListSearchKeyAttribute
      *
      * @param $key
+     * @param string $from
+     * @param string $to
      * @return mixed|null
      * @throws Exception
      */
-    public function catalogValue($key)
+    public function catalogValue($key, $from = null, $to = null)
     {
-        $catalog = $this->catalog();
+        $catalog = $this->catalog(false, true, $from, $to);
         if (isset($catalog[$key])){
             return $catalog[$key];
         }
