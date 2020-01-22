@@ -1,7 +1,6 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
-use concepture\yii2logic\enum\CacheTagsEnum;
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
 use Yii;
@@ -31,14 +30,14 @@ trait CatalogTrait
      * @param null $searchKey
      * @return array
      */
-    public function modelsCatalog($excludeDefault = false, $searchKey = null)
+    public function modelsCatalog($excludeDefault = false, $searchKey = null, $condition = null)
     {
         if (! $searchKey) {
             $searchClass = $this->getRelatedSearchModelClass();
             $searchKey = $searchClass::getListSearchKeyAttribute();
         }
 
-        return ArrayHelper::index( $this->getAllModelsForList([], $excludeDefault), $searchKey);
+        return ArrayHelper::index( $this->getAllModelsForList($condition, $excludeDefault), $searchKey);
     }
 
     /**
@@ -72,13 +71,22 @@ trait CatalogTrait
      *
      * @param string $from
      * @param string $to
+     *
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
+     * @param array|callable $condition
      * @param bool $excludeDefault
      * @param bool $resetModels - по умолчанию всегда будет делать запрсо на получение modelsCatalog
      * @return array
      * @throws Exception
      */
-    public function catalog($from = null, $to = null, $excludeDefault = false, $resetModels = true)
+    public function catalog($from = null, $to = null, $condition = null, $excludeDefault = false, $resetModels = true)
     {
+        /**
+         * @todo сделать ключ для статики если передан $condition
+         * но там может быть массив и анонимка
+         */
         static $_catalog = null;
 
         $searchClass = $this->getRelatedSearchModelClass();
@@ -92,8 +100,8 @@ trait CatalogTrait
         }
 
         $models =  $_catalog;
-        if (empty($models) || ! $resetModels){
-            $models = $this->modelsCatalog($excludeDefault, $from);
+        if (empty($models) || ! $resetModels || $condition !== null){
+            $models = $this->modelsCatalog($excludeDefault, $from, $condition);
             $_catalog = $models;
         }
 
@@ -129,12 +137,16 @@ trait CatalogTrait
      * @param $value
      * @param null $from
      * @param null $to
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
+     * @param array|callable $condition
      * @return mixed|null
      * @throws Exception
      */
-    public function catalogKey($value, $from = null, $to = null)
+    public function catalogKey($value, $from = null, $to = null, $condition = null)
     {
-        $catalog = $this->catalog(false, true, $from, $to);
+        $catalog = $this->catalog(false, true, $from, $to, $condition);
         $catalog = array_flip($catalog);
         $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
@@ -152,12 +164,16 @@ trait CatalogTrait
      * @param $key
      * @param string $from
      * @param string $to
+     * function(ActiveQuery $query) {
+     *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
+     * }
+     * @param array|callable $condition
      * @return mixed|null
      * @throws Exception
      */
-    public function catalogValue($key, $from = null, $to = null)
+    public function catalogValue($key, $from = null, $to = null, $condition = null)
     {
-        $catalog = $this->catalog(false, true, $from, $to);
+        $catalog = $this->catalog(false, true, $from, $to, $condition);
         if (isset($catalog[$key])){
             return $catalog[$key];
         }
@@ -259,12 +275,13 @@ trait CatalogTrait
     /**
      * Возвращает массив моделей для выпадающих списков
      *
-     * @param array $where
+     * @param array $condition
      * @param bool $excludeDefault
      * @return mixed
      */
-    public function getAllModelsForList($where = [], $excludeDefault = false)
+    public function getAllModelsForList($condition = null, $excludeDefault = false)
     {
+        $where = [];
         if ($excludeDefault === false) {
             $modelClass = $this->getRelatedModelClass();
             $model = Yii::createObject($modelClass);
@@ -276,7 +293,20 @@ trait CatalogTrait
             }
         }
 
-        $query = $this->getQuery()->andWhere($where);
+        $query = $this->getQuery();
+        if (! empty($where)) {
+            $query->andWhere($where);
+        }
+
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
         $this->extendCatalogTraitQuery($query);
 
         return $query->all();
