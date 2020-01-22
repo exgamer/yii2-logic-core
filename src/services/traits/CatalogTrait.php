@@ -237,7 +237,7 @@ trait CatalogTrait
         if ($searchModel->hasAttribute('status')) {
             $queryParams[$searchClass::tableName() . '.status'] = StatusEnum::ACTIVE;
         }
-        
+
         if ($searchModel->hasAttribute('is_deleted')) {
             $queryParams[$searchClass::tableName() . '.is_deleted'] = IsDeletedEnum::NOT_DELETED;
         }

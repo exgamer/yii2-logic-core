@@ -43,7 +43,7 @@ $saveButton = Html::submitButton(
         <?= "<?= " ?> $saveRedirectButton?>
         <?= "<?= " ?> $saveButton?>
     </div>
-</div>
+
 <div class="row">
         <?php foreach ($generator->getColumnNames() as $attribute) {
             if (in_array($attribute,['id', 'created_at', 'updated_at', 'is_deleted'])) {
@@ -57,7 +57,7 @@ $saveButton = Html::submitButton(
         } ?>
 </div>
 
-<div class="card">
+
     <div class="card-body text-right">
         <?= "<?= " ?> $saveRedirectButton?>
         <?= "<?= " ?> $saveButton?>
