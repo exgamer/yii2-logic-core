@@ -56,7 +56,11 @@ class Generator extends \yii\gii\generators\model\Generator
 
     public function hasSeoProperty($properties)
     {
-        if (isset($properties['seo_title'])){
+        if (isset($properties['seo_title'])
+            && isset($properties['seo_h1'])
+            && isset($properties['seo_description'])
+            && isset($properties['seo_keywords'])
+        ){
             return true;
         }
 
