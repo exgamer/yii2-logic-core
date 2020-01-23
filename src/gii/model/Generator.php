@@ -162,7 +162,7 @@ class Generator extends \yii\gii\generators\model\Generator
         }
 
         $servicesArray[$servicesAlias] = [
-            'class' => $serviceNs. '/' . $serviceName
+            'class' => $serviceNs. '\\' . $serviceName
         ];
 
         return new CodeFile(
