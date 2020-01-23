@@ -19,25 +19,33 @@ echo "<?php\n";
 
 namespace <?= $formNs ?>;
 
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    use concepture\yii2logic\traits\SeoPropertyTrait;
+<?php endif; ?>
+
 /**
 * This is the form class for model "<?= $generator->ns ?>\<?= $className ?>".
 *
 <?php foreach ($formProperties as $property => $data): ?>
-* @property <?= "{$data['type']} \${$property}"  . ($data['comment'] ? ' ' . strtr($data['comment'], ["\n" => ' ']) : '') . "\n" ?>
+    * @property <?= "{$data['type']} \${$property}"  . ($data['comment'] ? ' ' . strtr($data['comment'], ["\n" => ' ']) : '') . "\n" ?>
 <?php endforeach; ?>
 */
 class <?= $formName ?> extends <?= '\\' . ltrim($formBaseClass, '\\') . "\n" ?>
 {
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    use SeoPropertyTrait;
+<?php endif; ?>
+
 <?php foreach ($formProperties as $property => $data): ?>
     public $<?= $property; ?>; <?="\n"?>
 <?php endforeach; ?>
 
-    /**
-    * {@inheritdoc}
-    */
-    public function formRules()
-    {
-        return [
+/**
+* {@inheritdoc}
+*/
+public function formRules()
+{
+return [
 
 <?php if (! empty($rules)) :?>
     <?php foreach ($rules as $rule): ?>
@@ -48,6 +56,6 @@ class <?= $formName ?> extends <?= '\\' . ltrim($formBaseClass, '\\') . "\n" ?>
     <?php endforeach; ?>
 <?php endif;?>
 
-        ];
-    }
+];
+}
 }

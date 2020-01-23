@@ -61,6 +61,7 @@ class Generator extends \yii\gii\generators\model\Generator
     {
         if (isset($properties['seo_title'])
             && isset($properties['seo_h1'])
+            && isset($properties['seo_name'])
             && isset($properties['seo_description'])
             && isset($properties['seo_keywords'])
         ){
@@ -72,7 +73,7 @@ class Generator extends \yii\gii\generators\model\Generator
 
     public function isSeoProperty($property)
     {
-        if (in_array($property, ['seo_title', 'seo_h1' , 'seo_description' , 'seo_keywords'])){
+        if (in_array($property, ['seo_title', 'seo_name', 'seo_h1' , 'seo_description' , 'seo_keywords'])){
             return true;
         }
 
@@ -155,18 +156,17 @@ class Generator extends \yii\gii\generators\model\Generator
             if (in_array($property,['id', 'created_at', 'updated_at', 'is_deleted'])) {
                 continue;
             }
+
+            if ($this->isSeoProperty($property)){
+                continue;
+            }
+
             $r[$property] = $data;
         }
 
         return $r;
     }
 
-    /**
-     * Переопределно только чтобы исключить сео атрибуты
-     *
-     * @param $table
-     * @return array
-     */
     public function generateRules($table)
     {
         $types = [];
@@ -269,11 +269,6 @@ class Generator extends \yii\gii\generators\model\Generator
         return $rules;
     }
 
-    /**
-     * Переопределно только чтобы исключить сео атрибуты
-     * @param $table
-     * @return array
-     */
     public function generateLabels($table)
     {
         $labels = [];
