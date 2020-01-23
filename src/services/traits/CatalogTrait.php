@@ -146,7 +146,7 @@ trait CatalogTrait
      */
     public function catalogKey($value, $from = null, $to = null, $condition = null)
     {
-        $catalog = $this->catalog(false, true, $from, $to, $condition);
+        $catalog = $this->catalog( $from, $to, $condition, false, true);
         $catalog = array_flip($catalog);
         $this->catalogKeyPreAction($value, $catalog);
         if (isset($catalog[$value])){
@@ -173,7 +173,7 @@ trait CatalogTrait
      */
     public function catalogValue($key, $from = null, $to = null, $condition = null)
     {
-        $catalog = $this->catalog(false, true, $from, $to, $condition);
+        $catalog = $this->catalog($from, $to, $condition, false, true);
         if (isset($catalog[$key])){
             return $catalog[$key];
         }
