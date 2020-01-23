@@ -20,7 +20,7 @@ echo "<?php\n";
 namespace <?= $formNs ?>;
 
 <?php if (($generator->hasSeoProperty($properties))): ?>
-    use concepture\yii2logic\traits\SeoPropertyTrait;
+use concepture\yii2logic\traits\SeoPropertyTrait;
 <?php endif; ?>
 
 /**
@@ -32,30 +32,30 @@ namespace <?= $formNs ?>;
 */
 class <?= $formName ?> extends <?= '\\' . ltrim($formBaseClass, '\\') . "\n" ?>
 {
-<?php if (($generator->hasSeoProperty($properties))): ?>
+    <?php if (($generator->hasSeoProperty($properties))): ?>
     use SeoPropertyTrait;
-<?php endif; ?>
+    <?php endif; ?>
 
-<?php foreach ($formProperties as $property => $data): ?>
+    <?php foreach ($formProperties as $property => $data): ?>
     public $<?= $property; ?>; <?="\n"?>
-<?php endforeach; ?>
-
-/**
-* {@inheritdoc}
-*/
-public function formRules()
-{
-return [
-
-<?php if (! empty($rules)) :?>
-    <?php foreach ($rules as $rule): ?>
-        <?php if (strpos($rule, 'required')) :?>
-            <?= $rule; ?>
-            <?php continue; ?>
-        <?php endif;?>
     <?php endforeach; ?>
-<?php endif;?>
 
-];
-}
+    /**
+    * {@inheritdoc}
+    */
+    public function formRules()
+    {
+        return [
+
+        <?php if (! empty($rules)) :?>
+            <?php foreach ($rules as $rule): ?>
+                <?php if (strpos($rule, 'required')) :?>
+                    <?= $rule; ?>
+                    <?php continue; ?>
+                <?php endif;?>
+            <?php endforeach; ?>
+        <?php endif;?>
+
+        ];
+    }
 }

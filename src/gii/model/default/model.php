@@ -22,14 +22,14 @@ namespace <?= $generator->ns ?>;
 use Yii;
 
 <?php if (($generator->hasStatusProperty($properties))): ?>
-    use concepture\yii2logic\models\traits\StatusTrait;
+use concepture\yii2logic\models\traits\StatusTrait;
 <?php endif; ?>
 <?php if (($generator->hasIsDeletedProperty($properties))): ?>
-    use concepture\yii2logic\models\traits\IsDeletedTrait;
+use concepture\yii2logic\models\traits\IsDeletedTrait;
 <?php endif; ?>
 <?php if (($generator->hasSeoProperty($properties))): ?>
-    use concepture\yii2logic\models\traits\SeoTrait;
-    use yii\helpers\ArrayHelper;
+use concepture\yii2logic\models\traits\SeoTrait;
+use yii\helpers\ArrayHelper;
 <?php endif; ?>
 
 /**
@@ -58,32 +58,32 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 <?php endif; ?>
 
 
-/**
-* @see \concepture\yii2logic\models\ActiveRecord:label()
-*
-* @return string
-*/
-public static function label()
-{
-return Yii::t('<?= $generator->messageCategory?>', '<?= $generator->generateTableName($tableName) ?>');
-}
+    /**
+    * @see \concepture\yii2logic\models\ActiveRecord:label()
+    *
+    * @return string
+    */
+    public static function label()
+    {
+        return Yii::t('<?= $generator->messageCategory?>', '<?= $generator->generateTableName($tableName) ?>');
+    }
 
-/**
-* @see \concepture\yii2logic\models\ActiveRecord:toString()
-* @return string
-*/
-public function toString()
-{
-return $this->id;
-}
+    /**
+    * @see \concepture\yii2logic\models\ActiveRecord:toString()
+    * @return string
+    */
+    public function toString()
+    {
+        return $this->id;
+    }
 
-/**
-* {@inheritdoc}
-*/
-public static function tableName()
-{
-return '<?= $generator->generateTableName($tableName) ?>';
-}
+    /**
+    * {@inheritdoc}
+    */
+    public static function tableName()
+    {
+        return '<?= $generator->generateTableName($tableName) ?>';
+    }
 <?php if ($generator->db !== 'db'): ?>
 
     /**
@@ -91,54 +91,54 @@ return '<?= $generator->generateTableName($tableName) ?>';
     */
     public static function getDb()
     {
-    return Yii::$app->get('<?= $generator->db ?>');
+        return Yii::$app->get('<?= $generator->db ?>');
     }
 <?php endif; ?>
 
-/**
-* {@inheritdoc}
-*/
-public function rules()
-{
-<?php if (($generator->hasSeoProperty($properties))): ?>
-    return ArrayHelper::merge(
-    $this->seoRules(),
-    [
-<?php else: ?>
-    return [
-<?php endif; ?>
-<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>
-<?php if (($generator->hasSeoProperty($properties))): ?>
-    ]);
-<?php else: ?>
-    ];
-<?php endif; ?>
-}
+    /**
+    * {@inheritdoc}
+    */
+    public function rules()
+    {
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        return ArrayHelper::merge(
+        $this->seoRules(),
+        [
+    <?php else: ?>
+        return [
+    <?php endif; ?>
+    <?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        ]);
+    <?php else: ?>
+        ];
+    <?php endif; ?>
+    }
 
-/**
-* {@inheritdoc}
-*/
-public function attributeLabels()
-{
-<?php if (($generator->hasSeoProperty($properties))): ?>
-    return ArrayHelper::merge(
-    $this->seoAttributeLabels(),
-    [
-<?php else: ?>
-    return [
-<?php endif; ?>
+    /**
+    * {@inheritdoc}
+    */
+    public function attributeLabels()
+    {
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        return ArrayHelper::merge(
+        $this->seoAttributeLabels(),
+        [
+    <?php else: ?>
+        return [
+    <?php endif; ?>
 
-<?php foreach ($labels as $name => $label): ?>
-    <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
-<?php endforeach; ?>
+    <?php foreach ($labels as $name => $label): ?>
+        <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
+    <?php endforeach; ?>
 
-<?php if (($generator->hasSeoProperty($properties))): ?>
-    ]);
-<?php else: ?>
-    ];
-<?php endif; ?>
-}
-<?php foreach ($relations as $name => $relation): ?>
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        ]);
+    <?php else: ?>
+        ];
+    <?php endif; ?>
+    }
+    <?php foreach ($relations as $name => $relation): ?>
 
     /**
     * @return \yii\db\ActiveQuery
