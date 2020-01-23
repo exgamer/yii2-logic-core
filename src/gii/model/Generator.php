@@ -143,14 +143,14 @@ class Generator extends \yii\gii\generators\model\Generator
                     Yii::getAlias('@' . str_replace('\\', '/', $serviceNs)) . '/' . $serviceName . '.php',
                     $this->render('service.php', $params)
                 );
-                $files[] = $this->registerService($serviceNs, $serviceName);
+                $this->registerService($files, $serviceNs, $serviceName);
             }
         }
 
         return $files;
     }
 
-    public function registerService($serviceNs, $serviceName)
+    public function registerService(&$files, $serviceNs, $serviceName)
     {
         $configPath = Yii::getAlias('@common/config/services.php' );
         $configArray = require $configPath;
