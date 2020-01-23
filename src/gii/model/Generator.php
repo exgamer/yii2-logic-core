@@ -36,6 +36,33 @@ class Generator extends \yii\gii\generators\model\Generator
         ]);
     }
 
+    public function hasStatusProperty($properties)
+    {
+        if (isset($properties['status'])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasIsDeletedProperty($properties)
+    {
+        if (isset($properties['is_deleted'])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasSeoProperty($properties)
+    {
+        if (isset($properties['seo_title'])){
+            return true;
+        }
+
+        return false;
+    }
+
     public function generate()
     {
         $files = [];
