@@ -31,24 +31,24 @@ $saveButton = Html::saveButton();
         <?= "<?= " ?> $saveRedirectButton?>
         <?= "<?= " ?> $saveButton?>
     </div>
+    <div class="card-body">
+        <div class="row">
+            <?php foreach ($generator->getColumnNames() as $attribute) {
+                if (in_array($attribute,['id', 'created_at', 'updated_at', 'is_deleted'])) {
+                    continue;
+                }
 
-    <div class="row">
-        <?php foreach ($generator->getColumnNames() as $attribute) {
-            if (in_array($attribute,['id', 'created_at', 'updated_at', 'is_deleted'])) {
-                continue;
-            }
+                if ($generator->isSeoProperty($attribute)){
+                    continue;
+                }
 
-            if ($generator->isSeoProperty($attribute)){
-                continue;
-            }
-
-            if (in_array($attribute, $safeAttributes)) {
-                echo "    <div class=\"col-lg-12 col-md-12 col-sm-12\">\n\n";
-                echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
-                echo "   </div>\n\n";
-            }
-        } ?>
-
+                if (in_array($attribute, $safeAttributes)) {
+                    echo "    <div class=\"col-lg-12 col-md-12 col-sm-12\">\n\n";
+                    echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
+                    echo "   </div>\n\n";
+                }
+            } ?>
+        </div>
         <?php if (($generator->hasSeoProperty($generator->getColumnNames()))): ?>
             <?= "<?= " ?>
             $this->render('@concepture/yii2handbook/views/include/_seo_attributes', [
