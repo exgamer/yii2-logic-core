@@ -143,10 +143,32 @@ class Generator extends \yii\gii\generators\model\Generator
                     Yii::getAlias('@' . str_replace('\\', '/', $serviceNs)) . '/' . $serviceName . '.php',
                     $this->render('service.php', $params)
                 );
+                $files[] = $this->registerService($serviceNs, $serviceName);
             }
         }
 
         return $files;
+    }
+
+    public function registerService($serviceNs, $serviceName)
+    {
+        $configPath = Yii::getAlias('@common/config/services.php' );
+        $configArray = require $configPath;
+        $servicesArray = $configArray['components'] ?? [];
+        $servicesAlias = lcfirst($serviceName);
+        if (isset($servicesArray[$servicesAlias]))
+        {
+            return;
+        }
+
+        $servicesArray[$servicesAlias] = [
+            'class' => $serviceNs. '/' . $serviceName
+        ];
+
+        return new CodeFile(
+            $configPath,
+            $this->render('service_config.php', ['services' => $servicesArray])
+        );
     }
 
     public function getFormProperties($properties)
