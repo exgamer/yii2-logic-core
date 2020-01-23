@@ -21,6 +21,30 @@ class Generator extends \yii\gii\generators\crud\Generator
     public $searchModelClass =  null;
     public $messageCategory = 'yii2admin';
 
+    public function hasSeoProperty($properties)
+    {
+        $properties = array_flip($properties);
+        if (isset($properties['seo_title'])
+            && isset($properties['seo_h1'])
+            && isset($properties['seo_name'])
+            && isset($properties['seo_description'])
+            && isset($properties['seo_keywords'])
+        ){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSeoProperty($property)
+    {
+        if (in_array($property, ['seo_title', 'seo_name', 'seo_h1' , 'seo_description' , 'seo_keywords'])){
+            return true;
+        }
+
+        return false;
+    }
+
     public function generate()
     {
         if ($this->modelClass) {
