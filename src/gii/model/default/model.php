@@ -113,7 +113,6 @@ public function rules()
 <?php else: ?>
     ];
 <?php endif; ?>
-
 }
 
 /**
