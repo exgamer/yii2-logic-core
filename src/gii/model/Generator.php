@@ -165,7 +165,7 @@ class Generator extends \yii\gii\generators\model\Generator
             'class' => $serviceNs. '\\' . $serviceName
         ];
 
-        return new CodeFile(
+        $files[] = new CodeFile(
             $configPath,
             $this->render('service_config.php', ['services' => $servicesArray])
         );
