@@ -29,6 +29,7 @@ use Yii;
 <?php endif; ?>
 <?php if (($generator->hasSeoProperty($properties))): ?>
     use concepture\yii2logic\models\traits\SeoTrait;
+    use yii\helpers\ArrayHelper;
 <?php endif; ?>
 
 /**
@@ -99,7 +100,20 @@ return '<?= $generator->generateTableName($tableName) ?>';
 */
 public function rules()
 {
-return [<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>];
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    return ArrayHelper::merge(
+    $this->seoRules(),
+    [
+<?php else: ?>
+    return [
+<?php endif; ?>
+<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    ]);
+<?php else: ?>
+    ];
+<?php endif; ?>
+
 }
 
 /**
@@ -107,11 +121,23 @@ return [<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", 
 */
 public function attributeLabels()
 {
-return [
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    return ArrayHelper::merge(
+    $this->seoAttributeLabels(),
+    [
+<?php else: ?>
+    return [
+<?php endif; ?>
+
 <?php foreach ($labels as $name => $label): ?>
     <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
 <?php endforeach; ?>
-];
+
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    ]);
+<?php else: ?>
+    ];
+<?php endif; ?>
 }
 <?php foreach ($relations as $name => $relation): ?>
 
