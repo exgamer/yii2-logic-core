@@ -59,7 +59,7 @@ abstract class Service extends Component
     {
         $modelClass = $this->getRelatedModelClass();
 
-        return $modelClass::tableName();
+        return trim($modelClass::tableName(), '{}');
     }
 
     /**
