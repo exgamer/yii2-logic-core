@@ -3,6 +3,7 @@
 namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\CacheTagsEnum;
+use concepture\yii2logic\forms\Form;
 use Yii;
 use yii\helpers\Json;
 use yii\base\Exception;
@@ -79,6 +80,38 @@ trait ModifyTrait
         $this->afterUpdate($form, $model);
 
         return $model;
+    }
+
+    /**
+     * Обновление записи по id
+     *
+     * @param $id
+     * @param array $data
+     * @param null $formName
+     * @return bool|ActiveRecord|Form
+     */
+    public function updateById($id, $data, $formName = null)
+    {
+        $model = $this->findById($id);
+        $form = $this->getRelatedForm();
+        $form->setAttributes($model->attributes, false);
+        if (method_exists($form, 'customizeForm')) {
+            $form->customizeForm($model);
+        }
+
+        if (! $form->load($data, $formName)) {
+
+            return $form;
+        }
+
+        $model->setAttributes($form->attributes);
+        if (! $form->validate(null, true, $model)) {
+            $form->addErrors($model->getErrors());
+
+            return $form;
+        }
+
+        return $this->update($form, $model);
     }
 
     /**
