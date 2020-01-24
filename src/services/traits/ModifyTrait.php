@@ -87,10 +87,10 @@ trait ModifyTrait
      *
      * @param $id
      * @param array $data
-     * @param null $formName
+     * @param string|null $formName
      * @return bool|ActiveRecord|Form
      */
-    public function updateById($id, $data, $formName = null)
+    public function updateById($id, $data, $formName = '')
     {
         $model = $this->findById($id);
         $form = $this->getRelatedForm();
