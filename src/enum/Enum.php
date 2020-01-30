@@ -22,16 +22,11 @@ abstract class Enum {
      *    3,
      *  ]
      *
-     * @param array $exclude
      * @return array
      * @throws ReflectionException
      */
-    public static function values($exclude = []) {
+    public static function values() {
         $constants = static::all();
-        if(! empty($exclude)) {
-            $constants = array_diff($constants, $exclude);
-        }
-
         $constants = array_values($constants);
         $constants = array_unique($constants);
 
