@@ -215,6 +215,8 @@ trait ModifyTrait
                 ])
             );
         }
+
+        $this->afterDelete($model);
     }
 
     /**
@@ -241,6 +243,12 @@ trait ModifyTrait
      * @param ActiveRecord $model
      */
     protected function beforeDelete(ActiveRecord $model){}
+
+    /**
+     * Дополнительные действия после удалением
+     * @param ActiveRecord $model
+     */
+    protected function afterDelete(ActiveRecord $model){}
 
     /**
      * Дополнительные действия с моделью перед сохранением
