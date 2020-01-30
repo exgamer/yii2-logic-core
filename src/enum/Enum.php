@@ -34,7 +34,7 @@ abstract class Enum {
 
         $constants = array_values($constants);
         $constants = array_unique($constants);
-        
+
         return $constants;
     }
 
