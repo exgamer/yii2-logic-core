@@ -13,7 +13,7 @@ use yii\base\Component;
  */
 class DataProcessor extends Component
 {
-    protected $dataHandlerClass;
+    public $dataHandlerClass;
     public $pageSize = 50;
     public $isDone = false;
     public $totalCount = 0;
@@ -23,6 +23,12 @@ class DataProcessor extends Component
 
     /** @var \DateTime Время начала выполнения скрипта */
     protected $timeStart;
+
+    public static function exec($config, &$inputData = null)
+    {
+        $processor = new static($config);
+        $processor->execute($inputData);
+    }
 
     public function init()
     {
@@ -38,6 +44,10 @@ class DataProcessor extends Component
      */
     public function execute(&$inputData = null)
     {
+        if (! $inputData){
+            $inputData = [];
+        }
+
         $this->beforeExecute($inputData);
         if (! $this->isExecute($inputData))
         {
@@ -52,7 +62,7 @@ class DataProcessor extends Component
                 continue;
             }
         } while (! $this->isDone());
-        
+
         $this->afterExecute($inputData);
 
         return true;
@@ -71,7 +81,6 @@ class DataProcessor extends Component
         foreach ($models as $model) {
             try{
                 $this->prepareData($model);
-                $this->executeSubCollectors($model);
                 $this->processData($model, $inputData);
                 $this->finishProcess($model, $inputData);
             } catch (\Exception $dbEx){
@@ -156,15 +165,6 @@ class DataProcessor extends Component
     {
         $dataHandlerClass = $this->dataHandlerClass;
         $dataHandlerClass::beforeExecute($this, $inputData);
-        if (isset($inputData['page'])){
-            $this->currentPage = $this->targetPage = $inputData['page'];
-            $this->bySinglePage = true;
-            unset($inputData['page']);
-        }
-        if (isset($inputData['pageSize'])){
-            $this->pageSize = $inputData['pageSize'];
-            unset($inputData['pageSize']);
-        }
     }
 
     /**

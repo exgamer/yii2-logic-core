@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2logic\services\interfaces;
+namespace concepture\yii2logic\dataprocessor;
 
 use concepture\yii2logic\services\Service;
 

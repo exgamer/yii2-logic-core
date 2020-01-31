@@ -2,12 +2,11 @@
 
 namespace concepture\yii2logic\dataprocessor;
 
-use concepture\yii2logic\services\interfaces\DataHandlerInterface;
 use yii\db\ActiveQuery;
 
 /**
  * Вспомогательный класс для обработки данных
- * 
+ *
  * @author CitizenZet
  */
 abstract class DataHandler implements DataHandlerInterface
@@ -39,7 +38,7 @@ abstract class DataHandler implements DataHandlerInterface
      * @param type $inputData
      */
     public static function finishProcess($processor, &$data, &$inputData = null){}
-    
+
     /**
      * Действия после завершения обработки 1 страницы данных
      * @param type $inputData
@@ -48,7 +47,7 @@ abstract class DataHandler implements DataHandlerInterface
     /**
      * returns array of prepared data
      * вносим необходимые изменения в данные
-     * 
+     *
      * return array
      */
     public static function prepareData($processor, &$data){}
@@ -57,14 +56,14 @@ abstract class DataHandler implements DataHandlerInterface
      * Выполняем необходимые действия с данными
      */
     public static function processData($processor, &$data, &$inputData = null){}
-    
+
     /**
      * настройка основного запроса
      * @param ActiveQuery $query
      * @param null $inputData
      */
     public static function setupQuery(ActiveQuery $query, $inputData = null){}
-    
+
     /**
      * Показываем сообщение после выполнения
      */
