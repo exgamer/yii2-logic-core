@@ -16,4 +16,6 @@ interface ModifyEventInterface
     const EVENT_AFTER_UPDATE = 'afterUpdate';
     const EVENT_BEFORE_DELETE = 'beforeDelete';
     const EVENT_AFTER_DELETE = 'afterDelete';
+    const EVENT_BEFORE_BATCH_INSERT = 'beforeBatchInsert';
+    const EVENT_AFTER_BATCH_INSERT = 'afterBatchInsert';
 }

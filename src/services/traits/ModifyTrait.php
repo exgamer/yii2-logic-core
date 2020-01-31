@@ -4,10 +4,12 @@ namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\CacheTagsEnum;
 use concepture\yii2logic\forms\Form;
+use concepture\yii2logic\services\events\modify\AfterBatchInsertEvent;
 use concepture\yii2logic\services\events\modify\AfterCreateEvent;
 use concepture\yii2logic\services\events\modify\AfterDeleteEvent;
 use concepture\yii2logic\services\events\modify\AfterModelSaveEvent;
 use concepture\yii2logic\services\events\modify\AfterUpdateEvent;
+use concepture\yii2logic\services\events\modify\BeforeBatchInsertEvent;
 use concepture\yii2logic\services\events\modify\BeforeCreateEvent;
 use concepture\yii2logic\services\events\modify\BeforeDeleteEvent;
 use concepture\yii2logic\services\events\modify\BeforeModelSaveEvent;
@@ -45,13 +47,18 @@ trait ModifyTrait
      */
     public function batchInsert($fields, $rows)
     {
+        $this->beforeBatchInsert($fields, $rows);
         $db = $this->getDb();
         $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
         $update = [];
         foreach ($fields as $field){
             $update[] = $field."= VALUES($field)";
         }
-        return $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+
+        $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+        $this->afterBatchInsert($fields, $rows);
+        
+        return $result;
     }
 
     /**
@@ -322,6 +329,24 @@ trait ModifyTrait
     protected function afterDelete(ActiveRecord $model)
     {
         $this->trigger(static::EVENT_AFTER_DELETE, new AfterDeleteEvent(['model' => $model]));
+    }
+
+    /**
+     * @param $fields
+     * @param $rows
+     */
+    protected function beforeBatchInsert($fields, $rows)
+    {
+        $this->trigger(static::EVENT_BEFORE_BATCH_INSERT, new BeforeBatchInsertEvent(['fields' => $fields, 'rows' => $rows]));
+    }
+
+    /**
+     * @param $fields
+     * @param $rows
+     */
+    protected function afterBatchInsert($fields, $rows)
+    {
+        $this->trigger(static::EVENT_AFTER_BATCH_INSERT, new AfterBatchInsertEvent(['fields' => $fields, 'rows' => $rows]));
     }
 }
 
