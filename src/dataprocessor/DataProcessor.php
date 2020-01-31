@@ -159,6 +159,10 @@ class DataProcessor extends Component
             $this->isDone = true;
         }
 
+        if ($dataProvider->getCount() == 0){
+            $this->isDone = true;
+        }
+
         return $models;
     }
 
