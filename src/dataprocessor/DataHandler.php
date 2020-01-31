@@ -37,7 +37,7 @@ abstract class DataHandler implements DataHandlerInterface
      * @param type $data
      * @param type $inputData
      */
-    public static function finishProcess(DataProcessor $processor, &$data, &$inputData = null){}
+    public static function finishProcessModel(DataProcessor $processor, &$data, &$inputData = null){}
 
     /**
      * Действия после завершения обработки 1 страницы данных
@@ -50,12 +50,12 @@ abstract class DataHandler implements DataHandlerInterface
      *
      * return array
      */
-    public static function prepareData(DataProcessor $processor, &$data){}
+    public static function prepareModel(DataProcessor $processor, &$data){}
 
     /**
      * Выполняем необходимые действия с данными
      */
-    public static function processData(DataProcessor $processor, &$data, &$inputData = null){}
+    public static function processModel(DataProcessor $processor, &$data, &$inputData = null){}
 
     /**
      * настройка основного запроса

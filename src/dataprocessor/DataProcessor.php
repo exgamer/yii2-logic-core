@@ -81,9 +81,9 @@ class DataProcessor extends Component
         $models = $this->executeQuery($inputData);
         foreach ($models as $model) {
             try{
-                $this->prepareData($model);
-                $this->processData($model, $inputData);
-                $this->finishProcess($model, $inputData);
+                $this->prepareModel($model);
+                $this->processModel($model, $inputData);
+                $this->finishProcessModel($model, $inputData);
             } catch (\Exception $dbEx){
                 $this->noDbConnectionExceptionActions($model, $dbEx);
                 continue;
@@ -213,7 +213,7 @@ class DataProcessor extends Component
      * @param type $data
      * @param type $inputData
      */
-    public function finishProcess(&$data, &$inputData = null)
+    public function finishProcessModel(&$data, &$inputData = null)
     {
         $dataHandlerClass = $this->dataHandlerClass;
         $dataHandlerClass::finishProcess($this, $data, $inputData);
@@ -246,7 +246,7 @@ class DataProcessor extends Component
      *
      * return array
      */
-    public function prepareData(&$data)
+    public function prepareModel(&$data)
     {
         $dataHandlerClass = $this->dataHandlerClass;
         $dataHandlerClass::prepareData($this, $data);
@@ -255,7 +255,7 @@ class DataProcessor extends Component
     /**
      * Выполняем необходимые действия с данными
      */
-    public function processData(&$data, &$inputData = null)
+    public function processModel(&$data, &$inputData = null)
     {
         $dataHandlerClass = $this->dataHandlerClass;
         $dataHandlerClass::processData($this, $data, $inputData);
