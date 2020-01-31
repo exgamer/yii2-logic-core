@@ -8,6 +8,14 @@ use yii\base\Component;
 
 /**
  * Class DataProcessor
+ *
+ *  $config = [
+ *     'dataHandlerClass' => SitemapDataHandler::class,
+ *     'pageSize' => 5
+ * ];
+ *
+ * DataProcessor::exec($config);
+ * 
  * @package concepture\yii2logic\dataprocessor
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
