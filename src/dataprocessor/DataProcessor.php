@@ -16,7 +16,7 @@ class DataProcessor extends Component
     public $dataHandlerClass;
     public $pageSize = 50;
     public $isDone = false;
-    public $totalCount = 0;
+    public $totalCount;
     public $currentPage = 0;
     public $targetPage = 0;
     public $bySinglePage = false;
@@ -104,7 +104,7 @@ class DataProcessor extends Component
     public function isDone()
     {
 
-        return $this->isDone();
+        return $this->isDone;
     }
 
     /**
@@ -132,15 +132,18 @@ class DataProcessor extends Component
                 'pageSize' => $this->pageSize,
                 'pageSizeParam' => false,
                 'forcePageParam' => false,
-                'page' => $this->currentPage
+                'page' => $this->currentPage + 1
             ],
             'query' => $query
         ];
         $dataProvider = $service->getDataProvider([], $config);
         $models = $dataProvider->getModels();
-        $this->totalCount = $dataProvider->getTotalCount();
+        if (! $this->totalCount) {
+            $this->totalCount = $dataProvider->getTotalCount();
+        }
+
         $this->currentPage = $dataProvider->getPagination()->getPage();
-        if ($this->currentPage == $dataProvider->getPagination()->getPageCount()){
+        if ($this->currentPage+1 == $dataProvider->getPagination()->getPageCount()){
             $this->isDone = true;
         }
 
