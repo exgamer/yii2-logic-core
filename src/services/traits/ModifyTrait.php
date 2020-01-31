@@ -57,7 +57,7 @@ trait ModifyTrait
 
         $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
         $this->afterBatchInsert($fields, $rows);
-        
+
         return $result;
     }
 
