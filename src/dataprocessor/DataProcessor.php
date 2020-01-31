@@ -144,7 +144,7 @@ class DataProcessor extends Component
                 'pageSize' => $this->pageSize,
                 'pageSizeParam' => false,
                 'forcePageParam' => false,
-                'page' => $this->currentPage + 1
+                'page' => $this->currentPage
             ],
             'query' => $query
         ];
@@ -162,6 +162,8 @@ class DataProcessor extends Component
         if ($dataProvider->getCount() == 0){
             $this->isDone = true;
         }
+
+        $this->currentPage +=1;
 
         return $models;
     }
