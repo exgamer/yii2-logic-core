@@ -4,6 +4,15 @@ namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\CacheTagsEnum;
 use concepture\yii2logic\forms\Form;
+use concepture\yii2logic\services\events\modify\AfterCreateEvent;
+use concepture\yii2logic\services\events\modify\AfterDeleteEvent;
+use concepture\yii2logic\services\events\modify\AfterModelSaveEvent;
+use concepture\yii2logic\services\events\modify\AfterUpdateEvent;
+use concepture\yii2logic\services\events\modify\BeforeCreateEvent;
+use concepture\yii2logic\services\events\modify\BeforeDeleteEvent;
+use concepture\yii2logic\services\events\modify\BeforeModelSaveEvent;
+use concepture\yii2logic\services\events\modify\BeforeUpdateEvent;
+use concepture\yii2logic\services\events\modify\ModelSaveEvent;
 use Yii;
 use yii\helpers\Json;
 use yii\base\Exception;
@@ -237,26 +246,16 @@ trait ModifyTrait
         }
     }
 
-
-    /**
-     * Дополнительные действия перед удалением
-     * @param ActiveRecord $model
-     */
-    protected function beforeDelete(ActiveRecord $model){}
-
-    /**
-     * Дополнительные действия после удалением
-     * @param ActiveRecord $model
-     */
-    protected function afterDelete(ActiveRecord $model){}
-
     /**
      * Дополнительные действия с моделью перед сохранением
      * @param Model $form класс для работы
      * @param ActiveRecord $model
      * @param boolean $is_new_record
      */
-    protected function beforeModelSave(Model $form , ActiveRecord $model, $is_new_record){}
+    protected function beforeModelSave(Model $form , ActiveRecord $model, $is_new_record)
+    {
+        $this->trigger(static::EVENT_BEFORE_MODEL_SAVE, new BeforeModelSaveEvent(['form' => $form, 'model' => $model, 'is_new_record' => $is_new_record]));
+    }
 
     /**
      * Дополнительные действия с моделью после сохранения
@@ -264,32 +263,65 @@ trait ModifyTrait
      * @param ActiveRecord $model
      * @param boolean $is_new_record
      */
-    protected function afterModelSave(Model $form , ActiveRecord $model, $is_new_record){}
+    protected function afterModelSave(Model $form , ActiveRecord $model, $is_new_record)
+    {
+        $this->trigger(static::EVENT_AFTER_MODEL_SAVE, new AfterModelSaveEvent(['form' => $form, 'model' => $model, 'is_new_record' => $is_new_record]));
+    }
 
     /**
      * Дополнительные действия с моделью перед созданием
      * @param Model $form класс для работы
      */
-    protected function beforeCreate(Model $form){}
+    protected function beforeCreate(Model $form)
+    {
+        $this->trigger(static::EVENT_BEFORE_CREATE, new BeforeCreateEvent(['form' => $form]));
+    }
 
     /**
      * Дополнительные действия с моделью после создания
      * @param Model $form класс для работы
      */
-    protected function afterCreate(Model $form){}
+    protected function afterCreate(Model $form)
+    {
+        $this->trigger(static::EVENT_AFTER_CREATE, new AfterCreateEvent(['form' => $form]));
+    }
 
     /**
      * Дополнительные действия с моделью перед обновлением
      * @param Model $form класс для работы
      * @param ActiveRecord $model
      */
-    protected function beforeUpdate(Model $form, ActiveRecord $model){}
+    protected function beforeUpdate(Model $form, ActiveRecord $model)
+    {
+        $this->trigger(static::EVENT_BEFORE_UPDATE, new BeforeUpdateEvent(['form' => $form, 'model' => $model]));
+    }
 
     /**
      * Дополнительные действия с моделью после обновления
      * @param Model $form класс для работы
      * @param ActiveRecord $model
      */
-    protected function afterUpdate(Model $form, ActiveRecord $model){}
+    protected function afterUpdate(Model $form, ActiveRecord $model)
+    {
+        $this->trigger(static::EVENT_AFTER_UPDATE, new AfterUpdateEvent(['form' => $form, 'model' => $model]));
+    }
+
+    /**
+     * Дополнительные действия перед удалением
+     * @param ActiveRecord $model
+     */
+    protected function beforeDelete(ActiveRecord $model)
+    {
+        $this->trigger(static::EVENT_BEFORE_DELETE, new BeforeDeleteEvent(['model' => $model]));
+    }
+
+    /**
+     * Дополнительные действия после удалением
+     * @param ActiveRecord $model
+     */
+    protected function afterDelete(ActiveRecord $model)
+    {
+        $this->trigger(static::EVENT_AFTER_DELETE, new AfterDeleteEvent(['model' => $model]));
+    }
 }
 
