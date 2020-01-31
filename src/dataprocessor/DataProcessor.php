@@ -216,7 +216,7 @@ class DataProcessor extends Component
     public function finishProcessModel(&$data, &$inputData = null)
     {
         $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::finishProcess($this, $data, $inputData);
+        $dataHandlerClass::finishProcessModel($this, $data, $inputData);
     }
 
     /**
@@ -249,7 +249,7 @@ class DataProcessor extends Component
     public function prepareModel(&$data)
     {
         $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::prepareData($this, $data);
+        $dataHandlerClass::prepareModel($this, $data);
     }
 
     /**
@@ -258,6 +258,6 @@ class DataProcessor extends Component
     public function processModel(&$data, &$inputData = null)
     {
         $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::processData($this, $data, $inputData);
+        $dataHandlerClass::processModel($this, $data, $inputData);
     }
 }
