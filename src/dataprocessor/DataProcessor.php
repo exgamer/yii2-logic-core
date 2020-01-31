@@ -14,6 +14,7 @@ use yii\base\Component;
 class DataProcessor extends Component
 {
     public $dataHandlerClass;
+    public $queryCondition;
     public $pageSize = 50;
     public $isDone = false;
     public $totalCount;
@@ -127,6 +128,17 @@ class DataProcessor extends Component
         $service = $this->getService();
         $query = $service->getQuery();
         $dataHandlerClass::setupQuery($query, $inputData);
+        $condition = $this->queryCondition;
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
+
         $config = [
             'pagination' => [
                 'pageSize' => $this->pageSize,
