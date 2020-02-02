@@ -3,12 +3,9 @@
 namespace concepture\yii2logic\helpers;
 
 use Yii;
-use Exception;
-use ReflectionClass;
-use ReflectionException;
 
 /**
- * Class ClassHelper
+ * Class XmlHelper
  * @package concepture\yii2logic\helpers
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
