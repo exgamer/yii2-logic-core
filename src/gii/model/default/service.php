@@ -19,11 +19,17 @@ echo "<?php\n";
 
 namespace <?= $serviceNs ?>;
 
+<?php if (($generator->hasStatusProperty($properties))): ?>
+    use concepture\yii2logic\services\traits\StatusTrait;
+<?php endif; ?>
+
 /**
 * This is the service class for model "<?= $generator->ns ?>\<?= $className ?>".
 *
 */
 class <?= $serviceName ?> extends <?= '\\' . ltrim($serviceBaseClass, '\\') . "\n" ?>
 {
-
+<?php if (($generator->hasStatusProperty($properties))): ?>
+    use StatusTrait;
+<?php endif; ?>
 }

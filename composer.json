@@ -21,6 +21,7 @@
         }
     },
     "extra": {
+        "bootstrap": "concepture\\yii2logic\\Bootstrap",
         "branch-alias": {
             "dev-master": "1.0.0-dev"
         }

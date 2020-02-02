@@ -21,21 +21,43 @@ namespace <?= $generator->ns ?>;
 
 use Yii;
 
+<?php if (($generator->hasStatusProperty($properties))): ?>
+use concepture\yii2logic\models\traits\StatusTrait;
+<?php endif; ?>
+<?php if (($generator->hasIsDeletedProperty($properties))): ?>
+use concepture\yii2logic\models\traits\IsDeletedTrait;
+<?php endif; ?>
+<?php if (($generator->hasSeoProperty($properties))): ?>
+use concepture\yii2logic\models\traits\SeoTrait;
+use yii\helpers\ArrayHelper;
+<?php endif; ?>
+
 /**
 * This is the model class for table "<?= $generator->generateTableName($tableName) ?>".
 *
 <?php foreach ($properties as $property => $data): ?>
-* @property <?= "{$data['type']} \${$property}"  . ($data['comment'] ? ' ' . strtr($data['comment'], ["\n" => ' ']) : '') . "\n" ?>
+    * @property <?= "{$data['type']} \${$property}"  . ($data['comment'] ? ' ' . strtr($data['comment'], ["\n" => ' ']) : '') . "\n" ?>
 <?php endforeach; ?>
 <?php if (!empty($relations)): ?>
-*
+    *
     <?php foreach ($relations as $name => $relation): ?>
-* @property <?= $relation[1] . ($relation[2] ? '[]' : '') . ' $' . lcfirst($name) . "\n" ?>
+        * @property <?= $relation[1] . ($relation[2] ? '[]' : '') . ' $' . lcfirst($name) . "\n" ?>
     <?php endforeach; ?>
 <?php endif; ?>
 */
 class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . "\n" ?>
 {
+<?php if (($generator->hasStatusProperty($properties))): ?>
+    use StatusTrait;
+<?php endif; ?>
+<?php if (($generator->hasIsDeletedProperty($properties))): ?>
+    use IsDeletedTrait;
+<?php endif; ?>
+<?php if (($generator->hasSeoProperty($properties))): ?>
+    use SeoTrait;
+<?php endif; ?>
+
+
     /**
     * @see \concepture\yii2logic\models\ActiveRecord:label()
     *
@@ -78,7 +100,19 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     */
     public function rules()
     {
-        return [<?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>];
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        return ArrayHelper::merge(
+        $this->seoRules(),
+        [
+    <?php else: ?>
+        return [
+    <?php endif; ?>
+    <?= empty($rules) ? '' : ("\n            " . implode(",\n            ", $rules) . ",\n        ") ?>
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        ]);
+    <?php else: ?>
+        ];
+    <?php endif; ?>
     }
 
     /**
@@ -86,20 +120,32 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     */
     public function attributeLabels()
     {
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        return ArrayHelper::merge(
+        $this->seoAttributeLabels(),
+        [
+    <?php else: ?>
         return [
-        <?php foreach ($labels as $name => $label): ?>
-            <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
-        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <?php foreach ($labels as $name => $label): ?>
+        <?= "'$name' => " . $generator->generateString($label) . ",\n" ?>
+    <?php endforeach; ?>
+
+    <?php if (($generator->hasSeoProperty($properties))): ?>
+        ]);
+    <?php else: ?>
         ];
+    <?php endif; ?>
     }
-<?php foreach ($relations as $name => $relation): ?>
+    <?php foreach ($relations as $name => $relation): ?>
 
     /**
     * @return \yii\db\ActiveQuery
     */
     public function get<?= $name ?>()
     {
-        <?= $relation[0] . "\n" ?>
+    <?= $relation[0] . "\n" ?>
     }
 <?php endforeach; ?>
 <?php if ($queryClassName): ?>

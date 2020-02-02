@@ -3,6 +3,7 @@ namespace concepture\yii2logic\services;
 
 use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\models\ActiveRecord;
+use concepture\yii2logic\services\interfaces\ModifyEventInterface;
 use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\traits\CacheTrait;
@@ -28,7 +29,7 @@ use concepture\yii2logic\services\traits\CatalogTrait;
  * @package concepture\yii2logic\services
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-abstract class Service extends Component
+abstract class Service extends Component implements ModifyEventInterface
 {
     use ModifyTrait;
     use ReadTrait;
@@ -59,7 +60,7 @@ abstract class Service extends Component
     {
         $modelClass = $this->getRelatedModelClass();
 
-        return $modelClass::tableName();
+        return trim($modelClass::tableName(), '{}%');
     }
 
     /**

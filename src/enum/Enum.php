@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\enum;
 
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Класс для хранения констант
@@ -22,7 +23,7 @@ abstract class Enum {
      *  ]
      *
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function values() {
         $constants = static::all();
@@ -42,7 +43,7 @@ abstract class Enum {
      * ]
      *
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function keys() {
         $constants = static::all();
@@ -61,7 +62,7 @@ abstract class Enum {
      *   ]
      *
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function all() {
         $className = get_called_class();

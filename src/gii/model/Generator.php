@@ -3,8 +3,11 @@
 namespace concepture\yii2logic\gii\model;
 
 use Yii;
+use yii\base\NotSupportedException;
+use yii\db\Schema;
 use yii\gii\CodeFile;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 class Generator extends \yii\gii\generators\model\Generator
 {
@@ -34,6 +37,47 @@ class Generator extends \yii\gii\generators\model\Generator
             'search.php',
             'service.php',
         ]);
+    }
+
+    public function hasStatusProperty($properties)
+    {
+        if (isset($properties['status'])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasIsDeletedProperty($properties)
+    {
+        if (isset($properties['is_deleted'])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasSeoProperty($properties)
+    {
+        if (isset($properties['seo_title'])
+            && isset($properties['seo_h1'])
+            && isset($properties['seo_name'])
+            && isset($properties['seo_description'])
+            && isset($properties['seo_keywords'])
+        ){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSeoProperty($property)
+    {
+        if (in_array($property, ['seo_title', 'seo_name', 'seo_h1' , 'seo_description' , 'seo_keywords'])){
+            return true;
+        }
+
+        return false;
     }
 
     public function generate()
@@ -99,10 +143,32 @@ class Generator extends \yii\gii\generators\model\Generator
                     Yii::getAlias('@' . str_replace('\\', '/', $serviceNs)) . '/' . $serviceName . '.php',
                     $this->render('service.php', $params)
                 );
+                $this->registerService($files, $serviceNs, $serviceName);
             }
         }
 
         return $files;
+    }
+
+    public function registerService(&$files, $serviceNs, $serviceName)
+    {
+        $configPath = Yii::getAlias('@common/config/services.php' );
+        $configArray = require $configPath;
+        $servicesArray = $configArray['components'] ?? [];
+        $servicesAlias = lcfirst($serviceName);
+        if (isset($servicesArray[$servicesAlias]))
+        {
+            return;
+        }
+
+        $servicesArray[$servicesAlias] = [
+            'class' => $serviceNs. '\\' . $serviceName
+        ];
+
+        $files[] = new CodeFile(
+            $configPath,
+            $this->render('service_config.php', ['services' => $servicesArray])
+        );
     }
 
     public function getFormProperties($properties)
@@ -112,9 +178,139 @@ class Generator extends \yii\gii\generators\model\Generator
             if (in_array($property,['id', 'created_at', 'updated_at', 'is_deleted'])) {
                 continue;
             }
+
+            if ($this->isSeoProperty($property)){
+                continue;
+            }
+
             $r[$property] = $data;
         }
 
         return $r;
+    }
+
+    public function generateRules($table)
+    {
+        $types = [];
+        $lengths = [];
+        foreach ($table->columns as $column) {
+            if ($column->autoIncrement) {
+                continue;
+            }
+            if ($this->isSeoProperty($column->name)){
+                continue;
+            }
+            if (!$column->allowNull && $column->defaultValue === null) {
+                $types['required'][] = $column->name;
+            }
+            switch ($column->type) {
+                case Schema::TYPE_SMALLINT:
+                case Schema::TYPE_INTEGER:
+                case Schema::TYPE_BIGINT:
+                case Schema::TYPE_TINYINT:
+                    $types['integer'][] = $column->name;
+                    break;
+                case Schema::TYPE_BOOLEAN:
+                    $types['boolean'][] = $column->name;
+                    break;
+                case Schema::TYPE_FLOAT:
+                case Schema::TYPE_DOUBLE:
+                case Schema::TYPE_DECIMAL:
+                case Schema::TYPE_MONEY:
+                    $types['number'][] = $column->name;
+                    break;
+                case Schema::TYPE_DATE:
+                case Schema::TYPE_TIME:
+                case Schema::TYPE_DATETIME:
+                case Schema::TYPE_TIMESTAMP:
+                case Schema::TYPE_JSON:
+                    $types['safe'][] = $column->name;
+                    break;
+                default: // strings
+                    if ($column->size > 0) {
+                        $lengths[$column->size][] = $column->name;
+                    } else {
+                        $types['string'][] = $column->name;
+                    }
+            }
+        }
+        $rules = [];
+        $driverName = $this->getDbDriverName();
+        foreach ($types as $type => $columns) {
+            if ($driverName === 'pgsql' && $type === 'integer') {
+                $rules[] = "[['" . implode("', '", $columns) . "'], 'default', 'value' => null]";
+            }
+            $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
+        }
+        foreach ($lengths as $length => $columns) {
+            $rules[] = "[['" . implode("', '", $columns) . "'], 'string', 'max' => $length]";
+        }
+
+        $db = $this->getDbConnection();
+
+        // Unique indexes rules
+        try {
+            $uniqueIndexes = array_merge($db->getSchema()->findUniqueIndexes($table), [$table->primaryKey]);
+            $uniqueIndexes = array_unique($uniqueIndexes, SORT_REGULAR);
+            foreach ($uniqueIndexes as $uniqueColumns) {
+                // Avoid validating auto incremental columns
+                if (!$this->isColumnAutoIncremental($table, $uniqueColumns)) {
+                    $attributesCount = count($uniqueColumns);
+
+                    if ($attributesCount === 1) {
+                        $rules[] = "[['" . $uniqueColumns[0] . "'], 'unique']";
+                    } elseif ($attributesCount > 1) {
+                        $columnsList = implode("', '", $uniqueColumns);
+                        $rules[] = "[['$columnsList'], 'unique', 'targetAttribute' => ['$columnsList']]";
+                    }
+                }
+            }
+        } catch (NotSupportedException $e) {
+            // doesn't support unique indexes information...do nothing
+        }
+
+        // Exist rules for foreign keys
+        foreach ($table->foreignKeys as $refs) {
+            $refTable = $refs[0];
+            $refTableSchema = $db->getTableSchema($refTable);
+            if ($refTableSchema === null) {
+                // Foreign key could point to non-existing table: https://github.com/yiisoft/yii2-gii/issues/34
+                continue;
+            }
+            $refClassName = $this->generateClassName($refTable);
+            unset($refs[0]);
+            $attributes = implode("', '", array_keys($refs));
+            $targetAttributes = [];
+            foreach ($refs as $key => $value) {
+                $targetAttributes[] = "'$key' => '$value'";
+            }
+            $targetAttributes = implode(', ', $targetAttributes);
+            $rules[] = "[['$attributes'], 'exist', 'skipOnError' => true, 'targetClass' => $refClassName::className(), 'targetAttribute' => [$targetAttributes]]";
+        }
+
+        return $rules;
+    }
+
+    public function generateLabels($table)
+    {
+        $labels = [];
+        foreach ($table->columns as $column) {
+            if ($this->isSeoProperty($column->name)){
+                continue;
+            }
+            if ($this->generateLabelsFromComments && !empty($column->comment)) {
+                $labels[$column->name] = $column->comment;
+            } elseif (!strcasecmp($column->name, 'id')) {
+                $labels[$column->name] = 'ID';
+            } else {
+                $label = Inflector::camel2words($column->name);
+                if (!empty($label) && substr_compare($label, ' id', -3, 3, true) === 0) {
+                    $label = substr($label, 0, -3) . ' ID';
+                }
+                $labels[$column->name] = $label;
+            }
+        }
+
+        return $labels;
     }
 }
