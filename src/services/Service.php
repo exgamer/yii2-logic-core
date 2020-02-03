@@ -43,21 +43,12 @@ abstract class Service extends Component implements ModifyEventInterface
     use CacheTrait;
 
     /**
-     * @return Command
-     * @throws ReflectionException
-     */
-    public function getCommand()
-    {
-        return $this->getDb()->createCommand();
-    }
-
-    /**
      * @param $sql
      * @param array $params
      * @return Command
      * @throws ReflectionException
      */
-    public function createCommand($sql, $params = [])
+    public function createCommand($sql = null, $params = [])
     {
         return $this->getDb()->createCommand($sql, $params);
     }
