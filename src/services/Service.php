@@ -4,6 +4,7 @@ namespace concepture\yii2logic\services;
 use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\interfaces\ModifyEventInterface;
+use concepture\yii2logic\services\traits\SqlModifyTrait;
 use concepture\yii2logic\services\traits\SqlReadTrait;
 use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
@@ -11,6 +12,7 @@ use concepture\yii2logic\services\traits\CacheTrait;
 use concepture\yii2logic\services\traits\CopyTrait;
 use ReflectionException;
 use yii\base\Component;
+use yii\db\Command;
 use yii\db\Connection;
 use concepture\yii2logic\services\traits\ModifyTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
@@ -34,10 +36,22 @@ abstract class Service extends Component implements ModifyEventInterface
 {
     use ModifyTrait;
     use ReadTrait;
+    use SqlModifyTrait;
     use SqlReadTrait;
     use CatalogTrait;
     use CopyTrait;
     use CacheTrait;
+
+    /**
+     * @param $sql
+     * @param array $params
+     * @return Command
+     * @throws ReflectionException
+     */
+    public function createCommand($sql, $params = [])
+    {
+        return $this->getDb()->createCommand($sql, $params);
+    }
 
     /**
      * Возвращает соединение к БД

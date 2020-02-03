@@ -1,25 +1,12 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
-use yii\db\Command;
-use yii\db\Exception;
-
 /**
  * Trait SqlReadTrait
  * @package concepture\yii2logic\services\traits
  */
 trait SqlReadTrait
 {
-    /**
-     * @param $sql
-     * @param array $params
-     * @return Command
-     */
-    public function getCommand($sql, $params = [])
-    {
-        return $this->getDb()->createCommand($sql, $params);
-    }
-
     /**
      * @param $sql
      * @param $params
@@ -29,7 +16,7 @@ trait SqlReadTrait
      */
     public function queryAll($sql, $params, $fetchMode = null)
     {
-        $command = $this->getCommand($sql, $params);
+        $command = $this->createCommand($sql, $params);
 
         return $command->queryAll();
     }
@@ -43,7 +30,7 @@ trait SqlReadTrait
      */
     public function queryOne($sql, $params, $fetchMode = null)
     {
-        $command = $this->getCommand($sql, $params);
+        $command = $this->createCommand($sql, $params);
 
         return $command->queryOne();
     }
