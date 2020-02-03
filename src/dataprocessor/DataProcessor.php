@@ -15,7 +15,7 @@ use yii\base\Component;
  * ];
  *
  * DataProcessor::exec($config);
- * 
+ *
  * @package concepture\yii2logic\dataprocessor
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */

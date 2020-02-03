@@ -4,6 +4,7 @@ namespace concepture\yii2logic\services;
 use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\interfaces\ModifyEventInterface;
+use concepture\yii2logic\services\traits\SqlReadTrait;
 use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\traits\CacheTrait;
@@ -33,6 +34,7 @@ abstract class Service extends Component implements ModifyEventInterface
 {
     use ModifyTrait;
     use ReadTrait;
+    use SqlReadTrait;
     use CatalogTrait;
     use CopyTrait;
     use CacheTrait;
