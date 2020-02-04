@@ -17,6 +17,7 @@ use yii\db\Connection;
 use concepture\yii2logic\services\traits\ModifyTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
 use concepture\yii2logic\services\traits\CatalogTrait;
+use yii\helpers\Inflector;
 
 /**
  * Базовый класс сервиса для реализации бизнес логики
@@ -158,6 +159,17 @@ abstract class Service extends Component implements ModifyEventInterface
     protected function getEntityService($model)
     {
         $serviceName = ClassHelper::getServiceName($model);
+
+        return  Yii::$app->{$serviceName};
+    }
+
+    /**
+     * @param $model
+     * @return Service
+     */
+    protected function getServiceFromEntityTable($tablename)
+    {
+        $serviceName =  lcfirst(Inflector::camelize($tablename));
 
         return  Yii::$app->{$serviceName};
     }
