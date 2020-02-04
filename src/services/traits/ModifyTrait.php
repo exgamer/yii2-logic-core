@@ -115,7 +115,10 @@ trait ModifyTrait
             $form->customizeForm($model);
         }
 
-        if (! $form->load($data, $formName)) {
+        /**
+         * Это сделано специально для возможность простого пересохранения сущности
+         */
+        if (! empty($data) && ! $form->load($data, $formName)) {
 
             return $form;
         }
