@@ -72,6 +72,15 @@ class ClassHelper
         return $reflection->getShortName();
     }
 
+    public static function getTraits($objectOrClass)
+    {
+        if (is_object($objectOrClass)) {
+            $objectOrClass = static::getRelatedClass($objectOrClass);
+        }
+
+        return array_keys((new ReflectionClass($objectOrClass))->getTraits());
+    }
+
     public static function getServiceName($objectOrClass, $replacedNamePart = [])
     {
         $name = static::getShortClassName($objectOrClass);
