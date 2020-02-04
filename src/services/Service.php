@@ -150,4 +150,15 @@ abstract class Service extends Component implements ModifyEventInterface
 
         return Yii::createObject($class);
     }
+
+    /**
+     * @param $model
+     * @return Service
+     */
+    protected function getEntityService($model)
+    {
+        $serviceName = ClassHelper::getServiceName($model);
+
+        return  Yii::$app->{$serviceName};
+    }
 }
