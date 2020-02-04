@@ -6,6 +6,7 @@ use Yii;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class ClassHelper
@@ -82,5 +83,12 @@ class ClassHelper
         }
 
         return $name."Service";
+    }
+
+    public static function modelToArray($model)
+    {
+        $modelClass = static::getRelatedClass($model);
+
+        return ArrayHelper::toArray($model, [$modelClass => $model->attributes()]);
     }
 }
