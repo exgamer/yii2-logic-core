@@ -167,9 +167,9 @@ abstract class Service extends Component implements ModifyEventInterface
      * @param $tableName
      * @return Service
      */
-    protected function getServiceFromEntityTable($tableName)
+    protected function getServiceByEntityTable($tableName)
     {
-        $serviceName =  ClassHelper::getServiceFromEntityTable($tableName);
+        $serviceName =  ClassHelper::getServiceByEntityTable($tableName);
         if (! Yii::$app->has($serviceName)){
             return null;
         }

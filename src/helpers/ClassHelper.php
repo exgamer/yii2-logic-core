@@ -86,7 +86,7 @@ class ClassHelper
         return $name."Service";
     }
 
-    public static function getServiceFromEntityTable($tableName)
+    public static function getServiceByEntityTable($tableName)
     {
         $serviceName =  lcfirst(Inflector::camelize($tableName));
         $serviceName.="Service";
