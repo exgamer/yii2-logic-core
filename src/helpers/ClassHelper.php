@@ -7,6 +7,7 @@ use Exception;
 use ReflectionClass;
 use ReflectionException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 /**
  * Class ClassHelper
@@ -83,6 +84,14 @@ class ClassHelper
         }
 
         return $name."Service";
+    }
+
+    public static function getServiceFromEntityTable($tableName)
+    {
+        $serviceName =  lcfirst(Inflector::camelize($tableName));
+        $serviceName.="Service";
+
+        return $serviceName;
     }
 
     public static function modelToArray($model)
