@@ -39,8 +39,12 @@ class UrlHelper
     public static function getLocation($model, $urlParamAttrs, &$controllerId = null, $actionId = 'view', $moduleId = null)
     {
         $queryParams = [];
-        foreach ($urlParamAttrs as $attribute){
-            $queryParams[$attribute] = $model->{$attribute};
+        foreach ($urlParamAttrs as $key => $attribute){
+            if ( filter_var($key, FILTER_VALIDATE_INT) === true ) {
+                $key = $attribute;
+            }
+
+            $queryParams[$key] = $model->{$attribute};
         }
 
         $className = ClassHelper::getShortClassName($model);
