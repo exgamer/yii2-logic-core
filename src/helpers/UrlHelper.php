@@ -36,7 +36,7 @@ class UrlHelper
      * @param string $moduleId
      * @return string
      */
-    protected static function getLocation($model, $urlParamAttrs, $actionId = 'view', &$controllerId = null, $moduleId = null)
+    public static function getLocation($model, $urlParamAttrs, $actionId = 'view', &$controllerId = null, $moduleId = null)
     {
         $queryParams = [];
         foreach ($urlParamAttrs as $attribute){
