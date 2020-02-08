@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\helpers;
 
+use concepture\yii2logic\helpers\transliterator\TransliteratorHelper;
+
 class Transliterator
 {
 
@@ -165,16 +167,32 @@ class Transliterator
      * @param string $string
      * @return string
      */
-    public static function translit($string)
-    {
-        $array1 = self::$lang2tr;
-        $array2 = self::$other_langs;
-        foreach ($array2 as $arr){
-            $array = array_combine($arr[0], $arr[1]);
-            $array1 = array_merge($array1, $array) ;
-        }
+//    public static function translit($string)
+//    {
+//        $array1 = self::$lang2tr;
+//        $array2 = self::$other_langs;
+//        foreach ($array2 as $arr){
+//            $array = array_combine($arr[0], $arr[1]);
+//            $array1 = array_merge($array1, $array) ;
+//        }
+//
+//        $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( strtr( trim($string), $array1 ) ) ) );
+//        $result = self::utf8Normilize($result);
+//
+//        return $result;
+//    }
 
-        $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( strtr( trim($string), $array1 ) ) ) );
+    /**
+     * @param $string
+     * @param string $lang
+     * @return string|string[]|null
+     * @todo тестим новый траслитератор
+     *
+     */
+    public static function translit($string, $lang = 'en')
+    {
+        $string = TransliteratorHelper::process($string, '', $lang);
+        $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( trim($string) ) ) );
         $result = self::utf8Normilize($result);
 
         return $result;
