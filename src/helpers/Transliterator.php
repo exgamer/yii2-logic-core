@@ -6,7 +6,16 @@ use concepture\yii2logic\helpers\transliterator\TransliteratorHelper;
 
 class Transliterator
 {
-
+    static $totr = array(
+        // special
+        ' '=>'-', '_' => '-' ,
+        '\''=>'', '"'=>'',
+        '\t'=>'', '«'=>'',
+        '»'=>'', '?'=>'',
+        '!'=>'', '*'=>'',
+        '+'=>'plus' , '№' => 'number',
+        '`'=> '' , '?' => ''
+    );
 
     static $lang2tr = array(
         // russian
@@ -192,7 +201,7 @@ class Transliterator
     public static function translit($string, $lang = 'en')
     {
         $string = TransliteratorHelper::process($string, '', $lang);
-        $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( trim($string) ) ) );
+        $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( strtr( trim($string), static::$totr ) ) ) );
         $result = self::utf8Normilize($result);
 
         return $result;
