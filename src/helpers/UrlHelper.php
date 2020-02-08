@@ -40,7 +40,7 @@ class UrlHelper
     {
         $queryParams = [];
         foreach ($urlParamAttrs as $key => $attribute){
-            if ( filter_var($key, FILTER_VALIDATE_INT) === true ) {
+            if ( $key === 0 || filter_var($key, FILTER_VALIDATE_INT) === true ) {
                 $key = $attribute;
             }
 
