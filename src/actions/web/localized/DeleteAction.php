@@ -7,6 +7,8 @@ use ReflectionException;
 use concepture\yii2logic\actions\Action;
 
 /**
+ * @deprecated
+ *
  * Экшен для удаления сущности с локализацией
  *
  * Class DeleteLocalizedAction

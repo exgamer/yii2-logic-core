@@ -8,6 +8,8 @@ use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
 /**
+ * @deprecated
+ *
  * Экшон для прсомотра списка локализованных сущностей
  *
  * Class IndexLocalizedAction

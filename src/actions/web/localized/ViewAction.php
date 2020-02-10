@@ -10,6 +10,8 @@ use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\web\ViewAction as Base;
 
 /**
+ * @deprecated
+ *
  * Экшон для просмотра локализованных сущностей
  *
  * Class ViewLocalizedAction

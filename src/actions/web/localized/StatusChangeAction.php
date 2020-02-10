@@ -7,6 +7,8 @@ use ReflectionException;
 use concepture\yii2logic\actions\Action;
 
 /**
+ * @deprecated
+ *
  * Экшен для смены статуса сущности с локализацией
  *
  * Class StatusChangeLocalizedAction

@@ -7,6 +7,8 @@ use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 
 /**
+ * @deprecated
+ *
  * Экшен для создания сущности с локализацией
  *
  *

@@ -11,6 +11,8 @@ use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 
 /**
+ * @deprecated
+ *
  * Экшон для обновления сущностей с локализациями
  * Class UpdateLocalizedAction
  * @package concepture\yii2logic\actions\web

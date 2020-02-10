@@ -8,6 +8,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
 
 /**
+ * @deprecated
+ *
  * Экшен для работы с выпадающими списками виджет \yii\jui\AutoComplete для сущностей с локализацией
  *
  * Пример:

@@ -7,6 +7,8 @@ use ReflectionException;
 use concepture\yii2logic\actions\Action;
 
 /**
+ * @deprecated
+ *
  * Экшен для восстановления нефизически удаленной сущности с локализацией
  *
  * Class UndeleteLocalizedAction
