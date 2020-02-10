@@ -43,4 +43,17 @@ class XmlHelper
 
         return $element;
     }
+
+    public static function dd()
+    {
+        $doc = new \DOMDocument();
+        $doc->loadXML($sitemap->content);
+        $parent = $doc->getElementsByTagName('urlset')->item(0);
+        $url = $doc->createElement("url");
+        $loc = $doc->createElement("loc", "https://legalbet.ru/best-posts/zhelto-sinij-trend-v-otbore-evro-2016/");
+        $priority = $doc->createElement("priority", "0.5");
+        $url->appendChild($loc);
+        $url->appendChild($priority);
+        $parent->appendChild($url);
+    }
 }
