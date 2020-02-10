@@ -42,7 +42,7 @@ trait LocalizedTrait
         $localeId = $localeConverterClass::key($locale);
 
         if ($localeId == $locale){
-            return $this->localeService()->catalogKey('ru', 'id', 'locale');
+            return Yii::$app->localeService->catalogKey('ru', 'id', 'locale');
         }
 
         return $localeId;
