@@ -4,6 +4,8 @@ namespace concepture\yii2logic\actions\traits;
 use Yii;
 
 /**
+ * @deprecated
+ *
  * Trait LocalizedTrait
  * @package concepture\yii2logic\actions\traits
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
