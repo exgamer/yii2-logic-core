@@ -39,7 +39,13 @@ trait LocalizedTrait
         $modelClass = $this->getService()->getRelatedModelClass();
         $localeConverterClass = $modelClass::getLocaleConverterClass();
 
-        return  $localeConverterClass::key($locale);
+        $localeId = $localeConverterClass::key($locale);
+
+        if ($localeId == $locale){
+            return $this->localeService()->catalogKey('ru', 'id', 'locale');
+        }
+
+        return $localeId;
     }
 }
 
