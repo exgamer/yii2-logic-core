@@ -223,4 +223,14 @@ abstract class Form extends Model
 
         return $modelClass::label();
     }
+
+    public function getErrors($attribute = null)
+    {
+        $errors = parent::getErrors($attribute);
+        foreach ($errors as &$error){
+            $error = array_unique($error);
+        }
+
+        return $errors;
+    }
 }
