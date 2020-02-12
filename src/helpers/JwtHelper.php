@@ -57,7 +57,7 @@ class JwtHelper
      * @param array $payload
      * @return string encoded JWT
      */
-    public function getJWT($payload = [])
+    public static function getJWT($payload = [])
     {
         $secret = static::getSecretKey();
         $currentTime = time();
