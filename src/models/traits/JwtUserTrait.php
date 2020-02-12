@@ -2,11 +2,10 @@
 
 namespace concepture\yii2logic\models\traits;
 
+use concepture\yii2logic\helpers\JwtHelper;
 use Firebase\JWT\JWT;
-
 use Yii;
 use yii\web\UnauthorizedHttpException;
-use yii\web\Request as WebRequest;
 
 /**
  * Trait to handle JWT-authorization process. Should be attached to User model.
@@ -15,24 +14,6 @@ use yii\web\Request as WebRequest;
  */
 trait JwtUserTrait
 {
-    /**
-     * Getter for exp that's used for generation of JWT
-     * @return string secret key used to generate JWT
-     */
-    protected static function getJwtExpire()
-    {
-        return Yii::$app->params['JWT_EXPIRE'];
-    }
-
-    /**
-     * Getter for secret key that's used for generation of JWT
-     * @return string secret key used to generate JWT
-     */
-    protected static function getSecretKey()
-    {
-        return Yii::$app->params['JWT_SECRET'];
-    }
-
     /**
      * Logins user by given JWT encoded string. If string is correctly decoded
      * @param  string $accessToken access token to decode
@@ -58,12 +39,9 @@ trait JwtUserTrait
      */
     public static function decodeJWT($token)
     {
-        $secret = static::getSecretKey();
         $errorText = "Incorrect token";
-        // Decode token and transform it into array.
-        // Firebase\JWT\JWT throws exception if token can not be decoded
         try {
-            $decoded = JWT::decode($token, $secret, [static::getAlgo()]);
+            $decoded = JwtHelper::decodeJWT($token);
         } catch (\Exception $e) {
             if(YII_DEBUG){
                 throw new UnauthorizedHttpException($e->getMessage());
@@ -72,8 +50,8 @@ trait JwtUserTrait
                 throw new UnauthorizedHttpException($errorText);
             }
         }
-        $decodedArray = (array)$decoded;
-        return $decodedArray;
+
+        return $decoded;
     }
 
     /**
@@ -95,16 +73,6 @@ trait JwtUserTrait
     }
 
     /**
-     * Getter for encryption algorytm used in JWT generation and decoding
-     * Override this method to set up other algorytm.
-     * @return string needed algorytm
-     */
-    public static function getAlgo()
-    {
-        return 'HS256';
-    }
-
-    /**
      * Returns some 'id' to encode to token. By default is current model id.
      * If you override this method, be sure that getPayloadUid is updated too
      * @return identifier of user
@@ -120,25 +88,10 @@ trait JwtUserTrait
      */
     public function getJWT($payload = [])
     {
-        $secret = static::getSecretKey();
-        $currentTime = time();
-        $request = Yii::$app->request;
-        $hostInfo = '';
-
-        // There is also a \yii\console\Request that doesn't have this property
-        if ($request instanceof WebRequest) {
-            $hostInfo = $request->hostInfo;
-        }
-        $payload['iss'] = $hostInfo;
-        $payload['aud'] = $hostInfo;
-        $payload['iat'] = $currentTime;
-        $payload['nbf'] = $currentTime;
-
+        $payload = [];
         // Set up user id
         $payload['uid'] = $this->getPayloadUid();
-        if (!isset($payload['exp'])) {
-            $payload['exp'] = $currentTime + static::getJwtExpire();
-        }
-        return JWT::encode($payload, $secret, static::getAlgo());
+
+        return JwtHelper::getJWT($payload);
     }
 }
