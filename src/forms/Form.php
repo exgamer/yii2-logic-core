@@ -181,7 +181,7 @@ abstract class Form extends Model
     public function load($data, $formName = null)
     {
         $result = parent::load($data, $formName);
-        $this->afterLoad();
+        $this->afterLoad($data);
 
         return $result;
     }
@@ -189,8 +189,9 @@ abstract class Form extends Model
     /**
      * Действия с формой после загрузки в нее данных
      * используется в UpdateAction
+     * @param null $data
      */
-    public function afterLoad(){}
+    public function afterLoad($data){}
 
     /**
      * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
