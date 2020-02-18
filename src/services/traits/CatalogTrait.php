@@ -215,10 +215,29 @@ trait CatalogTrait
             $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
         }
 
-        $query = $this->getQuery()
-            ->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label","{$tableName}.{$searchKey} as id"])
-            ->andWhere(['like', $searchAttr, $term])
-            ->andWhere($where)
+        $query = $this->getQuery();
+        if (is_array($searchAttr)){
+            $string = 'CONCAT(';
+            $a = [];
+            foreach ($searchAttr as $attr){
+                $a[] = $tableName.".".$attr;
+            }
+            $string .= implode(', " ",', $a);
+            $string .= ')';
+            $query->select(["{$string} as value", "{$string} as  label", "{$tableName}.{$searchKey} as id"]);
+        }else {
+            $query->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label", "{$tableName}.{$searchKey} as id"]);
+        }
+
+        if (is_array($searchAttr)){
+            foreach ($searchAttr as $attr){
+                $query->orWhere(['like', $attr, $term]);
+            }
+        }else{
+            $query->andWhere(['like', $searchAttr, $term]);
+        }
+
+        $query->andWhere($where)
             ->asArray();
         $this->extendCatalogTraitQuery($query);
 
