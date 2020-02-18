@@ -14,6 +14,7 @@ use Yii;
 use yii\web\Controller as Base;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 /**
  * Базовый веб контроллер
@@ -96,6 +97,19 @@ abstract class Controller extends Base
         $name = ClassHelper::getServiceName($this, "Controller");
 
         return Yii::$app->{$name};
+    }
+
+    /**
+     * Возвращает ответ в формате JSON
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function responseJson(array $payload)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $payload;
     }
 
     /**

@@ -39,7 +39,13 @@ class UpdateAction extends Action
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
-                if ($this->getService()->{$this->serviceMethod}($model, $originModel) !== false) {
+                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
+                    if ( RequestHelper::isMagicModal()){
+                        return $this->controller->responseJson([
+                            'data' => $result,
+                        ]);
+                    }
+
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                         return $this->redirect($this->getRedirectParams($originModel));
                     }

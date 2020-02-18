@@ -28,6 +28,11 @@ class CreateAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
+                if ( RequestHelper::isMagicModal()){
+                    return $this->controller->responseJson([
+                        'data' => $result,
+                    ]);
+                }
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                     return $this->redirect([$this->redirect, 'id' => $result->id]);
                 } else {
