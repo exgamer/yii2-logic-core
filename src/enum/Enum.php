@@ -111,10 +111,11 @@ abstract class Enum {
      * Возвращает метку по значению константы из self::labels()
      * @param $key
      * @param null $default
+     * @param string $fName
      * @return mixed|null
      */
-    public static function label($key, $default = null) {
-        $labels = static::labels();
+    public static function label($key, $default = null, $fName = 'labels') {
+        $labels = static::{$fName}();
 
         if (isset($labels[$key])){
             return $labels[$key];
