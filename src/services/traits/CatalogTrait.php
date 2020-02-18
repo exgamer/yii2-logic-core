@@ -229,6 +229,11 @@ trait CatalogTrait
             $query->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label", "{$tableName}.{$searchKey} as id"]);
         }
 
+        $attributes = $searchClass::getListSearchAttributes();
+        if (! empty($attributes)){
+            $query->addSelect(implode(', ', $attributes));
+        }
+
         if (is_array($searchAttr)){
             foreach ($searchAttr as $attr){
                 $query->orWhere(['like', $attr, $term]);

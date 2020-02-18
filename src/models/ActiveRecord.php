@@ -114,6 +114,16 @@ abstract class ActiveRecord extends Base
     }
 
     /**
+     * Список атрибутов для выборки \yii\jui\AutoComplete
+     *
+     * @return array
+     */
+    public static function getListSearchAttributes()
+    {
+        return [];
+    }
+
+    /**
      * Аттрибут модели который будет использован для метки в выпадающих списках
      * используетсяв Search модели
      *
