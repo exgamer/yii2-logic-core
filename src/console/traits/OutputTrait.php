@@ -11,28 +11,17 @@ use yii\helpers\Console;
  */
 trait OutputTrait
 {
-    /**
-     * Массив с цветами текста
-     * @var array
-     */
-    private $f_colors = array(
-        'black' => '0;30', 'dark_gray' => '1;30', 'blue' => '0;34',
-        'light_blue' => '1;34', 'green' => '0;32', 'light_green' => '1;32',
-        'cyan' => '0;36', 'light_cyan' => '1;36', 'red' => '0;31',
-        'light_red' => '1;31', 'purple' => '0;35', 'light_purple' => '1;35',
-        'brown' => '0;33', 'yellow' => '1;33', 'light_gray' => '0;37',
-        'white' => '1;37',
-    );
-
-    /**
-     * Массив с цветами фона текста
-     * @var array
-     */
-    private $b_colors = array(
-        'black' => '40', 'red' => '41', 'green' => '42',
-        'yellow' => '43', 'blue' => '44', 'magenta' => '45',
-        'cyan' => '46', 'light_gray' => '47',
-    );
+    public static function getColors()
+    {
+        return array(
+            'black' => '0;30', 'dark_gray' => '1;30', 'blue' => '0;34',
+            'light_blue' => '1;34', 'green' => '0;32', 'light_green' => '1;32',
+            'cyan' => '0;36', 'light_cyan' => '1;36', 'red' => '0;31',
+            'light_red' => '1;31', 'purple' => '0;35', 'light_purple' => '1;35',
+            'brown' => '0;33', 'yellow' => '1;33', 'light_gray' => '0;37',
+            'white' => '1;37',
+        );
+    }
 
     /**
      * Успешнноое сообщение с переводом строки
@@ -41,11 +30,11 @@ trait OutputTrait
      * @param string $color
      * @return string
      */
-    public function outputSuccess($text , $color = 'green')
+    public static function outputSuccess($text , $color = 'green')
     {
-        $color = isset($this->f_colors[$color]) ? $this->f_colors[$color] : \yii\helpers\Console::FG_GREEN;
+        $color = isset(static::getColors()[$color]) ? static::getColors()[$color] : \yii\helpers\Console::FG_GREEN;
 
-        echo $this->aFormat($text . PHP_EOL,  $color);
+        echo static::aFormat($text . PHP_EOL,  $color);
     }
 
     /**
@@ -55,16 +44,16 @@ trait OutputTrait
      * @param string $color
      * @return string
      */
-    public function outputDone($text, $color = 'red')
+    public static function outputDone($text, $color = 'red')
     {
-        $color = isset($this->f_colors[$color]) ? $this->f_colors[$color] : \yii\helpers\Console::FG_RED;
+        $color = isset(static::getColors()[$color]) ? static::getColors()[$color] : \yii\helpers\Console::FG_RED;
 
-        echo $this->aFormat($text . PHP_EOL,  $color);
+        echo static::aFormat($text . PHP_EOL,  $color);
     }
 
-    public function aFormat($string)
+    public static function aFormat($string)
     {
-        if ($this->isColorEnabled()) {
+        if (static::isColorEnabled()) {
             $args = func_get_args();
             array_shift($args);
             $string = Console::ansiFormat($string, $args);
@@ -73,7 +62,7 @@ trait OutputTrait
         return $string;
     }
 
-    public function isColorEnabled($stream = \STDOUT)
+    public static function isColorEnabled($stream = \STDOUT)
     {
         return Console::streamSupportsAnsiColors($stream);
     }
