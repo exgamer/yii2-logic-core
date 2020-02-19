@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\dataprocessor;
 
+use yii\db\ActiveQuery;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
 
