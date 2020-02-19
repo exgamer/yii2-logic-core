@@ -2,7 +2,8 @@
 
 namespace concepture\yii2logic\dataprocessor;
 
-use yii\db\ActiveQuery;
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
 
 /**
  * Вспомогательный класс для обработки данных
@@ -11,6 +12,23 @@ use yii\db\ActiveQuery;
  */
 abstract class DataHandler implements DataHandlerInterface
 {
+    /**
+     * @return Query
+     */
+    public static function getQuery()
+    {
+        return static::getService()->getQuery();
+    }
+
+    /**
+     * @param $config
+     * @return ActiveDataProvider
+     */
+    public static function getDataProvider($config)
+    {
+        return static::getService()->getDataProvider([], $config);
+    }
+
     /**
      * признак работать ли дальше
      * @param $processor
