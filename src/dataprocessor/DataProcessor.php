@@ -116,16 +116,12 @@ class DataProcessor extends Component
         return $this->isDone;
     }
 
-    /**
-     * @return Service
-     */
-    protected function getService()
+    protected function getQuery()
     {
         $dataHandlerClass = $this->dataHandlerClass;
 
-        return $dataHandlerClass::getService();
+        return $dataHandlerClass::getQuery();
     }
-
 
     /**
      *  get rows by sql
@@ -133,8 +129,7 @@ class DataProcessor extends Component
     private function executeQuery($inputData = null)
     {
         $dataHandlerClass = $this->dataHandlerClass;
-        $service = $this->getService();
-        $query = $service->getQuery();
+        $query = $this->getQuery();
         $dataHandlerClass::setupQuery($query, $inputData);
         $condition = $this->queryCondition;
         if (is_callable($condition)){
@@ -156,7 +151,7 @@ class DataProcessor extends Component
             ],
             'query' => $query
         ];
-        $dataProvider = $service->getDataProvider([], $config);
+        $dataProvider = $dataHandlerClass::getDataProvider($config );
         $models = $dataProvider->getModels();
         if (! $this->totalCount) {
             $this->totalCount = $dataProvider->getTotalCount();

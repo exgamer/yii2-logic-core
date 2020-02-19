@@ -3,7 +3,8 @@
 namespace concepture\yii2logic\dataprocessor;
 
 use concepture\yii2logic\services\Service;
-
+use yii\db\Query;
+use yii\data\ActiveDataProvider;
 /**
  * Interface DataHandlerInterface
  * @package concepture\yii2logic\services\interfaces
@@ -11,7 +12,13 @@ use concepture\yii2logic\services\Service;
 interface DataHandlerInterface
 {
     /**
-     * @return Service
+     * @return Query
      */
-    public static function getService();
+    public static function getQuery();
+
+    /**
+     * @param $config
+     * @return ActiveDataProvider
+     */
+    public static function getDataProvider($config);
 }
