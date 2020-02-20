@@ -220,13 +220,13 @@ trait CatalogTrait
             $string = 'CONCAT(';
             $a = [];
             foreach ($searchAttr as $attr){
-                $a[] = $tableName.".".$attr;
+                $a[] = $this->processFieldName($attr, $tableName);
             }
             $string .= implode(', " ",', $a);
             $string .= ')';
             $query->select(["{$string} as value", "{$string} as  label", "{$tableName}.{$searchKey} as id"]);
         }else {
-            $query->select(["{$tableName}.{$searchAttr} as value", "{$tableName}.{$searchAttr} as  label", "{$tableName}.{$searchKey} as id"]);
+            $query->select([$this->processFieldName($searchAttr, $tableName) . " as value", $this->processFieldName($searchAttr, $tableName) . " as  label", "{$tableName}.{$searchKey} as id"]);
         }
 
         $attributes = $searchClass::getListSearchAttributes();
@@ -247,6 +247,15 @@ trait CatalogTrait
         $this->extendCatalogTraitQuery($query);
 
         return $query->all();
+    }
+
+    protected function processFieldName($fieldName, $tableName)
+    {
+        if (strripos($fieldName, '.')){
+            return $fieldName;
+        }
+
+        return $tableName . "." . $fieldName;
     }
 
     /**
