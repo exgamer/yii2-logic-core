@@ -103,6 +103,8 @@ class DataProcessor extends Component
             $this->isDone = true;
         }
 
+        unset($models);
+
         return true;
     }
 
