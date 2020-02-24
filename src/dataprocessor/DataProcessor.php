@@ -38,10 +38,10 @@ class DataProcessor extends Component
     /** @var \DateTime Время начала выполнения скрипта */
     protected $timeStart;
 
-    public static function printMemoryUsage($message = '')
+    public function printMemoryUsage($message = '')
     {
         $memory = memory_get_usage();
-        static::outputSuccess( "MEMORY USED : " . ($memory/(1024) ) . " - " . $message, 'red');
+        $this->outputSuccess( "MEMORY USED : " . ($memory/(1024) ) . " - " . $message, 'red');
     }
 
     public static function exec($config, &$inputData = null)
@@ -101,8 +101,8 @@ class DataProcessor extends Component
     public function _execute(&$inputData = null)
     {
         $models = $this->executeQuery($inputData);
-        static::outputSuccess( "START PROCESS PAGE : " . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) );
-        static::printMemoryUsage("after query");
+        $this->outputSuccess( "START PROCESS PAGE : " . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) );
+        $this->printMemoryUsage("after query");
         $this->beforePageProcess($inputData);
         $count = count($models);
         Console::startProgress(0, $count);
@@ -123,8 +123,8 @@ class DataProcessor extends Component
         }
 
         $models = null;
-        static::printMemoryUsage("after page process");
-        static::outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize));
+        $this->printMemoryUsage("after page process");
+        $this->outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize));
 
         return true;
     }

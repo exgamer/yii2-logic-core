@@ -11,7 +11,7 @@ use yii\helpers\Console;
  */
 trait OutputTrait
 {
-    public static function getColors()
+    public function getColors()
     {
         return array(
             'black' => '0;30', 'dark_gray' => '1;30', 'blue' => '0;34',
@@ -30,11 +30,11 @@ trait OutputTrait
      * @param string $color
      * @return string
      */
-    public static function outputSuccess($text , $color = 'green')
+    public function outputSuccess($text , $color = 'green')
     {
-        $color = isset(static::getColors()[$color]) ? static::getColors()[$color] : \yii\helpers\Console::FG_GREEN;
+        $color = isset($this->getColors()[$color]) ? $this->getColors()[$color] : \yii\helpers\Console::FG_GREEN;
 
-        echo static::aFormat($text . PHP_EOL,  $color);
+        echo $this->aFormat($text . PHP_EOL,  $color);
     }
 
     /**
@@ -44,16 +44,16 @@ trait OutputTrait
      * @param string $color
      * @return string
      */
-    public static function outputDone($text, $color = 'red')
+    public function outputDone($text, $color = 'red')
     {
-        $color = isset(static::getColors()[$color]) ? static::getColors()[$color] : \yii\helpers\Console::FG_RED;
+        $color = isset($this->getColors()[$color]) ? $this->getColors()[$color] : \yii\helpers\Console::FG_RED;
 
-        echo static::aFormat($text . PHP_EOL,  $color);
+        echo $this->aFormat($text . PHP_EOL,  $color);
     }
 
-    public static function aFormat($string)
+    public function aFormat($string)
     {
-        if (static::isColorEnabled()) {
+        if ($this->isColorEnabled()) {
             $args = func_get_args();
             array_shift($args);
             $string = Console::ansiFormat($string, $args);
@@ -62,7 +62,7 @@ trait OutputTrait
         return $string;
     }
 
-    public static function isColorEnabled($stream = \STDOUT)
+    public function isColorEnabled($stream = \STDOUT)
     {
         return Console::streamSupportsAnsiColors($stream);
     }
