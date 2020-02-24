@@ -13,7 +13,7 @@ interface DataHandlerInterface
     /**
      * @return Service
      */
-    public static function getService();
+    public function getService();
 
 
 }

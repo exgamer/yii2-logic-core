@@ -26,6 +26,7 @@ class DataProcessor extends Component
     use OutputTrait;
 
     public $dataHandlerClass;
+    public $dataHandler;
     public $queryCondition;
     public $pageSize = 50;
     public $isDone = false;
@@ -52,6 +53,8 @@ class DataProcessor extends Component
     public function init()
     {
         parent::init();
+        $dataHandlerClass = $this->dataHandlerClass;
+        $this->dataHandler = new $dataHandlerClass();
         $this->timeStart = Yii::$app->formatter->asDateTime('now', 'php:Y-m-d H:i:s');
     }
 
@@ -75,8 +78,8 @@ class DataProcessor extends Component
 
         do {
             try{
-                $this->_execute($inputData);
                 gc_collect_cycles();
+                $this->_execute($inputData);
             } catch (\Exception $dbEx){
                 $this->noDbConnectionExceptionActions([], $dbEx);
                 continue;
@@ -138,9 +141,7 @@ class DataProcessor extends Component
 
     protected function getQuery()
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-
-        return $dataHandlerClass::getQuery();
+        return $this->dataHandler->getQuery();
     }
 
     /**
@@ -148,9 +149,8 @@ class DataProcessor extends Component
      */
     private function executeQuery($inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $query = $this->getQuery();
-        $dataHandlerClass::setupQuery($query, $inputData);
+        $query = $this->dataHandler->getQuery();
+        $this->dataHandler->setupQuery($query, $inputData);
         $condition = $this->queryCondition;
         if (is_callable($condition)){
             call_user_func($condition, $query);
@@ -171,7 +171,7 @@ class DataProcessor extends Component
             ],
             'query' => $query
         ];
-        $dataProvider = $dataHandlerClass::getDataProvider($config );
+        $dataProvider = $this->dataHandler->getDataProvider($config );
         $models = $dataProvider->getModels();
         if (! $this->totalCount) {
             $this->totalCount = $dataProvider->getTotalCount();
@@ -210,8 +210,7 @@ class DataProcessor extends Component
      */
     public function beforeExecute(&$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::beforeExecute($this, $inputData);
+        $this->dataHandler->beforeExecute($this, $inputData);
     }
 
     /**
@@ -220,8 +219,7 @@ class DataProcessor extends Component
      */
     public function afterExecute(&$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::afterExecute($this, $inputData);
+        $this->dataHandler->afterExecute($this, $inputData);
     }
 
     /**
@@ -231,8 +229,7 @@ class DataProcessor extends Component
      */
     public function isExecute(&$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        return $dataHandlerClass::isExecute($this, $inputData);
+        return $this->dataHandler->isExecute($this, $inputData);
     }
 
     /**
@@ -242,8 +239,7 @@ class DataProcessor extends Component
      */
     public function finishProcessModel(&$data, &$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::finishProcessModel($this, $data, $inputData);
+        $this->dataHandler->finishProcessModel($this, $data, $inputData);
     }
 
     /**
@@ -252,8 +248,7 @@ class DataProcessor extends Component
      */
     public function beforePageProcess(&$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::beforePageProcess($this, $inputData);
+        $this->dataHandler->beforePageProcess($this, $inputData);
     }
 
     /**
@@ -262,8 +257,7 @@ class DataProcessor extends Component
      */
     public function afterPageProcess(&$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::afterPageProcess($this, $inputData);
+        $this->dataHandler->afterPageProcess($this, $inputData);
     }
 
     /**
@@ -285,8 +279,7 @@ class DataProcessor extends Component
      */
     public function prepareModel(&$data)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::prepareModel($this, $data);
+        $this->dataHandler->prepareModel($this, $data);
     }
 
     /**
@@ -294,7 +287,6 @@ class DataProcessor extends Component
      */
     public function processModel(&$data, &$inputData = null)
     {
-        $dataHandlerClass = $this->dataHandlerClass;
-        $dataHandlerClass::processModel($this, $data, $inputData);
+        $this->dataHandler->processModel($this, $data, $inputData);
     }
 }
