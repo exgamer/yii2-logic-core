@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\dataprocessor;
 
+use concepture\yii2logic\console\traits\OutputTrait;
 use yii\db\ActiveQuery;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
@@ -13,6 +14,8 @@ use yii\data\ActiveDataProvider;
  */
 abstract class DataHandler implements DataHandlerInterface
 {
+    use OutputTrait;
+
     /**
      * @return Query
      */
@@ -63,6 +66,7 @@ abstract class DataHandler implements DataHandlerInterface
      * @param type $inputData
      */
     public static function afterPageProcess(DataProcessor $processor, &$inputData = null){}
+    public static function beforePageProcess(DataProcessor $processor, &$inputData = null){}
     /**
      * returns array of prepared data
      * вносим необходимые изменения в данные
@@ -88,4 +92,3 @@ abstract class DataHandler implements DataHandlerInterface
      */
     public static function showMessage(DataProcessor $processor, $isUpdate, $model, $endMessage){}
 }
-

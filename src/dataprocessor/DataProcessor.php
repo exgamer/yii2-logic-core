@@ -5,6 +5,7 @@ namespace concepture\yii2logic\dataprocessor;
 use concepture\yii2logic\services\Service;
 use Yii;
 use yii\base\Component;
+use concepture\yii2logic\console\traits\OutputTrait;
 
 /**
  * Class DataProcessor
@@ -21,6 +22,8 @@ use yii\base\Component;
  */
 class DataProcessor extends Component
 {
+    use OutputTrait;
+
     public $dataHandlerClass;
     public $queryCondition;
     public $pageSize = 50;
@@ -32,6 +35,12 @@ class DataProcessor extends Component
 
     /** @var \DateTime Время начала выполнения скрипта */
     protected $timeStart;
+
+    public static function printMemoryUsage($message = '')
+    {
+        $memory = memory_get_usage();
+        static::outputSuccess( "MEMORY USED : " . ($memory/(1024) ) . " - " . $message, 'red');
+    }
 
     public static function exec($config, &$inputData = null)
     {
@@ -66,6 +75,7 @@ class DataProcessor extends Component
         do {
             try{
                 $this->_execute($inputData);
+                gc_collect_cycles();
             } catch (\Exception $dbEx){
                 $this->noDbConnectionExceptionActions([], $dbEx);
                 continue;
@@ -87,6 +97,7 @@ class DataProcessor extends Component
     public function _execute(&$inputData = null)
     {
         $models = $this->executeQuery($inputData);
+        $this->beforePageProcess($inputData);
         foreach ($models as $model) {
             try{
                 $this->prepareModel($model);
@@ -170,6 +181,10 @@ class DataProcessor extends Component
 
         $this->currentPage +=1;
 
+        unset($query);
+        unset($config);
+        unset($dataProvider);
+
         return $models;
     }
 
@@ -222,6 +237,16 @@ class DataProcessor extends Component
     {
         $dataHandlerClass = $this->dataHandlerClass;
         $dataHandlerClass::finishProcessModel($this, $data, $inputData);
+    }
+
+    /**
+     * Действия после завершения обработки 1 страницы данных
+     * @param type $inputData
+     */
+    public function beforePageProcess(&$inputData = null)
+    {
+        $dataHandlerClass = $this->dataHandlerClass;
+        $dataHandlerClass::beforePageProcess($this, $inputData);
     }
 
     /**
