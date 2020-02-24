@@ -114,7 +114,7 @@ class DataProcessor extends Component
             $this->isDone = true;
         }
 
-        unset($models);
+        $models = null;
 
         return true;
     }
@@ -180,10 +180,9 @@ class DataProcessor extends Component
         }
 
         $this->currentPage +=1;
-
-        unset($query);
-        unset($config);
-        unset($dataProvider);
+        $query = null;
+        $config = null;
+        $dataProvider = null;
 
         return $models;
     }
