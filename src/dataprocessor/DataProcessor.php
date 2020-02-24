@@ -6,6 +6,7 @@ use concepture\yii2logic\services\Service;
 use Yii;
 use yii\base\Component;
 use concepture\yii2logic\console\traits\OutputTrait;
+use yii\helpers\Console;
 
 /**
  * Class DataProcessor
@@ -97,24 +98,30 @@ class DataProcessor extends Component
     public function _execute(&$inputData = null)
     {
         $models = $this->executeQuery($inputData);
+        static::outputSuccess( "START PROCESS PAGE : " . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) );
+        static::printMemoryUsage("after query");
         $this->beforePageProcess($inputData);
-        foreach ($models as $model) {
+        $count = count($models);
+        Console::startProgress(0, $count);
+        foreach ($models as $k => $model) {
             try{
                 $this->prepareModel($model);
                 $this->processModel($model, $inputData);
                 $this->finishProcessModel($model, $inputData);
+                Console::updateProgress($k, $count);
             } catch (\Exception $dbEx){
                 $this->noDbConnectionExceptionActions($model, $dbEx);
                 continue;
             }
         }
-
         $this->afterPageProcess($inputData);
         if ($this->bySinglePage){
             $this->isDone = true;
         }
 
         $models = null;
+        static::printMemoryUsage("after page process");
+        static::outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize));
 
         return true;
     }
