@@ -221,6 +221,7 @@ class DataProcessor extends Component
     /**
      *
      * @param type $inputData
+     * @return boolean
      */
     public function isExecute(&$inputData = null)
     {
