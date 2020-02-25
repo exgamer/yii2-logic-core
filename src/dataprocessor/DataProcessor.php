@@ -102,7 +102,6 @@ class DataProcessor extends Component
     {
         $models = $this->executeQuery($inputData);
         $this->outputSuccess( "START PROCESS PAGE : " . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) );
-        $this->printMemoryUsage("after query");
         $this->beforePageProcess($inputData);
         $count = count($models);
         Console::startProgress(0, $count);
@@ -123,8 +122,8 @@ class DataProcessor extends Component
         }
 
         $models = null;
-        $this->printMemoryUsage("after page process");
         $this->outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize));
+        $this->printMemoryUsage();
 
         return true;
     }
