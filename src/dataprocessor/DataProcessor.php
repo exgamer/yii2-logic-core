@@ -122,8 +122,8 @@ class DataProcessor extends Component
         }
 
         $models = null;
-        $this->outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize));
-        $this->printMemoryUsage();
+        $memory = memory_get_usage()/1024;
+        $this->outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) . "; MEMORY USED: {$memory}");
 
         return true;
     }
