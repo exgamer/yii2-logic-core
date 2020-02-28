@@ -14,9 +14,13 @@ use concepture\yii2logic\models\ActiveRecord;
 trait UpdateColumnTrait
 {
     /**
+     * Обновление колонки
+     *
      * @param ActiveRecord $model
      * @param string $column
      * @param mixed $value
+     *
+     * @throws InvalidConfigException
      */
     public function updateColumn(ActiveRecord $model, $column, $value)
     {
@@ -31,7 +35,7 @@ trait UpdateColumnTrait
         $this->beforeUpdateColumn($model, $column, $value);
         $class = get_class($model);
         if(! isset($model->{$column})) {
-            throw new InvalidConfigException("Column `{$column}` in class {$class} not found.");;
+            throw new InvalidConfigException("Column `{$column}` in class {$class} not found.");
         }
 
         $model->{$column} = $value;
