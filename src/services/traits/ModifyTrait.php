@@ -18,7 +18,6 @@ use concepture\yii2logic\services\events\modify\BeforeCreateEvent;
 use concepture\yii2logic\services\events\modify\BeforeDeleteEvent;
 use concepture\yii2logic\services\events\modify\BeforeModelSaveEvent;
 use concepture\yii2logic\services\events\modify\BeforeUpdateEvent;
-use concepture\yii2logic\services\events\modify\BeforeModifyEvent;
 use concepture\yii2logic\services\events\modify\AfterModifyEvent;
 
 /**
@@ -265,7 +264,6 @@ trait ModifyTrait
     protected function beforeModelSave(Model $form , ActiveRecord $model, $is_new_record)
     {
         $this->trigger(static::EVENT_BEFORE_MODEL_SAVE, new BeforeModelSaveEvent(['form' => $form, 'model' => $model, 'is_new_record' => $is_new_record]));
-        $this->trigger(static::EVENT_BEFORE_MODIFY, new BeforeModifyEvent(['form' => $form, 'model' => $model, 'is_new_record' => $is_new_record]));
     }
 
     /**
@@ -287,7 +285,6 @@ trait ModifyTrait
     protected function beforeCreate(Model $form)
     {
         $this->trigger(static::EVENT_BEFORE_CREATE, new BeforeCreateEvent(['form' => $form]));
-        $this->trigger(static::EVENT_BEFORE_MODIFY, new BeforeModifyEvent(['form' => $form]));
     }
 
     /**
@@ -297,7 +294,6 @@ trait ModifyTrait
     protected function afterCreate(Model $form)
     {
         $this->trigger(static::EVENT_AFTER_CREATE, new AfterCreateEvent(['form' => $form]));
-        $this->trigger(static::EVENT_AFTER_MODIFY, new AfterModifyEvent(['form' => $form]));
     }
 
     /**
@@ -308,7 +304,6 @@ trait ModifyTrait
     protected function beforeUpdate(Model $form, ActiveRecord $model)
     {
         $this->trigger(static::EVENT_BEFORE_UPDATE, new BeforeUpdateEvent(['form' => $form, 'model' => $model]));
-        $this->trigger(static::EVENT_BEFORE_MODIFY, new BeforeModifyEvent(['form' => $form, 'model' => $model]));
     }
 
     /**
@@ -319,7 +314,6 @@ trait ModifyTrait
     protected function afterUpdate(Model $form, ActiveRecord $model)
     {
         $this->trigger(static::EVENT_AFTER_UPDATE, new AfterUpdateEvent(['form' => $form, 'model' => $model]));
-        $this->trigger(static::EVENT_AFTER_MODIFY, new AfterModifyEvent(['form' => $form, 'model' => $model]));
     }
 
     /**
@@ -329,7 +323,6 @@ trait ModifyTrait
     protected function beforeDelete(ActiveRecord $model)
     {
         $this->trigger(static::EVENT_BEFORE_DELETE, new BeforeDeleteEvent(['model' => $model]));
-        $this->trigger(static::EVENT_BEFORE_MODIFY, new BeforeModifyEvent(['model' => $model]));
     }
 
     /**
@@ -349,7 +342,6 @@ trait ModifyTrait
     protected function beforeBatchInsert($fields, $rows)
     {
         $this->trigger(static::EVENT_BEFORE_BATCH_INSERT, new BeforeBatchInsertEvent(['fields' => $fields, 'rows' => $rows]));
-        $this->trigger(static::EVENT_BEFORE_MODIFY, new BeforeModifyEvent());
     }
 
     /**
