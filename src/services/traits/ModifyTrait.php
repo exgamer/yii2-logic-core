@@ -61,7 +61,7 @@ trait ModifyTrait
          * @TODO дописать для постгреса
          */
         if ($this->isPostgres()){
-            $result = $db->createCommand($sql . ' ON CONFLICT ON CONFLICT DO NOTHING ')->execute();
+            $result = $db->createCommand($sql . ' ON CONFLICT DO NOTHING ')->execute();
         }
 
         $this->afterBatchInsert($fields, $rows);
