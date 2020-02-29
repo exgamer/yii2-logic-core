@@ -53,8 +53,17 @@ trait ModifyTrait
         foreach ($fields as $field){
             $update[] = $field."= VALUES($field)";
         }
+        if ($this->isMysql()){
+            $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+        }
 
-        $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+        /**
+         * @TODO дописать для постгреса
+         */
+        if ($this->isPostgres()){
+            $result = $db->createCommand($sql . ' ON CONFLICT ON CONFLICT DO NOTHING ')->execute();
+        }
+
         $this->afterBatchInsert($fields, $rows);
 
         return $result;

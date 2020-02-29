@@ -67,6 +67,29 @@ abstract class Service extends Component implements ModifyEventInterface
         return $modelClass::getDb();
     }
 
+    protected function getDbType()
+    {
+        return $this->getDb()->getDriverName();
+    }
+
+    protected function isMysql()
+    {
+        if ($this->getDbType() == 'mysql'){
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isPostgres()
+    {
+        if ($this->getDbType() == 'pgsql'){
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Возвращает имя таблицы
      *
