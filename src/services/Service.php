@@ -67,12 +67,12 @@ abstract class Service extends Component implements ModifyEventInterface
         return $modelClass::getDb();
     }
 
-    protected function getDbType()
+    public function getDbType()
     {
         return $this->getDb()->getDriverName();
     }
 
-    protected function isMysql()
+    public function isMysql()
     {
         if ($this->getDbType() == 'mysql'){
             return true;
@@ -81,7 +81,7 @@ abstract class Service extends Component implements ModifyEventInterface
         return false;
     }
 
-    protected function isPostgres()
+    public function isPostgres()
     {
         if ($this->getDbType() == 'pgsql'){
             return true;
