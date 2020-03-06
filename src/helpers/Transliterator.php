@@ -202,6 +202,7 @@ class Transliterator
     {
         $string = TransliteratorHelper::process($string, '', $lang);
         $result = preg_replace( '/[\-]+/', '-', preg_replace( '/[^\w\-\*]/', '', strtolower( strtr( trim($string), static::$totr ) ) ) );
+        $result = trim($result, "-");
         $result = self::utf8Normilize($result);
 
         return $result;
