@@ -306,7 +306,9 @@ trait HasPropertyTrait
                 $property->default = 1;
             }
 
-            $property->{$uniqueField} = static::uniqueFieldValue();
+            if (! $property->{$uniqueField}) {
+                $property->{$uniqueField} = static::uniqueFieldValue();
+            }
         }
 
         foreach ($property->attributes() as $attribute){
