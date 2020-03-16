@@ -109,4 +109,16 @@ class ClassHelper
 
         return ArrayHelper::toArray($model, [$modelClass => $model->attributes()]);
     }
+
+    /**
+     * @param object $object
+     * @param mixed $modifiers
+     * @return ReflectionProperty[]
+     * @throws ReflectionException
+     */
+    public static function getProperties($object, $modifiers = \ReflectionProperty::IS_PUBLIC)
+    {
+        $reflection = new \ReflectionClass($object);
+        return $reflection->getProperties($modifiers);
+    }
 }
