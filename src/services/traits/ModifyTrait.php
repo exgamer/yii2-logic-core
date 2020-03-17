@@ -360,6 +360,8 @@ trait ModifyTrait
     protected function afterBatchInsert($fields, $rows)
     {
         $this->trigger(static::EVENT_AFTER_BATCH_INSERT, new AfterBatchInsertEvent(['fields' => $fields, 'rows' => $rows]));
+        $event = new AfterModifyEvent();
+        $event->modifyData = $rows;
         $this->trigger(static::EVENT_AFTER_MODIFY, new AfterModifyEvent());
     }
 }
