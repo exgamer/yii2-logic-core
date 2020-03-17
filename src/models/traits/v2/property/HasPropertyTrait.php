@@ -35,6 +35,17 @@ trait HasPropertyTrait
     }
 
     /**
+     * Возвращает названия полей свойств, которые будут исключены при маппинге дефлотных данных из основной модели
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function excludedPropertyDefaultValues()
+    {
+        return [];
+    }
+
+    /**
      * Возвращает название поля по которому будет разделение свойств
      *
      * @return string
@@ -81,6 +92,11 @@ trait HasPropertyTrait
         $result = [];
         foreach ($property->attributes() as $attribute){
             if (in_array($attribute, static::excludedPropertyFields())){
+                continue;
+            }
+
+            if (in_array($attribute, static::excludedPropertyDefaultValues())){
+                $result[] = static::propertyAlias() . "." . $attribute;
                 continue;
             }
 
