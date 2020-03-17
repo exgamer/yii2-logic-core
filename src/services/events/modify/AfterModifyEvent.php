@@ -14,4 +14,5 @@ class AfterModifyEvent extends Event
     public $form;
     public $model;
     public $is_new_record;
+    public $modifyData;
 }
