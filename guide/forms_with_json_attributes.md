@@ -139,6 +139,38 @@ class BookmakerForm extends BaseForm
 
 ```
 
+Для првоерки на уникальность можно использовать следующую конструкцию
+
+```php
+
+    public function jsonAttributes()
+    {
+        return [
+            'social'  => [
+                'class' => Social::class,
+                'uniqueKey' => 'social'
+            ]
+        ];
+    }
+
+```
+
+Для првоерки на уникальность по нескольким аттрибутам можно использовать следующую конструкцию
+
+```php
+
+    public function jsonAttributes()
+    {
+        return [
+            'social'  => [
+                'class' => Social::class,
+                'uniqueKey' => ['social', 'url']
+            ]
+        ];
+    }
+
+```
+
 4. на вьюшке
 
 ```php

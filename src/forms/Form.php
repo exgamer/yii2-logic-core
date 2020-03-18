@@ -286,6 +286,7 @@ abstract class Form extends Model
 
         $jsonAttrs = $this->jsonAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
+            $pojoClass = $this->getPojoData($pojoClass, 'class');
             $data = [];
             if ($model->{$attr}) {
                 $model->{$attr} = json_decode($model->{$attr}, true);
@@ -342,6 +343,7 @@ abstract class Form extends Model
     {
         $jsonAttrs = $this->jsonAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
+            $pojoClass = $this->getPojoData($pojoClass, 'class');
             $this->jsonDataCheck($data, $pojoClass);
             $className = ClassHelper::getShortClassName($pojoClass);
             $pojoClass::loadMultiple($this->{$attr}, $data, $className);
@@ -358,11 +360,72 @@ abstract class Form extends Model
         $validationResult = true;
         $jsonAttrs = $this->jsonAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
+            $pojoClass = $this->getPojoData($pojoClass, 'class');
             if (! empty($this->{$attr}) && ! $pojoClass::validateMultiple($this->{$attr}) && ! Yii::$app->request->post('refresh-form')){
                 $validationResult = false;
             }
         }
 
+        $validationResult = $this->validateJsonDataUnique();
+
         return $validationResult;
+    }
+
+    /**
+     * Проверка json данных на уникальность
+     *
+     * @return bool
+     */
+    public function validateJsonDataUnique()
+    {
+        $validationResult = true;
+        $jsonAttrs = $this->jsonAttributes();
+        foreach ($jsonAttrs as $attr => $pojoClass){
+            $uniqueKey = $this->getPojoData($pojoClass, 'uniqueKey' , true);
+            if (! $uniqueKey){
+                continue;
+            }
+
+            if (! is_array($uniqueKey)){
+                $uniqueKey = [$uniqueKey];
+            }
+
+            $d = [];
+            foreach ($this->{$attr} as $model){
+                $key = '';
+                foreach ($uniqueKey as $uAttr){
+                    $key .= $model->{$uAttr};
+                }
+
+                if (isset($d[$key])){
+                    $message = Yii::t('yii', '{attribute} "{value}" has already been taken.');
+                    $message = str_replace('{attribute}', implode('-', $uniqueKey), $message);
+                    $message = str_replace('{value}', $key, $message);
+                    $model->addError($uniqueKey[0], $message);
+                    $validationResult = false;
+                }
+
+                $d[$key] = $key;
+            }
+        }
+
+        return $validationResult;
+    }
+
+    protected function getPojoData($pojoData, $key, $getOnlyKey = false)
+    {
+        if ($getOnlyKey){
+            return   $pojoData[$key] ?? null;
+        }
+
+        if (! is_array($pojoData)){
+            return $pojoData;
+        }
+
+        if (! isset($pojoData[$key])){
+            throw new \Exception("no {$key} data");
+        }
+
+        return $pojoData[$key];
     }
 }
