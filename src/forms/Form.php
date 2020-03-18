@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\forms;
 
+use common\pojo\Social;
 use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
@@ -171,7 +172,7 @@ abstract class Form extends Model
      */
     public function customizeForm(ActiveRecord $model = null)
     {
-
+        $this->resolveJsonData($model);
     }
 
     /**
@@ -181,6 +182,10 @@ abstract class Form extends Model
     public function load($data, $formName = null)
     {
         $result = parent::load($data, $formName);
+        if (! $result){
+            return $result;
+        }
+
         $this->afterLoad($data);
 
         return $result;
@@ -191,7 +196,20 @@ abstract class Form extends Model
      * используется в UpdateAction
      * @param null $data
      */
-    public function afterLoad($data){}
+    public function afterLoad($data)
+    {
+        $this->jsonDataLoad($data);
+    }
+
+    public function beforeValidate()
+    {
+        $validationResult = $this->validateJsonData();
+        if (! $validationResult){
+            return $validationResult;
+        }
+
+        return parent::beforeValidate();
+    }
 
     /**
      * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
@@ -233,5 +251,118 @@ abstract class Form extends Model
         }
 
         return $errors;
+    }
+
+    /**
+     * Для работы с json атрибутами формы
+     * Создаем pojo модель для описания структуры данных
+     * на форме используем DynamicForm::widget([
+     *
+     */
+
+    /**
+     * Возвращает атрибуты которые являются json данными
+     *
+     * [
+     *   'attribute' => Pojo::class
+     * ]
+     *
+     * @return array
+     */
+    public function jsonAttributes()
+    {
+        return [];
+    }
+
+    /**
+     * Конвертирует json данные в pojo
+     * @param $model
+     */
+    protected function resolveJsonData($model)
+    {
+        if (! $model){
+            return;
+        }
+
+        $jsonAttrs = $this->jsonAttributes();
+        foreach ($jsonAttrs as $attr => $pojoClass){
+            $data = [];
+            if ($model->{$attr}) {
+                $model->{$attr} = json_decode($model->{$attr}, true);
+                if ($model->{$attr} !== false) {
+                    $data[ClassHelper::getShortClassName($pojoClass)] = $model->{$attr};
+                }
+            }
+
+            $this->jsonDataCheck($data, $pojoClass, $attr,  true);
+        }
+    }
+
+    /**
+     * @param $data
+     * @param $pojoClass
+     * @param null $attribute
+     * @param bool $loadData
+     */
+    protected function jsonDataCheck($data, $pojoClass, $attribute = null, $loadData = false)
+    {
+        $className = ClassHelper::getShortClassName($pojoClass);
+        if (! $attribute){
+            $attribute = strtolower($className);
+        }
+
+        if (! $this->{$attribute} || ! is_array($this->{$attribute})){
+            $this->{$attribute} = [];
+        }
+
+        if ($loadData == false){
+            $this->{$attribute} = [];
+        }
+
+        if (! isset($data[$className])) {
+            return;
+        }
+
+        foreach ($data[$className] as $key => $post){
+            $pojo = new $pojoClass();
+            if ($loadData){
+                $pojo->load($post, '');
+            }
+
+            $this->{$attribute}[$key] = $pojo;
+        }
+    }
+
+    /**
+     * load json данных
+     *
+     * @param $data
+     */
+    protected function jsonDataLoad($data)
+    {
+        $jsonAttrs = $this->jsonAttributes();
+        foreach ($jsonAttrs as $attr => $pojoClass){
+            $this->jsonDataCheck($data, $pojoClass);
+            $className = ClassHelper::getShortClassName($pojoClass);
+            $pojoClass::loadMultiple($this->{$attr}, $data, $className);
+        }
+    }
+
+    /**
+     * Валидация json данных
+     *
+     * @return bool
+     */
+    public function validateJsonData()
+    {
+        $validationResult = true;
+        $jsonAttrs = $this->jsonAttributes();
+        foreach ($jsonAttrs as $attr => $pojoClass){
+            if (! empty($this->{$attr}) && ! $pojoClass::validateMultiple($this->{$attr}) && ! Yii::$app->request->post('refresh-form')){
+                $validationResult = false;
+            }
+        }
+
+        return $validationResult;
     }
 }
