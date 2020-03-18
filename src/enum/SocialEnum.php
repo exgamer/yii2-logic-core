@@ -2,7 +2,7 @@
 
 namespace concepture\yii2logic\enum;
 
-use concepture\yii2logic\enum\Enum;
+use Yii;
 
 /**
  * Список соцсетей
