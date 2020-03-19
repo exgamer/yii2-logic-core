@@ -62,7 +62,7 @@ abstract class Service extends Component implements ModifyEventInterface
      */
     public function getDb()
     {
-        $modelClass = $this->getRelatedModelClass();
+        $modelClass = $this->getRelatedModel();
 
         return $modelClass::getDb();
     }
