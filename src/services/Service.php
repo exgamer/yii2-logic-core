@@ -98,7 +98,7 @@ abstract class Service extends Component implements ModifyEventInterface
      */
     public function getTableName()
     {
-        $modelClass = $this->getRelatedModelClass();
+        $modelClass = $this->getRelatedModel();
 
         return trim($modelClass::tableName(), '{}%');
     }
