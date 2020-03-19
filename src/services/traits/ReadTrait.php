@@ -23,7 +23,7 @@ trait ReadTrait
      */
     public function getQuery()
     {
-        $class = $this->getRelatedModel();
+        $class = $this->getRelatedModelClass();
         $query = $class::find();
         $this->extendQuery($query);
 
