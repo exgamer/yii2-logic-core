@@ -19,8 +19,8 @@ class StatusEnum extends Enum
     public static function labels()
     {
         return [
-            self::ACTIVE => Yii::t('core', "Активный"),
-            self::INACTIVE => Yii::t('core', "Неактивный"),
+            self::ACTIVE => Yii::t('core', "Опубликован"),
+            self::INACTIVE => Yii::t('core', "Черновик"),
         ];
     }
 }
