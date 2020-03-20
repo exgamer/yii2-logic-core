@@ -62,7 +62,7 @@ abstract class Service extends Component implements ModifyEventInterface
      */
     public function getDb()
     {
-        $modelClass = $this->getRelatedModel();
+        $modelClass = $this->getRelatedModelClass();
 
         return $modelClass::getDb();
     }
@@ -98,7 +98,7 @@ abstract class Service extends Component implements ModifyEventInterface
      */
     public function getTableName()
     {
-        $modelClass = $this->getRelatedModel();
+        $modelClass = $this->getRelatedModelClass();
 
         return trim($modelClass::tableName(), '{}%');
     }

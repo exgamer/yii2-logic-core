@@ -279,7 +279,7 @@ trait HasLocalizationTrait
         $locClass = static::getLocalizationModelClass();
         $localization = $locClass::find()->where(['locale' => $this->locale, 'entity_id' => $this->id])->one();
         if (! $localization){
-            $localization = new $locClass();
+            $localization = Yii::createObject($locClass);
             $localization->entity_id = $this->id;
         }
 
@@ -295,8 +295,8 @@ trait HasLocalizationTrait
             $localization->{$attribute} = $this->{$attribute};
         }
 
-        if(!$localization->save()){
-            throw new Exception("localization not saved");
+        if(! $localization->save()) {
+            throw new \Exception("localization not saved");
         }
 
         return true;
