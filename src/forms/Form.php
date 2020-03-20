@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\forms;
 
 use common\pojo\Social;
+use concepture\yii2logic\models\behaviors\JsonFieldsBehavior;
 use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
@@ -27,8 +28,7 @@ abstract class Form extends Model
      */
     public function rules()
     {
-        $modelClass = $this->getModelClass();
-        $model = Yii::createObject($modelClass);
+        $model = static::getModel();
 
         return array_merge($this->formRules(), $model->rules());
     }
@@ -40,8 +40,7 @@ abstract class Form extends Model
      */
     public function attributeLabels()
     {
-        $modelClass = static::getModelClass();
-        $model = Yii::createObject($modelClass);
+        $model = static::getModel();
 
         return array_merge($model->attributeLabels(), $this->formAttributeLabels());
     }
@@ -80,6 +79,13 @@ abstract class Form extends Model
         return ClassHelper::getRelatedClass($me, ["Form" => ""], ["forms" => "models"]);
     }
 
+    public static function getModel()
+    {
+        $modelClass =  static::getModelClass();
+
+        return Yii::createObject($modelClass);
+    }
+
     /**
      * Возвращает соединение к БД модели
      * реализовано для возможности использования валидаторов котрые требуют обращения к БД
@@ -89,9 +95,9 @@ abstract class Form extends Model
      */
     public static function getDb()
     {
-        $modelClass =  static::getModelClass();
+        $model = static::getModel();
 
-        return $modelClass::getDb();
+        return $model::getDb();
     }
 
     /**
@@ -103,9 +109,9 @@ abstract class Form extends Model
      */
     public static function find()
     {
-        $modelClass =  static::getModelClass();
+        $model = static::getModel();
 
-        return $modelClass::find();
+        return $model::find();
     }
 
     /**
@@ -170,10 +176,7 @@ abstract class Form extends Model
      *
      * @param ActiveRecord $model
      */
-    public function customizeForm(ActiveRecord $model = null)
-    {
-        $this->resolveJsonData($model);
-    }
+    public function customizeForm(ActiveRecord $model = null){}
 
     /**
      *
@@ -201,16 +204,6 @@ abstract class Form extends Model
         $this->jsonDataLoad($data);
     }
 
-    public function beforeValidate()
-    {
-        $validationResult = $this->validateJsonData();
-        if (! $validationResult){
-            return $validationResult;
-        }
-
-        return parent::beforeValidate();
-    }
-
     /**
      * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
      *
@@ -221,8 +214,7 @@ abstract class Form extends Model
      */
     public function __call($method, $parameters)
     {
-        $modelClass = static::getModelClass();
-        $model = Yii::createObject($modelClass);
+        $model = static::getModel();
         $model->load($this->attributes, '');
         if (! method_exists($this, $method)){
             return call_user_func_array([$model, $method], $parameters);
@@ -238,9 +230,9 @@ abstract class Form extends Model
      */
     public static function label()
     {
-        $modelClass = static::getModelClass();
+        $model = static::getModel();
 
-        return $modelClass::label();
+        return $model::label();
     }
 
     public function getErrors($attribute = null)
@@ -254,178 +246,31 @@ abstract class Form extends Model
     }
 
     /**
-     * Для работы с json атрибутами формы
-     * Создаем pojo модель для описания структуры данных
-     * на форме используем DynamicForm::widget([
-     *
-     */
-
-    /**
-     * Возвращает атрибуты которые являются json данными
-     *
-     * [
-     *   'attribute' => Pojo::class
-     * ]
-     *
-     * @return array
-     */
-    public function jsonAttributes()
-    {
-        return [];
-    }
-
-    /**
-     * Конвертирует json данные в pojo
-     * @param $model
-     */
-    protected function resolveJsonData($model)
-    {
-        if (! $model){
-            return;
-        }
-
-        $jsonAttrs = $this->jsonAttributes();
-        foreach ($jsonAttrs as $attr => $pojoClass){
-            $pojoClass = $this->getPojoData($pojoClass, 'class');
-            $data = [];
-            if ($model->{$attr}) {
-                $model->{$attr} = json_decode($model->{$attr}, true);
-                if ($model->{$attr} !== false) {
-                    $data[ClassHelper::getShortClassName($pojoClass)] = $model->{$attr};
-                }
-            }
-
-            $this->jsonDataCheck($data, $pojoClass, $attr,  true);
-        }
-    }
-
-    /**
-     * @param $data
-     * @param $pojoClass
-     * @param null $attribute
-     * @param bool $loadData
-     */
-    protected function jsonDataCheck($data, $pojoClass, $attribute = null, $loadData = false)
-    {
-        $className = ClassHelper::getShortClassName($pojoClass);
-        if (! $attribute){
-            $attribute = strtolower($className);
-        }
-
-        if (! $this->{$attribute} || ! is_array($this->{$attribute})){
-            $this->{$attribute} = [];
-        }
-
-        if ($loadData == false){
-            $this->{$attribute} = [];
-        }
-
-        if (! isset($data[$className])) {
-            return;
-        }
-
-        foreach ($data[$className] as $key => $post){
-            $pojo = new $pojoClass();
-            if ($loadData){
-                $pojo->load($post, '');
-            }
-
-            $this->{$attribute}[$key] = $pojo;
-        }
-    }
-
-    /**
      * load json данных
      *
      * @param $data
      */
     protected function jsonDataLoad($data)
     {
-        $jsonAttrs = $this->jsonAttributes();
+        $model = static::getModel();
+        $jsonAttrs = $model->getPojoAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
-            $pojoClass = $this->getPojoData($pojoClass, 'class');
-            $this->jsonDataCheck($data, $pojoClass);
+            $pojoClass = $model->getAttributeConfigData($pojoClass, 'class');
             $className = ClassHelper::getShortClassName($pojoClass);
-            $pojoClass::loadMultiple($this->{$attr}, $data, $className);
-        }
-    }
-
-    /**
-     * Валидация json данных
-     *
-     * @return bool
-     */
-    public function validateJsonData()
-    {
-        $validationResult = true;
-        $jsonAttrs = $this->jsonAttributes();
-        foreach ($jsonAttrs as $attr => $pojoClass){
-            $pojoClass = $this->getPojoData($pojoClass, 'class');
-            if (! empty($this->{$attr}) && ! $pojoClass::validateMultiple($this->{$attr}) && ! Yii::$app->request->post('refresh-form')){
-                $validationResult = false;
-            }
-        }
-
-        $validationResult = $this->validateJsonDataUnique();
-
-        return $validationResult;
-    }
-
-    /**
-     * Проверка json данных на уникальность
-     *
-     * @return bool
-     */
-    public function validateJsonDataUnique()
-    {
-        $validationResult = true;
-        $jsonAttrs = $this->jsonAttributes();
-        foreach ($jsonAttrs as $attr => $pojoClass){
-            $uniqueKey = $this->getPojoData($pojoClass, 'uniqueKey' , true);
-            if (! $uniqueKey){
-                continue;
-            }
-
-            if (! is_array($uniqueKey)){
-                $uniqueKey = [$uniqueKey];
-            }
-
-            $d = [];
-            foreach ($this->{$attr} as $model){
-                $key = '';
-                foreach ($uniqueKey as $uAttr){
-                    $key .= $model->{$uAttr};
+            $this->{$attr} = $data[$className] ?? [];
+            $data = $this->{$attr};
+            $pogoData = [];
+            foreach ($data as $key => $value){
+                if (! is_array($value) ){
+                    continue;
                 }
 
-                if (isset($d[$key])){
-                    $message = Yii::t('yii', '{attribute} "{value}" has already been taken.');
-                    $message = str_replace('{attribute}', implode('-', $uniqueKey), $message);
-                    $message = str_replace('{value}', $key, $message);
-                    $model->addError($uniqueKey[0], $message);
-                    $validationResult = false;
-                }
-
-                $d[$key] = $key;
+                $pojo = new $pojoClass();
+                $pojo->load($value, '');
+                $pogoData[$key] = $pojo;
             }
+
+            $this->{$attr} = $pogoData;
         }
-
-        return $validationResult;
-    }
-
-    protected function getPojoData($pojoData, $key, $getOnlyKey = false)
-    {
-        if ($getOnlyKey){
-            return   $pojoData[$key] ?? null;
-        }
-
-        if (! is_array($pojoData)){
-            return $pojoData;
-        }
-
-        if (! isset($pojoData[$key])){
-            throw new \Exception("no {$key} data");
-        }
-
-        return $pojoData[$key];
     }
 }

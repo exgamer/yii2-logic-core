@@ -121,4 +121,26 @@ class ClassHelper
         $reflection = new \ReflectionClass($object);
         return $reflection->getProperties($modifiers);
     }
+
+    /**
+     * Возвращает конфиг поведения обьекта по классу
+     * @param $object
+     * @param $class
+     * @return mixed|null
+     */
+    public static function getBehavior($object, $class)
+    {
+        $behaviors = $object->behaviors();
+        foreach ($behaviors as $name => $config){
+            if (is_string($config) && $config === $class){
+                return $config;
+            }
+
+            if (isset($config['class']) && $config['class'] === $class){
+                return $config;
+            }
+        }
+
+        return null;
+    }
 }
