@@ -181,21 +181,23 @@ class JsonFieldsBehavior extends Behavior
             }
 
             $d = [];
-            foreach ($this->owner->{$attr} as $model){
-                $key = '';
-                foreach ($uniqueKey as $uAttr){
-                    $key .= $model->{$uAttr};
-                }
+            if (is_array($this->owner->{$attr})) {
+                foreach ($this->owner->{$attr} as $model) {
+                    $key = '';
+                    foreach ($uniqueKey as $uAttr) {
+                        $key .= $model->{$uAttr};
+                    }
 
-                if (isset($d[$key])){
-                    $message = Yii::t('yii', '{attribute} "{value}" has already been taken.');
-                    $message = str_replace('{attribute}', implode('-', $uniqueKey), $message);
-                    $message = str_replace('{value}', $key, $message);
-                    $model->addError($uniqueKey[0], $message);
-                    $validationResult = false;
-                }
+                    if (isset($d[$key])) {
+                        $message = Yii::t('yii', '{attribute} "{value}" has already been taken.');
+                        $message = str_replace('{attribute}', implode('-', $uniqueKey), $message);
+                        $message = str_replace('{value}', $key, $message);
+                        $model->addError($uniqueKey[0], $message);
+                        $validationResult = false;
+                    }
 
-                $d[$key] = $key;
+                    $d[$key] = $key;
+                }
             }
         }
 
