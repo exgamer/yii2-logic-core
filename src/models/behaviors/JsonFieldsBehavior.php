@@ -3,6 +3,7 @@ namespace concepture\yii2logic\models\behaviors;
 
 use Yii;
 use yii\base\Behavior;
+use yii\db\ActiveRecord;
 
 /**
  * Поведение для полей являющихся Json строкой
