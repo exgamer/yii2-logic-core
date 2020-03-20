@@ -253,6 +253,10 @@ abstract class Form extends Model
     protected function jsonDataLoad($data)
     {
         $model = static::getModel();
+        if (! ClassHelper::getBehavior($model, JsonFieldsBehavior::class)){
+            return;
+        }
+
         $jsonAttrs = $model->getPojoAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
             $pojoClass = $model->getAttributeConfigData($pojoClass, 'class');
