@@ -71,10 +71,37 @@ class Social extends Pojo
 2. В модели добавляем 
 ```php
 
+    public function behaviors()
+    {
+        return [
+            'JsonFieldsBehavior' => [
+                'class' => 'concepture\yii2logic\models\behaviors\JsonFieldsBehavior',
+                'jsonAttr' => [
+                    'languages',
+                    'currencies',
+                    'restricted_countries',
+                    'social' => [
+                        'class' => Social::class,
+                        'uniqueKey' => 'social'
+                    ]
+                ],
+            ],
+        ];
+    }
+
     public function rules()
     {
         return [
             [
+                [
+                    [
+                        'languages',
+                        'currencies',
+                        'restricted_countries',
+                    ],
+                    'each',
+                    'rule' => ['integer'],
+                ],
                 [
                     'social',
                 ],
@@ -108,66 +135,12 @@ use yii\db\ActiveRecord;
  */
 class BookmakerForm extends BaseForm
 {
+    public $languages;
+    public $currencies;
+    public $restricted_countries;
+
     public $social = [];
-
-    /**
-     * @see Form::formRules()
-     * @return array
-     */
-    public function formRules()
-    {
-        return [
-        ];
-    }
-
-    /**
-     * Возвращает атрибуты которые являются json данными
-     *
-     * [
-     *   'attribute' => Pojo::class
-     * ]
-     *
-     * @return array
-     */
-    public function jsonAttributes()
-    {
-        return [
-            'social'  => Social::class
-        ];
-    }
 }
-
-```
-
-Для првоерки на уникальность можно использовать следующую конструкцию
-
-```php
-
-    public function jsonAttributes()
-    {
-        return [
-            'social'  => [
-                'class' => Social::class,
-                'uniqueKey' => 'social'
-            ]
-        ];
-    }
-
-```
-
-Для првоерки на уникальность по нескольким аттрибутам можно использовать следующую конструкцию
-
-```php
-
-    public function jsonAttributes()
-    {
-        return [
-            'social'  => [
-                'class' => Social::class,
-                'uniqueKey' => ['social', 'url']
-            ]
-        ];
-    }
 
 ```
 
