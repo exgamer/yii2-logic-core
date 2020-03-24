@@ -88,7 +88,7 @@ trait HasPropertyTrait
     {
         $propertyAlias = static::propertyAlias();
         $propertyClass = static::getPropertyModelClass();
-        $property = new $propertyClass();
+        $property = Yii::createObject($propertyClass);
         $result = [];
         foreach ($property->attributes() as $attribute){
             if (in_array($attribute, static::excludedPropertyFields())){
@@ -188,7 +188,7 @@ trait HasPropertyTrait
     {
         $attributes = parent::attributes();
         $propertyModelClass = static::getPropertyModelClass();
-        $propertyModel = new $propertyModelClass();
+        $propertyModel = Yii::createObject($propertyModelClass);
         $propertyAttributes = $propertyModel->attributes();
         $propertyAttributes = array_flip($propertyAttributes);
         foreach (static::excludedPropertyFields() as $field){
@@ -222,7 +222,7 @@ trait HasPropertyTrait
         if (! $attributes) {
             $attributes = $this->attributes();
             $propertyModelClass = static::getPropertyModelClass();
-            $propertyModel = new $propertyModelClass();
+            $propertyModel = Yii::createObject($propertyModelClass);
             $propertyAttributes = $propertyModel->attributes();
             $attributes = array_diff($attributes, $propertyAttributes);
         }
@@ -267,7 +267,7 @@ trait HasPropertyTrait
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
             $propertyModelClass = static::getPropertyModelClass();
-            $propertyModel = new $propertyModelClass();
+            $propertyModel = Yii::createObject($propertyModelClass);
             $propertyAttributes = $propertyModel->attributes();
             $attributeNames = array_diff($attributeNames, $propertyAttributes);
         }
@@ -314,9 +314,10 @@ trait HasPropertyTrait
     {
         $uniqueField = static::uniqueField();
         $propertyClass = static::getPropertyModelClass();
-        $property = $propertyClass::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
+        $propertyM = Yii::createObject($propertyClass);
+        $property = $propertyM::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
         if (! $property){
-            $property = new $propertyClass();
+            $property = Yii::createObject($propertyClass);
             $property->entity_id = $this->id;
             if ($insert){
                 $property->default = 1;
@@ -344,6 +345,25 @@ trait HasPropertyTrait
         }
 
         return true;
+    }
+
+    /**
+     * Зачищает все атрибуты кроме исключений excludedPropertyFields
+     *
+     * @throws Exception
+     */
+    public function clearPropertyAttributes()
+    {
+        $propertyClass = static::getPropertyModelClass();
+        $propertyModel = Yii::createObject($propertyClass);
+        $attributes = $propertyModel->attributes();
+        foreach ($attributes as $attribute){
+            if (in_array($attribute, static::excludedPropertyFields())){
+                continue;
+            }
+
+            $this->{attribute} = null;
+        }
     }
 
     /**
