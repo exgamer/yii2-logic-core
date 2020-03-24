@@ -38,7 +38,7 @@ trait NonPhysicalDeleteTrait
 
         $this->is_deleted = 1;
 
-        return $this->update(false, ['is_deleted']);
+        return $this->update(false);
     }
 
     /**

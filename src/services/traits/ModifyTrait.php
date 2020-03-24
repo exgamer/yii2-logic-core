@@ -235,14 +235,7 @@ trait ModifyTrait
     public function delete(ActiveRecord $model)
     {
         $this->beforeDelete($model);
-        if (! $model->delete()){
-            throw new Exception(
-                Yii::t('service','model delete exception - {errors}', [
-                    'errors' => Json::encode($model->getErrors())
-                ])
-            );
-        }
-
+        $model->delete();
         $this->afterDelete($model);
     }
 

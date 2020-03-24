@@ -326,6 +326,10 @@ trait HasPropertyTrait
             if (! $property->{$uniqueField}) {
                 $property->{$uniqueField} = static::uniqueFieldValue();
             }
+        }else {
+            if ($property->hasAttribute("is_deleted")) {
+                $property->is_deleted = 0;
+            }
         }
 
         foreach ($property->attributes() as $attribute){
