@@ -352,13 +352,17 @@ trait HasPropertyTrait
      *
      * @throws Exception
      */
-    public function clearPropertyAttributes($clearUniqueAttribute = false)
+    public function clearPropertyAttributes($clearUniqueAttribute = false, $exclude = [])
     {
         $propertyClass = static::getPropertyModelClass();
         $propertyModel = Yii::createObject($propertyClass);
         $attributes = $propertyModel->attributes();
         foreach ($attributes as $attribute){
             if (in_array($attribute, static::excludedPropertyFields())){
+                continue;
+            }
+
+            if (in_array($attribute, $exclude)){
                 continue;
             }
 
