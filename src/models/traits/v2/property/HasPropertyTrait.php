@@ -352,7 +352,7 @@ trait HasPropertyTrait
      *
      * @throws Exception
      */
-    public function clearPropertyAttributes()
+    public function clearPropertyAttributes($clearUniqueAttribute = false)
     {
         $propertyClass = static::getPropertyModelClass();
         $propertyModel = Yii::createObject($propertyClass);
@@ -362,7 +362,12 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $this->{attribute} = null;
+            $this->{$attribute} = null;
+        }
+
+        if ($clearUniqueAttribute){
+            $uAttr = static::uniqueField();
+            $this->{$uAttr} = null;
         }
     }
 
