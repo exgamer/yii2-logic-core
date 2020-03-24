@@ -315,6 +315,10 @@ trait HasPropertyTrait
         $uniqueField = static::uniqueField();
         $propertyClass = static::getPropertyModelClass();
         $propertyM = Yii::createObject($propertyClass);
+        if (! $this->{$uniqueField}) {
+            $this->{$uniqueField} = static::uniqueFieldValue();
+        }
+
         $property = $propertyM::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
         if (! $property){
             $property = Yii::createObject($propertyClass);
