@@ -34,7 +34,7 @@ abstract class Migration extends Base
 
     protected function getDbType()
     {
-        return \Yii::$app->db->getDriverName();
+        return $this->db->getDriverName();
     }
 
     protected function getTableOptions()
@@ -104,6 +104,16 @@ abstract class Migration extends Base
     {
         $tableName = $this->getTableName();
         $this->dropColumn($tableName, $column);
+    }
+
+    protected function isColumnExists($name)
+    {
+        $table = $this->db->schema->getTableSchema($this->getTableName());
+        if (! isset($table->columns[$name])) {
+            return false;
+        }
+
+        return true;
     }
 
     abstract function getTableName();
