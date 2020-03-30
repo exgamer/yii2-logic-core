@@ -45,6 +45,13 @@ abstract class Form extends Model
         return array_merge($model->attributeLabels(), $this->formAttributeLabels());
     }
 
+    public function behaviors()
+    {
+        $model = static::getModel();
+
+        return array_merge($this->formBehaviors(), $model->behaviors());
+    }
+
     /**
      * метод для определения правил валидации для формы
      *
@@ -62,6 +69,15 @@ abstract class Form extends Model
      * @return array
      */
     public function formAttributeLabels()
+    {
+        return [];
+    }
+
+    /**
+     * метод для определения поведения формы
+     * @return array
+     */
+    public function formBehaviors()
     {
         return [];
     }
