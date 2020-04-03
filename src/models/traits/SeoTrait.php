@@ -23,7 +23,6 @@ trait SeoTrait
         return [
                     [
                         [
-                            'seo_h1',
                             'seo_title',
                             'seo_description',
                             'seo_keywords',
@@ -43,7 +42,6 @@ trait SeoTrait
                         ],
                         TranslitValidator::class,
                         'source' => $this->getSeoTranslationSource(),
-                        'secondary_source' => $this->getSeoTranslationSourceSecond(),
                     ],
         ];
     }
@@ -57,7 +55,6 @@ trait SeoTrait
     {
         return [
             'seo_name' => Yii::t('core','SEO имя'),
-            'seo_h1' => Yii::t('core','H1'),
             'seo_title' => Yii::t('core','Title'),
             'seo_description' => Yii::t('core','Description'),
             'seo_keywords' => Yii::t('core','Keywords'),
@@ -69,14 +66,6 @@ trait SeoTrait
      */
     protected function getSeoTranslationSource()
     {
-        return 'seo_h1';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSeoTranslationSourceSecond()
-    {
-        return 'title';
+        return 'header';
     }
 }
