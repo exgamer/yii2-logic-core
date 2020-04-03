@@ -18,7 +18,7 @@ trait SqlReadTrait
     {
         $command = $this->createCommand($sql, $params);
 
-        return $command->queryAll();
+        return $command->queryAll($fetchMode);
     }
 
     /**
@@ -32,7 +32,7 @@ trait SqlReadTrait
     {
         $command = $this->createCommand($sql, $params);
 
-        return $command->queryOne();
+        return $command->queryOne($fetchMode);
     }
 }
 
