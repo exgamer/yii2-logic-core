@@ -1,14 +1,15 @@
 <?php
+
 namespace concepture\yii2logic\actions\web\localized;
 
+use Yii;
 use ReflectionException;
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
-use Yii;
-use yii\db\Exception;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
+use concepture\yii2logic\enum\ScenarioEnum;
 
 /**
  * @deprecated
@@ -25,7 +26,11 @@ class UpdateAction extends Action
     public $view = 'update';
     public $redirect = 'index';
     public $serviceMethod = 'update';
+    public $scenario = ScenarioEnum::UPDATE;
 
+    /**
+     * @inheritDoc
+     */
     public function run($id, $locale = null)
     {
         $originModel = $this->getModel($id, $locale);
@@ -34,6 +39,7 @@ class UpdateAction extends Action
         }
 
         $model = $this->getForm();
+        $model->scenario = $this->scenario;
         $model->setAttributes($originModel->attributes, false);
         $model->locale = $this->getConvertedLocale($locale);
         if (method_exists($model, 'customizeForm')) {

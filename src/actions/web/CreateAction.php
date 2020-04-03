@@ -1,9 +1,11 @@
 <?php
+
 namespace concepture\yii2logic\actions\web;
 
-use concepture\yii2logic\actions\Action;
 use Yii;
-use yii\db\Exception;
+use concepture\yii2logic\actions\Action;
+use concepture\yii2logic\enum\ScenarioEnum;
+
 
 /**
  * Экшен для создания сущности
@@ -17,16 +19,21 @@ class CreateAction extends Action
     public $view = 'create';
     public $redirect = 'index';
     public $serviceMethod = 'create';
-    
+    public $scenario = ScenarioEnum::INSERT;
+
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
         $model = $this->getForm();
+        $model->scenario = $this->scenario;
         $this->processModel($model);
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm();
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()  && !$this->isReload()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()  && ! $this->isReload()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) != false) {
                 $redirectParams = [$this->redirect, 'id' => $result->id];
                 $this->extendRedirectParams($redirectParams);

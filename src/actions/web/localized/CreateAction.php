@@ -1,10 +1,12 @@
 <?php
+
 namespace concepture\yii2logic\actions\web\localized;
 
 use Yii;
 use concepture\yii2logic\actions\traits\LocalizedTrait;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
+use concepture\yii2logic\enum\ScenarioEnum;
 
 /**
  * @deprecated
@@ -23,11 +25,16 @@ class CreateAction extends Action
     public $view = 'create';
     public $redirect = 'index';
     public $serviceMethod = 'create';
+    public $scenario = ScenarioEnum::INSERT;
 
+    /**
+     * @inheritDoc
+     */
     public function run($locale = null)
     {
         $localeId = $this->getConvertedLocale($locale);
         $model = $this->getForm();
+        $model->scenario = $this->scenario;
         $model->locale = $localeId;
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm();

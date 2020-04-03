@@ -1,12 +1,13 @@
 <?php
+
 namespace concepture\yii2logic\actions\web;
 
+use Yii;
 use concepture\yii2logic\actions\Action;
 use ReflectionException;
 use yii\db\ActiveRecord;
 use yii\web\NotFoundHttpException;
-use Yii;
-use yii\db\Exception;
+use concepture\yii2logic\enum\ScenarioEnum;
 
 /**
  * Экшен для обновления сущности
@@ -18,7 +19,11 @@ class UpdateAction extends Action
     public $view = 'update';
     public $redirect = 'index';
     public $serviceMethod = 'update';
+    public $scenario = ScenarioEnum::UPDATE;
 
+    /**
+     * @inheritDoc
+     */
     public function run($id)
     {
         $originModel = $this->getModel($id);
@@ -27,6 +32,7 @@ class UpdateAction extends Action
         }
 
         $model = $this->getForm();
+        $model->scenario = $this->scenario;
         $this->processModel($model, $originModel);
         $model->setAttributes($originModel->attributes, false);
         if (method_exists($model, 'customizeForm')) {

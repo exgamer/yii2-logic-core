@@ -1,10 +1,11 @@
 <?php
+
 namespace concepture\yii2logic\actions\web\v2;
 
+use Yii;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
-use Yii;
-use yii\db\Exception;
+use concepture\yii2logic\enum\ScenarioEnum;
 
 /**
  * Экшен для создания сущности
@@ -18,10 +19,15 @@ class CreateAction extends Action
     public $view = 'create';
     public $redirect = 'index';
     public $serviceMethod = 'create';
+    public $scenario = ScenarioEnum::INSERT;
 
+    /**
+     * @inheritDoc
+     */
     public function run()
     {
         $model = $this->getForm();
+        $model->scenario = $this->scenario;
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm();
         }
