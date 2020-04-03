@@ -17,6 +17,65 @@ use Yii;
 trait PropertyTrait
 {
     /**
+     * Возвращает список аписей дял копирования по уникальному полю
+     *
+     * @param string $key
+     * @param string $value
+     * @return array
+     */
+    public function getListForCopyFrom($key = 'id' , $value = 'name')
+    {
+        $condition = [];
+        $model = $this->getRelatedModel();
+        $propertyClass = $model::getPropertyModelClass();
+        $propertyModel = Yii::createObject($propertyClass);
+        $table = $this->getTableName();
+        $propertyTable = $propertyModel::tableName();
+        $propertyAlias = $model::propertyAlias();
+        $propertyUniqueAttribute = $model::uniqueField();
+        if ($propertyModel->hasAttribute('status')){
+            $condition[$propertyAlias . '.status'] = StatusEnum::ACTIVE;
+        }
+
+        if ($propertyModel->hasAttribute('is_deleted')){
+            $condition[$propertyAlias . '.is_deleted'] = IsDeletedEnum::NOT_DELETED;
+        }
+
+        if (! isset($condition[$propertyAlias . '.status']) && $model->hasAttribute('status')){
+            $condition['status'] = StatusEnum::ACTIVE;
+        }
+
+        if (! isset($condition[$propertyAlias . '.is_deleted']) && $model->hasAttribute('is_deleted')){
+            $condition['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+        }
+
+        $currentModels = $this->getAllByCondition($condition);
+        $currentModels = ArrayHelper::map($currentModels, $key, $value);
+        $currentModelsIds = array_keys($currentModels);
+        if (empty($currentModelsIds)){
+            return [];
+        }
+
+        $extConditionSql = '';
+        if (! empty($condition)){
+            $extConditionSql.= " AND ";
+            $tmp = [];
+            foreach ($condition as $attr => $val){
+                $tmp[] = $attr . "=" . $val;
+            }
+
+            $extConditionSql .=implode(" AND ", $tmp);
+        }
+
+        $sql = "SELECT * FROM {$propertyTable} {$propertyAlias} JOIN {$table} a ON a.id={$propertyAlias}.entity_id  WHERE {$propertyAlias}.entity_id NOT IN (".implode(',', $currentModelsIds).") AND {$propertyAlias}.`default`=1 {$extConditionSql}";
+        $result = $this->getDb()->createCommand($sql)->queryAll();
+
+        return  ArrayHelper::map($result, function ($array, $default) use ($propertyUniqueAttribute){
+            return $array['entity_id']."-".$array[$propertyUniqueAttribute];
+        }, $value);
+    }
+
+    /**
      * Получить сущность со свойствами по md5 hash seo_name
      *
      * @param $seo_name
