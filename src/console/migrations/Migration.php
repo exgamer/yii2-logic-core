@@ -80,7 +80,7 @@ abstract class Migration extends Base
         if (! is_array($columns)){
             $columns = [$columns];
         }
-        
+
         $tableName = $this->getTableName();
         if ($index_name === null) {
             $index_name = 'uni_' . implode("_", $columns);
