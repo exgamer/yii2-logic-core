@@ -322,25 +322,45 @@ trait CatalogTrait
         if ($excludeDefault === false) {
             $modelClass = $this->getRelatedModelClass();
             $model = Yii::createObject($modelClass);
-            $alias = "";
+            /**
+             * следующие 2 переменные костыли. я торопился
+             */
+            $statusAlias = "";
+            $deletedAlias = "";
             $traits = ClassHelper::getTraits($model);
             /**
              * Потому что статус и is_deleted могут быть в локализациях
              */
             if (in_array(HasDomainPropertyTrait::class, $traits) ||
                 in_array(HasLocalePropertyTrait::class, $traits)){
-                $alias = $model::propertyAlias() . ".";
+                $propModelClass = $model::getPropertyModelClass();
+                $propModel = Yii::createObject($propModelClass);
+                if ($propModel->hasAttribute('status')){
+                    $statusAlias = $model::propertyAlias() . ".";
+                }
+
+                if ($propModel->hasAttribute('is_deleted')){
+                    $deletedAlias = $model::propertyAlias() . ".";
+                }
             }
 
             if (in_array(HasLocalizationTrait::class, $traits)){
-                $alias = $model::localizationAlias() . ".";
+                $propModelClass = $model::getLocalizationModelClass();
+                $propModel = Yii::createObject($propModelClass);
+                if ($propModel->hasAttribute('status')){
+                    $statusAlias = $model::localizationAlias() . ".";
+                }
+
+                if ($propModel->hasAttribute('is_deleted')){
+                    $deletedAlias = $model::propertyAlias() . ".";
+                }
             }
 
             if ($model->hasAttribute('status')) {
-                $where[$alias . 'status'] = StatusEnum::ACTIVE;
+                $where[$statusAlias . 'status'] = StatusEnum::ACTIVE;
             }
             if ($model->hasAttribute('is_deleted')) {
-                $where[$alias . 'is_deleted'] = IsDeletedEnum::NOT_DELETED;
+                $where[$deletedAlias . 'is_deleted'] = IsDeletedEnum::NOT_DELETED;
             }
         }
 
