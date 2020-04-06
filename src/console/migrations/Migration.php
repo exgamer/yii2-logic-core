@@ -77,6 +77,10 @@ abstract class Migration extends Base
 
     protected function addUniqueIndex($columns, $index_name = null)
     {
+        if (! is_array($columns)){
+            $columns = [$columns];
+        }
+        
         $tableName = $this->getTableName();
         if ($index_name === null) {
             $index_name = 'uni_' . implode("_", $columns);
