@@ -3,6 +3,10 @@ namespace concepture\yii2logic\services\traits;
 
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
+use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\models\traits\HasLocalizationTrait;
+use concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait;
+use concepture\yii2logic\models\traits\v2\property\HasLocalePropertyTrait;
 use Yii;
 use Exception;
 use yii\helpers\ArrayHelper;
@@ -318,11 +322,25 @@ trait CatalogTrait
         if ($excludeDefault === false) {
             $modelClass = $this->getRelatedModelClass();
             $model = Yii::createObject($modelClass);
+            $alias = "";
+            $traits = ClassHelper::getTraits($model);
+            /**
+             * Потому что статус и is_deleted могут быть в локализациях
+             */
+            if (in_array(HasDomainPropertyTrait::class, $traits) ||
+                in_array(HasLocalePropertyTrait::class, $traits)){
+                $alias = $model::propertyAlias() . ".";
+            }
+
+            if (in_array(HasLocalizationTrait::class, $traits)){
+                $alias = $model::localizationAlias() . ".";
+            }
+
             if ($model->hasAttribute('status')) {
-                $where['status'] = StatusEnum::ACTIVE;
+                $where[$alias . 'status'] = StatusEnum::ACTIVE;
             }
             if ($model->hasAttribute('is_deleted')) {
-                $where['is_deleted'] = IsDeletedEnum::NOT_DELETED;
+                $where[$alias . 'is_deleted'] = IsDeletedEnum::NOT_DELETED;
             }
         }
 
