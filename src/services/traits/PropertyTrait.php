@@ -21,9 +21,10 @@ trait PropertyTrait
      *
      * @param string $key
      * @param string $value
+     * @param bool $current
      * @return array
      */
-    public function getListForCopyFrom($key = 'id' , $value = 'name')
+    public function getListForCopyFrom($key = 'id' , $value = 'name', $current = false)
     {
         $condition = [];
         $model = $this->getRelatedModel();
@@ -33,23 +34,31 @@ trait PropertyTrait
         $propertyTable = $propertyModel::tableName();
         $propertyAlias = $model::propertyAlias();
         $propertyUniqueAttribute = $model::uniqueField();
-        if ($propertyModel->hasAttribute('status')){
-            $condition[$propertyAlias . '.status'] = StatusEnum::ACTIVE;
-        }
+//        if ($propertyModel->hasAttribute('status')) {
+//            $condition[$propertyAlias . '.status'] = StatusEnum::ACTIVE;
+//        }
 
         if ($propertyModel->hasAttribute('is_deleted')){
             $condition[$propertyAlias . '.is_deleted'] = IsDeletedEnum::NOT_DELETED;
         }
 
-        if (! isset($condition[$propertyAlias . '.status']) && $model->hasAttribute('status')){
-            $condition['status'] = StatusEnum::ACTIVE;
-        }
+//        if (! isset($condition[$propertyAlias . '.status']) && $model->hasAttribute('status')){
+//            $condition['status'] = StatusEnum::ACTIVE;
+//        }
 
         if (! isset($condition[$propertyAlias . '.is_deleted']) && $model->hasAttribute('is_deleted')){
             $condition['is_deleted'] = IsDeletedEnum::NOT_DELETED;
         }
 
         $currentModels = $this->getAllByCondition($condition);
+        if ($current){
+            $currentModels = ArrayHelper::toArray($currentModels);
+
+            return  ArrayHelper::map($currentModels, function ($array, $default) use ($key){
+                return $array[$key];
+            }, $value);
+        }
+
         $currentModels = ArrayHelper::map($currentModels, $key, $value);
         $currentModelsIds = array_keys($currentModels);
         if (empty($currentModelsIds)){
