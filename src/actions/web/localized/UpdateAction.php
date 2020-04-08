@@ -27,6 +27,7 @@ class UpdateAction extends Action
     public $redirect = 'index';
     public $serviceMethod = 'update';
     public $scenario = ScenarioEnum::UPDATE;
+    public $originModelNotFoundCallback = null;
 
     /**
      * @inheritDoc
@@ -35,7 +36,13 @@ class UpdateAction extends Action
     {
         $originModel = $this->getModel($id, $locale);
         if (!$originModel){
-            throw new NotFoundHttpException();
+            if (! $this->originModelNotFoundCallback) {
+                throw new NotFoundHttpException();
+            }
+
+            if (is_callable($this->originModelNotFoundCallback)){
+                return call_user_func($this->originModelNotFoundCallback, $this);
+            }
         }
 
         $model = $this->getForm();

@@ -21,12 +21,19 @@ class UpdateAction extends Action
     public $view = 'update';
     public $redirect = 'index';
     public $serviceMethod = 'update';
+    public $originModelNotFoundCallback = null;
 
     public function run($id)
     {
         $originModel = $this->getModel($id);
         if (!$originModel){
-            throw new NotFoundHttpException();
+            if (! $this->originModelNotFoundCallback) {
+                throw new NotFoundHttpException();
+            }
+
+            if (is_callable($this->originModelNotFoundCallback)){
+                return call_user_func($this->originModelNotFoundCallback, $this);
+            }
         }
 
         $model = $this->getForm();
