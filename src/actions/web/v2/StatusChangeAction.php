@@ -17,19 +17,31 @@ use yii\db\Exception;
  */
 class StatusChangeAction extends Action
 {
+    /**
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'statusChange';
 
+    /**
+     * @param integer $id
+     * @param integer $status
+     */
     public function run($id, $status)
     {
         $model = $this->getModel($id);
-        if (!$model){
+        if (! $model){
             throw new NotFoundHttpException();
         }
 
         $this->getService()->{$this->serviceMethod}($model, $status);
 
-        return $this->redirect([$this->redirect]);
+        if($this->redirect) {
+            return $this->redirect([$this->redirect]);
+        }
     }
 
     /**
