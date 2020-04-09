@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\models\traits\v2\property;
 
+use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\models\traits\HasLocalizationTrait;
 use Yii;
 
