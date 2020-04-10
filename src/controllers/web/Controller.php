@@ -99,7 +99,7 @@ abstract class Controller extends Base
         }
 
         if($this->localized && $this->tree) {
-            return $this->getTrreLocalizedActions();
+            return $this->getTreeLocalizedActions();
         }
 
         throw new \Exception('Default actions is not found.');
@@ -225,7 +225,7 @@ abstract class Controller extends Base
      *
      * @return array
      */
-    protected function getTrreLocalizedActions()
+    protected function getTreeLocalizedActions()
     {
         return [
             'index' => TreeLocalizedIndexAction::class,
