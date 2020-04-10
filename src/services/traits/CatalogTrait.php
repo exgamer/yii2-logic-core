@@ -92,6 +92,16 @@ trait CatalogTrait
          * но там может быть массив и анонимка
          */
         static $_catalog = null;
+        static $class;
+
+        if($class !== static::class) {
+            $_catalog = null;
+            $class = null;
+        }
+
+        if(! $class) {
+            $class = static::class;
+        }
 
         $searchClass = $this->getRelatedSearchModelClass();
         if (! $from && ! $to){
