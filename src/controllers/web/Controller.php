@@ -2,19 +2,38 @@
 
 namespace concepture\yii2logic\controllers\web;
 
-use concepture\yii2logic\actions\web\v2\CreateAction;
-use concepture\yii2logic\actions\web\v2\DeleteAction;
-use concepture\yii2logic\actions\web\v2\IndexAction;
-use concepture\yii2logic\actions\web\v2\UpdateAction;
-use concepture\yii2logic\actions\web\v2\ViewAction;
-use concepture\yii2logic\helpers\ClassHelper;
-use concepture\yii2logic\services\Service;
 use ReflectionException;
 use Yii;
 use yii\web\Controller as Base;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Response;
+use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\services\Service;
+# обычные действия
+use concepture\yii2logic\actions\web\v2\CreateAction;
+use concepture\yii2logic\actions\web\v2\DeleteAction;
+use concepture\yii2logic\actions\web\v2\IndexAction;
+use concepture\yii2logic\actions\web\v2\UpdateAction;
+use concepture\yii2logic\actions\web\v2\ViewAction;
+# локализованные действия
+use concepture\yii2logic\actions\web\localized\CreateAction as LocalizedCreateAction;
+use concepture\yii2logic\actions\web\localized\UpdateAction as LocalizedUpdateAction;
+use concepture\yii2logic\actions\web\localized\DeleteAction as LocalizedDeleteAction;
+use concepture\yii2logic\actions\web\localized\IndexAction  as LocalizedIndexAction;
+use concepture\yii2logic\actions\web\localized\ViewAction as LocalizedViewAction;
+# деревья
+use concepture\yii2logic\actions\web\tree\CreateAction as TreeCreateAction;
+use concepture\yii2logic\actions\web\tree\UpdateAction as TreeUpdateAction;
+use concepture\yii2logic\actions\web\tree\DeleteAction as TreeDeleteAction;
+use concepture\yii2logic\actions\web\tree\IndexAction as TreeIndexAction;
+use concepture\yii2logic\actions\web\ViewAction as TreeViewAction;
+# локализованные деревья
+use concepture\yii2logic\actions\web\localized\tree\CreateAction as TreeLocalizedCreateAction;
+use concepture\yii2logic\actions\web\localized\tree\UpdateAction as TreeLocalizedUpdateAction;
+use concepture\yii2logic\actions\web\localized\tree\DeleteAction as TreeLocalizedDeleteAction;
+use concepture\yii2logic\actions\web\localized\tree\IndexAction as TreeLocalizedIndexAction;
+use concepture\yii2logic\actions\web\localized\ViewAction as TreeLocalizedViewAction;
 
 /**
  * Базовый веб контроллер
@@ -25,6 +44,16 @@ use yii\web\Response;
  */
 abstract class Controller extends Base
 {
+    /**
+     * @var boolean
+     */
+    public $localized = false;
+
+    /**
+     * @var boolean
+     */
+    public $tree = false;
+
     /**
      * @return array
      */
@@ -52,15 +81,28 @@ abstract class Controller extends Base
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function actions()
     {
-        return [
-            'index' => IndexAction::class,
-            'create' => CreateAction::class,
-            'update' => UpdateAction::class,
-            'view' => ViewAction::class,
-            'delete' => DeleteAction::class,
-        ];
+        if(! $this->localized && ! $this->tree) {
+            return $this->getDefaultActions();
+        }
+
+        if($this->localized && ! $this->tree) {
+            return $this->getLocalizedActions();
+        }
+
+        if(! $this->localized && $this->tree) {
+            return $this->getTreeActions();
+        }
+
+        if($this->localized && $this->tree) {
+            return $this->getTrreLocalizedActions();
+        }
+
+        throw new \Exception('Default actions is not found.');
     }
 
     /**
@@ -128,5 +170,69 @@ abstract class Controller extends Base
         }
 
         return false;
+    }
+
+    /**
+     * Подключаемые действия
+     *
+     * @return array
+     */
+    protected function getDefaultActions()
+    {
+        return [
+            'index' => IndexAction::class,
+            'create' => CreateAction::class,
+            'update' => UpdateAction::class,
+            'view' => ViewAction::class,
+            'delete' => DeleteAction::class,
+        ];
+    }
+
+    /**
+     * Подключаемые действия с локалицацией
+     *
+     * @return array
+     */
+    protected function getLocalizedActions()
+    {
+        return [
+            'index' => LocalizedIndexAction::class,
+            'create' => LocalizedCreateAction::class,
+            'update' => LocalizedUpdateAction::class,
+            'view' => LocalizedViewAction::class,
+            'delete' => LocalizedDeleteAction::class,
+        ];
+    }
+
+    /**
+     * Подключаемые действия деревьев
+     *
+     * @return array
+     */
+    protected function getTreeActions()
+    {
+        return [
+            'index' => TreeIndexAction::class,
+            'create' => TreeCreateAction::class,
+            'update' => TreeUpdateAction::class,
+            'view' => TreeViewAction::class,
+            'delete' => TreeDeleteAction::class,
+        ];
+    }
+
+    /**
+     * Подключаемые действия деревьев с локалицацией
+     *
+     * @return array
+     */
+    protected function getTrreLocalizedActions()
+    {
+        return [
+            'index' => TreeLocalizedIndexAction::class,
+            'create' => TreeLocalizedCreateAction::class,
+            'update' => TreeLocalizedUpdateAction::class,
+            'view' => TreeLocalizedViewAction::class,
+            'delete' => TreeLocalizedDeleteAction::class,
+        ];
     }
 }
