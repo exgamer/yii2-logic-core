@@ -10,15 +10,22 @@ use yii\db\ActiveRecord;
 /**
  * Экшен для восстановления нефизически удаленной сущности
  *
- * Class UndeleteAction
- * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class UndeleteAction extends Action
 {
+    /**
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'undelete';
 
+    /**
+     * @param integer $id
+     */
     public function run($id)
     {
         $model = $this->getModel($id);
@@ -28,7 +35,9 @@ class UndeleteAction extends Action
 
         $this->getService()->{$this->serviceMethod}($model);
 
-        return $this->redirect([$this->redirect]);
+        if($this->redirect) {
+            return $this->redirect([$this->redirect]);
+        }
     }
 
     /**

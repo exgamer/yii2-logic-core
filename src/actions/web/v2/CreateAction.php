@@ -16,13 +16,25 @@ use concepture\yii2logic\enum\ScenarioEnum;
  */
 class CreateAction extends Action
 {
+    /**
+     * @var string
+     */
     public $view = 'create';
+    /**
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'create';
+    /**
+     * @var string
+     */
     public $scenario = ScenarioEnum::INSERT;
 
     /**
-     * @inheritDoc
+     * @return staing HTML
      */
     public function run()
     {

@@ -9,14 +9,20 @@ use yii\db\ActiveRecord;
 /**
  * Экшен для просмотра сущности
  *
- * Class ViewAction
- * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class ViewAction extends Action
 {
+    /**
+     * @var string
+     */
     public $view = 'view';
 
+    /**
+     * @param $id
+     *
+     * @return string HTML
+     */
     public function run($id)
     {
         $model = $this->getModel($id);

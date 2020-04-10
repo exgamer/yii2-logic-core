@@ -15,9 +15,18 @@ use yii\db\ActiveRecord;
  */
 class DeleteAction extends Action
 {
+    /**
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'delete';
 
+    /**
+     * @param integer $id
+     */
     public function run($id)
     {
         $model = $this->getModel($id);
@@ -27,7 +36,9 @@ class DeleteAction extends Action
 
         $this->getService()->{$this->serviceMethod}($model);
 
-        return $this->redirect([$this->redirect]);
+        if($this->redirect) {
+            return $this->redirect([$this->redirect]);
+        }
     }
 
     /**

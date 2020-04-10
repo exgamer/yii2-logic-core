@@ -7,15 +7,22 @@ use Yii;
 /**
  * Экшен для вывода списка
  *
- * Class IndexAction
- * @package cconcepture\yii2logic\actions\web
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class IndexAction extends Action
 {
+    /**
+     * @var string
+     */
     public $view = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'getDataProvider';
 
+    /**
+     * @return string HTML
+     */
     public function run()
     {
         $searchClass = $this->getSearchClass();

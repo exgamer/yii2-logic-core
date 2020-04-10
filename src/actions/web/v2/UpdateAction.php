@@ -17,14 +17,31 @@ use concepture\yii2logic\enum\ScenarioEnum;
  */
 class UpdateAction extends Action
 {
+    /**
+     * @var string
+     */
     public $view = 'update';
+    /**
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'update';
+    /**
+     * @var string
+     */
     public $scenario = ScenarioEnum::UPDATE;
+    /**
+     * @var null|\Closure
+     */
     public $originModelNotFoundCallback = null;
 
     /**
-     * @inheritDoc
+     * @param $id
+     *
+     * @return mixed
      */
     public function run($id)
     {
