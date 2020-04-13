@@ -92,12 +92,13 @@ trait ModifyTrait
      *
      * @param Model $form
      * @param ActiveRecord $model
+     * @param bool $validate
      * @return ActiveRecord
      */
-    public function update(Model $form, ActiveRecord $model)
+    public function update(Model $form, ActiveRecord $model, $validate = true)
     {
         $this->beforeUpdate($form, $model);
-        $model = $this->save($form, $model);
+        $model = $this->save($form, $model, $validate);
         if (! $model) {
             return $model;
         }
@@ -112,9 +113,10 @@ trait ModifyTrait
      * @param $id
      * @param array $data
      * @param string|null $formName
+     * @param bool $validate
      * @return bool|ActiveRecord|Form
      */
-    public function updateById($id, $data, $formName = '')
+    public function updateById($id, $data, $formName = '', $validate = true)
     {
         $model = $this->findById($id);
         $form = $this->getRelatedForm();
@@ -132,13 +134,15 @@ trait ModifyTrait
         }
 
         $model->setAttributes($form->attributes);
-        if (! $form->validate(null, true, $model)) {
-            $form->addErrors($model->getErrors());
+        if ($validate) {
+            if (!$form->validate(null, true, $model)) {
+                $form->addErrors($model->getErrors());
 
-            return $form;
+                return $form;
+            }
         }
 
-        return $this->update($form, $model);
+        return $this->update($form, $model, $validate);
     }
 
     /**
@@ -148,10 +152,10 @@ trait ModifyTrait
      *
      * @param Model $form класс для работы
      * @param ActiveRecord $model модель данных - передается при редактировании
+     * @param bool $validate
      * @return ActiveRecord | boolean
-     * @throws
      */
-    protected function save(Model $form , ActiveRecord $model = null)
+    protected function save(Model $form , ActiveRecord $model = null, $validate = true)
     {
         if($model === null){
             $model = $this->getRelatedModel();
@@ -174,7 +178,7 @@ trait ModifyTrait
             $this->setOldData($model->getOldAttributes());
         }
         $this->beforeModelSave($form, $model, $is_new_record);
-        if (! $model->save()) {
+        if (! $model->save($validate)) {
             $form->addErrors($model->getErrors());
 
             return false;
