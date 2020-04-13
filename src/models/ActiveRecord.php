@@ -77,7 +77,7 @@ abstract class ActiveRecord extends Base
      *
      * @param ActiveQuery $query
      */
-    public function extendQuery(ActiveQuery $query){}
+    public function extendQuery(\yii\db\ActiveQuery $query){}
 
     /**
      * Метод для расширения DataProvider
