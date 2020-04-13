@@ -3,7 +3,7 @@ namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveQuery;
+use concepture\yii2logic\db\ActiveQuery;
 use Yii;
 use yii\helpers\ArrayHelper;
 

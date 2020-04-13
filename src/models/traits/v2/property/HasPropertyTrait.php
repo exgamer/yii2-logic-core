@@ -4,7 +4,7 @@ namespace concepture\yii2logic\models\traits\v2\property;
 use Exception;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveQuery;
+use concepture\yii2logic\db\ActiveQuery;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;

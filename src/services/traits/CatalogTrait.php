@@ -329,54 +329,10 @@ trait CatalogTrait
     public function getAllModelsForList($condition = null, $excludeDefault = false)
     {
         $where = [];
-        if ($excludeDefault === false) {
-            $modelClass = $this->getRelatedModelClass();
-            $model = Yii::createObject($modelClass);
-            /**
-             * следующие 2 переменные костыли. я торопился
-             */
-            $statusAlias = "";
-            $deletedAlias = "";
-            $traits = ClassHelper::getTraits($model);
-            /**
-             * Потому что статус и is_deleted могут быть в локализациях
-             */
-            if (in_array(HasDomainPropertyTrait::class, $traits) ||
-                in_array(HasLocalePropertyTrait::class, $traits)){
-                $propModelClass = $model::getPropertyModelClass();
-                $propModel = Yii::createObject($propModelClass);
-                if ($propModel->hasAttribute('status')){
-                    $statusAlias = $model::propertyAlias() . ".";
-                }
-
-                if ($propModel->hasAttribute('is_deleted')){
-                    $deletedAlias = $model::propertyAlias() . ".";
-                }
-            }
-
-            if (in_array(HasLocalizationTrait::class, $traits)){
-                $propModelClass = $model::getLocalizationModelClass();
-                $propModel = Yii::createObject($propModelClass);
-                if ($propModel->hasAttribute('status')){
-                    $statusAlias = $model::localizationAlias() . ".";
-                }
-
-                if ($propModel->hasAttribute('is_deleted')){
-                    $deletedAlias = $model::propertyAlias() . ".";
-                }
-            }
-
-            if ($model->hasAttribute('status')) {
-                $where[$statusAlias . 'status'] = StatusEnum::ACTIVE;
-            }
-            if ($model->hasAttribute('is_deleted')) {
-                $where[$deletedAlias . 'is_deleted'] = IsDeletedEnum::NOT_DELETED;
-            }
-        }
-
         $query = $this->getQuery();
-        if (! empty($where)) {
-            $query->andWhere($where);
+        if ($excludeDefault === false) {
+            $query->active();
+            $query->notDeleted();
         }
 
         if (is_callable($condition)){
