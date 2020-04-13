@@ -178,7 +178,7 @@ trait ModifyTrait
             $this->setOldData($model->getOldAttributes());
         }
         $this->beforeModelSave($form, $model, $is_new_record);
-        if (! $model->save($validate)) {
+        if ($model->save($validate) === false) {
             $form->addErrors($model->getErrors());
 
             return false;
