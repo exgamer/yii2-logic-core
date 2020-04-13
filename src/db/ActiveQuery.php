@@ -72,4 +72,31 @@ class ActiveQuery extends Base
             $this->andWhere([$alias . 'is_deleted' => IsDeletedEnum::NOT_DELETED]);
         }
     }
+
+    public function byCurrentDomain()
+    {
+        $model = Yii::createObject($this->modelClass);
+        $alias = "";
+        $traits = ClassHelper::getTraits($model);
+        if (in_array(HasDomainPropertyTrait::class, $traits) ||
+            in_array(HasLocalePropertyTrait::class, $traits)){
+            $propModelClass = $model::getPropertyModelClass();
+            $propModel = Yii::createObject($propModelClass);
+            if ($propModel->hasAttribute('domain_id')){
+                $alias = $model::propertyAlias() . ".";
+            }
+        }
+
+        if (in_array(HasLocalizationTrait::class, $traits)){
+            $propModelClass = $model::getLocalizationModelClass();
+            $propModel = Yii::createObject($propModelClass);
+            if ($propModel->hasAttribute('domain_id')){
+                $alias = $model::localizationAlias() . ".";
+            }
+        }
+
+        if ($model->hasAttribute('domain_id')) {
+            $this->andWhere([$alias . 'domain_id' => $this->domain_id]);
+        }
+    }
 }
