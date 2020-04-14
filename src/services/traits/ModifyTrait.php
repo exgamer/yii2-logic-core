@@ -76,7 +76,7 @@ trait ModifyTrait
      * @param array $params
      * @return mixed
      */
-    public function deleteByCondition($condition, $params = [])
+    public function deleteAllByCondition($condition, $params = [])
     {
         $model = $this->getRelatedModel();
 
@@ -91,7 +91,7 @@ trait ModifyTrait
      * @param array $params
      * @return mixed
      */
-    public function updateByCondition($attributes, $condition = '', $params = [])
+    public function updateAllByCondition($attributes, $condition = '', $params = [])
     {
         $model = $this->getRelatedModel();
 
