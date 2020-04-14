@@ -278,9 +278,8 @@ abstract class Form extends Model
             $pojoClass = $model->getAttributeConfigData($pojoClass, 'class');
             $className = ClassHelper::getShortClassName($pojoClass);
             $this->{$attr} = $data[$className] ?? [];
-            $data = $this->{$attr};
             $pogoData = [];
-            foreach ($data as $key => $value){
+            foreach ($this->{$attr} as $key => $value){
                 if (! is_array($value) ){
                     continue;
                 }
