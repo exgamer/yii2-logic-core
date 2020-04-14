@@ -70,7 +70,7 @@ trait ModifyTrait
     }
 
     /**
-     * Deletes rows in the related table using the provided conditions.
+     * Вызывает стандартный deleteAll связанной модели
      *
      * @param $condition
      * @param array $params
@@ -84,7 +84,7 @@ trait ModifyTrait
     }
 
     /**
-     * Updates rows in the related table using the provided conditions.
+     * Вызывает стандартный updateAll связанной модели
      *
      * @param array $attributes attribute values (name-value pairs) to be saved into the table
      * @param $condition
