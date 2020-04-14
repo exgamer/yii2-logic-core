@@ -70,6 +70,35 @@ trait ModifyTrait
     }
 
     /**
+     * Deletes rows in the related table using the provided conditions.
+     *
+     * @param $condition
+     * @param array $params
+     * @return mixed
+     */
+    public function deleteByCondition($condition, $params = [])
+    {
+        $model = $this->getRelatedModel();
+
+        return $model::deleteAll($condition, $params);
+    }
+
+    /**
+     * Updates rows in the related table using the provided conditions.
+     *
+     * @param array $attributes attribute values (name-value pairs) to be saved into the table
+     * @param $condition
+     * @param array $params
+     * @return mixed
+     */
+    public function updateByCondition($attributes, $condition = '', $params = [])
+    {
+        $model = $this->getRelatedModel();
+
+        return $model::updateAll($attributes, $condition, $params);
+    }
+
+    /**
      * Добавление записи в бд
      *
      * @param Model $form
