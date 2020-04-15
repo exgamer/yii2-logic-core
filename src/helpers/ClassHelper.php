@@ -65,11 +65,15 @@ class ClassHelper
         return  $class;
     }
 
-    public static function getShortClassName($objectOrClass)
+    public static function getShortClassName($objectOrClass, $cutPart = null, $capitalize = false)
     {
         $reflection = new ReflectionClass($objectOrClass);
+        $name = str_replace($cutPart, "", $reflection->getShortName());
+        if ($capitalize){
+            $name = strtoupper($name);
+        }
 
-        return $reflection->getShortName();
+        return $name;
     }
 
     public static function getTraits($objectOrClass)
