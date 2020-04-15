@@ -273,6 +273,8 @@ trait CatalogTrait
     }
 
     /**
+     * @deprecated use catalog() function
+     *
      * Возвращает массив даных для выпадающих списков
      * Для использования у search модели должны быть определены методы
      * getListSearchAttribute и getListSearchKeyAttribute
