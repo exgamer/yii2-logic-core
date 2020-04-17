@@ -1,5 +1,6 @@
 <?php
 namespace concepture\yii2logic\helpers\transliterator;
+use concepture\yii2logic\helpers\CharsetFromString;
 use Yii;
 
 /**
@@ -24,7 +25,8 @@ class TransliteratorHelper
 	public static function process($string, $unknown = '?', $language = null)
 	{
 		// If intl extension load
-		if (extension_loaded('intl') === true) {
+        $charset = CharsetFromString::getCharset($string);
+		if (extension_loaded('intl') === true && $charset !== 'CYRILLIC') {
 			$options = 'Any-Latin; Latin-ASCII; [\u0100-\u7fff] remove;';
 			return transliterator_transliterate($options, $string);
 		}
