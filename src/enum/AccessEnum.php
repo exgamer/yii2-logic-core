@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2user\enum\AccessEnum;
+namespace concepture\yii2logic\enum;
 
 use Yii;
 
