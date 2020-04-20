@@ -14,5 +14,9 @@ class PermissionEnum extends Enum
     const ADMIN = "ADMIN";
     const EDITOR = "EDITOR";
     const READER = "READER";
+    /**
+     * Это полномочие имеет доступ только к свом записям
+     * _STAFF
+     */
     const STAFF = "STAFF";
 }

@@ -23,5 +23,8 @@ class AccessEnum extends Enum
     const ADMIN = "admin";
     const EDITOR = "EDITOR";
     const READER = "READER";
+    /**
+     * Эта роль имеет доступ только к свом записям
+     */
     const STAFF = "STAFF";
 }
