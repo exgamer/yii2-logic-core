@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\actions\web;
 
+use concepture\yii2logic\helpers\AccessHelper;
 use Yii;
 use concepture\yii2logic\actions\Action;
 use ReflectionException;
@@ -36,6 +37,10 @@ class UpdateAction extends Action
             if (is_callable($this->originModelNotFoundCallback)){
                 return call_user_func($this->originModelNotFoundCallback, $this);
             }
+        }
+
+        if (! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
+            throw new yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
         $model = $this->getForm();

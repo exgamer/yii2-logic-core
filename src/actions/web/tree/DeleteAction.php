@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\actions\web\tree;
 
 use concepture\yii2logic\actions\Action;
+use concepture\yii2logic\helpers\AccessHelper;
 use ReflectionException;
 use yii\web\NotFoundHttpException;
 use yii\db\ActiveRecord;
@@ -23,6 +24,10 @@ class DeleteAction extends Action
         $model = $this->getModel($id);
         if (!$model){
             throw new NotFoundHttpException();
+        }
+
+        if (! AccessHelper::checkAccess($this->id, ['model' => $model])){
+            throw new yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
         $this->getService()->{$this->serviceMethod}($model);
