@@ -40,7 +40,7 @@ class UpdateAction extends Action
         }
 
         if (! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
-            throw new yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
+            throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
         $model = $this->getForm();

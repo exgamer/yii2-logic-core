@@ -29,7 +29,7 @@ class DeleteAction extends Action
         }
 
         if (! AccessHelper::checkAccess($this->id, ['model' => $model])){
-            throw new yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
+            throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
         $redirectParams = $this->getRedirectParams($model);
