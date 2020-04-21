@@ -81,7 +81,7 @@ trait HasLocalizationTrait
         $l = [];
         if (isset($this->localizations)){
             foreach ($this->localizations as $locale){
-                $l[$localeConverterClass::key($locale->locale)] = $localeConverterClass::value($locale->locale);
+                $l[$localeConverterClass::key($locale->{static::uniqueField()})] = $localeConverterClass::value($locale->{static::uniqueField()});
             }
         }
         if ($flip){
@@ -113,7 +113,7 @@ trait HasLocalizationTrait
         $m = static::getLocalizationModelClass();
         $query->select([static::tableName(). ".*", static::localizationAlias() . '.*']);
         $query->innerJoin($m::tableName() . " ". static::localizationAlias(), static::localizationAlias() . '.entity_id = '. static::tableName().'.id');
-        $query->andWhere([static::localizationAlias() . '.locale' => static::currentLocale()]);
+        $query->andWhere([static::localizationAlias() . '.' . static::uniqueField() => static::currentLocale()]);
 
         return $query;
     }
@@ -247,7 +247,7 @@ trait HasLocalizationTrait
         $locClass = static::getLocalizationModelClass();
         return $this->hasOne($locClass::className(), ['entity_id' => 'id'])
             ->alias('p')
-            ->andOnCondition(['p.locale' => static::currentLocale()]);
+            ->andOnCondition(['p.' . static::uniqueField() => static::currentLocale()]);
     }
 
     /**
@@ -277,7 +277,7 @@ trait HasLocalizationTrait
     public function saveLocalizations()
     {
         $locClass = static::getLocalizationModelClass();
-        $localization = $locClass::find()->where(['locale' => $this->locale, 'entity_id' => $this->id])->one();
+        $localization = $locClass::find()->where([static::uniqueField() => $this->{static::uniqueField()}, 'entity_id' => $this->id])->one();
         if (! $localization){
             $localization = Yii::createObject($locClass);
             $localization->entity_id = $this->id;
@@ -383,5 +383,13 @@ trait HasLocalizationTrait
     protected function addSortByLocalizationAttribute(ActiveDataProvider $dataProvider, $attribute)
     {
         $this->addSortByRelatedAttribute($dataProvider, "p", $attribute);
+    }
+
+    /**
+     * @return string
+     */
+    public static function uniqueField()
+    {
+        return 'locale';
     }
 }
