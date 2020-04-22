@@ -184,7 +184,7 @@ trait ModifyTrait
      * @param bool $validate
      * @return ActiveRecord | boolean
      */
-    protected function save(Model $form , ActiveRecord $model = null, $validate = true)
+    public function save(Model $form , ActiveRecord $model = null, $validate = true)
     {
         if($model === null){
             $model = $this->getRelatedModel();
