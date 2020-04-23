@@ -28,6 +28,10 @@ class MailerHelper
      */
     public static function send($to, $subject, $body)
     {
+        if (! isset(Yii::$app->params['concepture']['mailer'])){
+            return;
+        }
+
         $transport = self::createTransport(
             Yii::$app->params['concepture']['mailer'][self::HOST],
             Yii::$app->params['concepture']['mailer'][self::PORT],
