@@ -62,7 +62,7 @@ trait PropertyTrait
         $currentModels = ArrayHelper::map($currentModels, $key, $value);
         $currentModelsIds = array_keys($currentModels);
         if (empty($currentModelsIds)){
-            return [];
+            $currentModelsIds[] = 0;
         }
 
         $extConditionSql = '';
