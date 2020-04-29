@@ -268,8 +268,10 @@ trait ModifyTrait
     public function delete(ActiveRecord $model)
     {
         $this->beforeDelete($model);
-        $model->delete();
+        $result = $model->delete();
         $this->afterDelete($model);
+
+        return $result;
     }
 
     /**
