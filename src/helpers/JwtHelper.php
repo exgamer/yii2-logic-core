@@ -49,6 +49,9 @@ class JwtHelper
     public static function decodeJWT($token)
     {
         $secret = static::getSecretKey();
+        if (! $secret){
+            throw new \Exception("JWT Secret Key may not be empty");
+        }
 
         return (array)JWT::decode($token, $secret, [static::getAlgo()]);
     }
