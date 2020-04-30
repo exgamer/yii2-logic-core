@@ -186,8 +186,12 @@ trait ReadTrait
 
         $sql = $query->prepare($this->getDb()->queryBuilder)->createCommand()->rawSql;
         $command = $this->createCommand($sql);
+        $rows = $command->queryAll($fetchMode);
+        if ($query->indexBy){
+            $rows = array_column($rows, null, 'id');
+        }
 
-        return $command->queryAll($fetchMode);
+        return $rows;
     }
 
     /**
