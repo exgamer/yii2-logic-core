@@ -188,7 +188,7 @@ trait ReadTrait
         $command = $this->createCommand($sql);
         $rows = $command->queryAll($fetchMode);
         if ($query->indexBy){
-            $rows = array_column($rows, null, 'id');
+            $rows = array_column($rows, null, $query->indexBy);
         }
 
         return $rows;
