@@ -451,6 +451,7 @@ trait HasPropertyTrait
         $propertyClass = static::getPropertyModelClass();
         $query =  $this->hasMany($propertyClass, ['entity_id' => 'id']);
         $query->where = [];
+        $query->indexBy(static::uniqueField());
 
         return $query;
     }
