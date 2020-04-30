@@ -123,9 +123,12 @@ trait ReadTrait
      * }
      *
      * @param array|callable $condition
+     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
+     * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
      */
-    public function getOneByCondition($condition = null)
+    public function getOneByCondition($condition = null, $asSql = false, $fetchMode = null)
     {
         $query = $this->getQuery();
         if (is_callable($condition)){
@@ -138,7 +141,14 @@ trait ReadTrait
             }
         }
 
-        return $query->one();
+        if (! $asSql){
+            return $query->one();
+        }
+
+        $sql = $query->prepare($this->getDb()->queryBuilder)->createCommand()->rawSql;
+        $command = $this->createCommand($sql);
+
+        return $command->queryOne($fetchMode);
     }
 
     /**
@@ -150,9 +160,12 @@ trait ReadTrait
      *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
      * }
      * @param array|callable $condition
+     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
+     * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
      */
-    public function getAllByCondition($condition = null)
+    public function getAllByCondition($condition = null, $asSql = false, $fetchMode = null)
     {
         $query = $this->getQuery();
         if (is_callable($condition)){
@@ -165,7 +178,14 @@ trait ReadTrait
             }
         }
 
-        return $query->all();
+        if (! $asSql){
+            return $query->all();
+        }
+
+        $sql = $query->prepare($this->getDb()->queryBuilder)->createCommand()->rawSql;
+        $command = $this->createCommand($sql);
+
+        return $command->queryAll($fetchMode);
     }
 
     /**
