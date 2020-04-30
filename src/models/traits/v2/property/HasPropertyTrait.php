@@ -455,4 +455,30 @@ trait HasPropertyTrait
 
         return $query;
     }
+
+    /**
+     * Возвращает unique id всех properties
+     * @return array
+     * @throws Exception
+     */
+    public function getPropertiesUniqueValues()
+    {
+        $properties = [];
+        if (isset($this->properties)){
+            $properties = $this->properties;
+        }
+
+        if (empty($properties)){
+            return $properties;
+        }
+
+        $field = static::uniqueField();
+        $ids = array_keys($properties);
+        $key = array_search($this->{$field}, $ids);
+        $first = $ids[$key];
+        unset($ids[$key]);
+        array_unshift($ids, $first);
+
+        return $ids;
+    }
 }
