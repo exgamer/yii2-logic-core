@@ -99,18 +99,20 @@ trait ReadTrait
      *
      * @param integer $id
      * @param array $with
+     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
+     * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      *
      * @return ActiveRecord
      */
-    public function findById($id , $with = [])
+    public function findById($id , $with = [], $asSql = false, $fetchMode = null)
     {
-        $q = $this->getQuery();
-        if (! empty($with)){
-            $q->with($with);
-        }
-        $q->andWhere(["{$this->getTableName()}.id" => $id]);
-
-        return $q->one();
+        return $this->getOneByCondition(function (ActiveQuery $query) use ($id, $with){
+            if (! empty($with)){
+                $query->with($with);
+            }
+            $query->andWhere(["{$this->getTableName()}.id" => $id]);
+        }, $asSql, $fetchMode);
     }
 
     /**
