@@ -449,7 +449,9 @@ trait HasPropertyTrait
     public function getProperties()
     {
         $propertyClass = static::getPropertyModelClass();
+        $query =  $this->hasMany($propertyClass, ['entity_id' => 'id']);
+        $query->where = [];
 
-        return $this->hasMany($propertyClass, ['entity_id' => 'id']);
+        return $query;
     }
 }
