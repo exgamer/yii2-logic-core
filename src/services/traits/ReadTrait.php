@@ -99,7 +99,7 @@ trait ReadTrait
      *
      * @param integer $id
      * @param array $with
-     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      *
@@ -125,7 +125,7 @@ trait ReadTrait
      * }
      *
      * @param array|callable $condition
-     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
@@ -162,7 +162,7 @@ trait ReadTrait
      *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
      * }
      * @param array|callable $condition
-     * @param bool $asSql - если true запрос будет выполнен как простой sql
+     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
