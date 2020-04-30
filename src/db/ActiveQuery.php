@@ -41,6 +41,8 @@ class ActiveQuery extends Base
         if ($model->hasAttribute('status')) {
             $this->andWhere([$alias . 'status' => StatusEnum::ACTIVE]);
         }
+
+        return $this;
     }
 
     /**
@@ -71,6 +73,8 @@ class ActiveQuery extends Base
         if ($model->hasAttribute('is_deleted')) {
             $this->andWhere([$alias . 'is_deleted' => IsDeletedEnum::NOT_DELETED]);
         }
+
+        return $this;
     }
 
     public function byCurrentDomain()
