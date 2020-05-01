@@ -22,11 +22,7 @@ class ArrayDataProvider extends Base
      * на itemView показываем количество элементов widget.dataProvider.getPagination().getPageSize()
      * остальным даем класс для скрытия
      *
-     *   {% set itemClass = '' %}
-     *   {% if (index +1 > widget.dataProvider.getPagination().getPageSize()) %}
-     *   {% set itemClass = 'd-none' %}
-     *   {% endif %}
-     *   <tr data-expanded="true" class="{{ itemClass }} ">
+     *   <tr data-expanded="true" class=" {{ widget.dataProvider.getItemClass(index) }} ">
      *
      *   </tr>
      *
@@ -53,11 +49,11 @@ class ArrayDataProvider extends Base
      *   if (items.length <  pageSize){
      *      $(countTextSelector).html(items.length);
      *   }
-    *
-    *    if (itemsAfterCount <= 0){
-    *         self.hide();
-    *    }
-    *    });
+     *
+     *    if (itemsAfterCount <= 0){
+     *         self.hide();
+     *    }
+     *    });
      *
      * {@inheritdoc}
      */
@@ -80,5 +76,23 @@ class ArrayDataProvider extends Base
         }
 
         return $models;
+    }
+
+    /**
+     * Вызывается на вьюшке item в ListView Для получения класса для контейнера элемента листа
+     * в параметр передается index {{ widget.dataProvider.getItemClass(index) }}
+     *
+     * @param $index
+     * @param string $defaultHideClass
+     * @return string
+     */
+    public function getItemClass($index, $defaultHideClass = 'd-none')
+    {
+        $class = "";
+        if ($index + 1 > $this->getPagination()->getPageSize()){
+            $class = $defaultHideClass;
+        }
+
+        return $class;
     }
 }
