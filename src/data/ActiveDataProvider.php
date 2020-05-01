@@ -42,8 +42,9 @@ class ActiveDataProvider extends Base
             return $query->all($this->db);
         }
 
-        $sql = $query->prepare($this->db->queryBuilder)->createCommand()->rawSql;
-        $command = $this->db->createCommand($sql);
+        $modelClass = $query->modelClass;
+        $sql = $query->prepare($modelClass::getDb()->queryBuilder)->createCommand()->rawSql;
+        $command = $modelClass::getDb()->createCommand($sql);
 
         return $command->queryAll();
     }
