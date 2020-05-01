@@ -98,20 +98,20 @@ trait ReadTrait
      *
      * @param integer $id
      * @param array $with
-     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
+     * @param bool $asArray - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      *
      * @return ActiveRecord
      */
-    public function findById($id , $with = [], $asSql = false, $fetchMode = null)
+    public function findById($id , $with = [], $asArray = false, $fetchMode = null)
     {
         return $this->getOneByCondition(function (ActiveQuery $query) use ($id, $with){
             if (! empty($with)){
                 $query->with($with);
             }
             $query->andWhere(["{$this->getTableName()}.id" => $id]);
-        }, $asSql, $fetchMode);
+        }, $asArray, $fetchMode);
     }
 
     /**
@@ -124,12 +124,12 @@ trait ReadTrait
      * }
      *
      * @param array|callable $condition
-     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
+     * @param bool $asArray - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
      */
-    public function getOneByCondition($condition = null, $asSql = false, $fetchMode = null)
+    public function getOneByCondition($condition = null, $asArray = false, $fetchMode = null)
     {
         $query = $this->getQuery();
         if (is_callable($condition)){
@@ -142,7 +142,7 @@ trait ReadTrait
             }
         }
 
-        if (! $asSql){
+        if (! $asArray){
             return $query->one();
         }
 
@@ -161,12 +161,12 @@ trait ReadTrait
      *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
      * }
      * @param array|callable $condition
-     * @param bool $asSql - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
+     * @param bool $asArray - если true запрос будет выполнен как простой sql и вернет обыяный массив данных
      * @param int $fetchMode the result fetch mode. Please refer to [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return mixed
      */
-    public function getAllByCondition($condition = null, $asSql = false, $fetchMode = null)
+    public function getAllByCondition($condition = null, $asArray = false, $fetchMode = null)
     {
         $query = $this->getQuery();
         if (is_callable($condition)){
@@ -179,7 +179,7 @@ trait ReadTrait
             }
         }
 
-        if (! $asSql){
+        if (! $asArray){
             return $query->all();
         }
 

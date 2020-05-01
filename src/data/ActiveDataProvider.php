@@ -16,7 +16,7 @@ class ActiveDataProvider extends Base
      * для возможности делать запрос  через Command
      * @var bool
      */
-    public $asSql = false;
+    public $asArray = false;
     /**
      * {@inheritdoc}
      */
@@ -38,7 +38,7 @@ class ActiveDataProvider extends Base
             $query->addOrderBy($sort->getOrders());
         }
 
-        if (! $this->asSql){
+        if (! $this->asArray){
             return $query->all($this->db);
         }
 
