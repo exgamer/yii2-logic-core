@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\data;
 
+use concepture\yii2logic\db\ActiveQuery;
 use yii\data\ActiveDataProvider as Base;
 use yii\db\ActiveQueryInterface;
 use yii\db\QueryInterface;
@@ -40,6 +41,10 @@ class ActiveDataProvider extends Base
 
         if (! $this->asArray){
             return $query->all($this->db);
+        }
+
+        if (! $query instanceof ActiveQuery){
+            throw new InvalidConfigException('The "query" property must be an instance of a class concepture\yii2logic\db\ActiveQuery.');
         }
 
         return $query->queryAllAsArray();
