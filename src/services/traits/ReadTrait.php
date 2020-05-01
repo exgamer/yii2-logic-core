@@ -142,7 +142,7 @@ trait ReadTrait
             }
         }
 
-        if (! $asArray){
+        if ($asArray){
             $query->asArray();
         }
 
@@ -176,7 +176,7 @@ trait ReadTrait
             }
         }
 
-        if (! $asArray){
+        if ($asArray){
             $query->asArray();
         }
 

@@ -39,7 +39,7 @@ class ActiveDataProvider extends Base
             $query->addOrderBy($sort->getOrders());
         }
 
-        if (! $this->asArray){
+        if ($this->asArray){
             $query->asArray();
         }
 
