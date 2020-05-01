@@ -146,10 +146,7 @@ trait ReadTrait
             return $query->one();
         }
 
-        $sql = $query->prepare($this->getDb()->queryBuilder)->createCommand()->rawSql;
-        $command = $this->createCommand($sql);
-
-        return $command->queryOne($fetchMode);
+        return $query->queryOneAsArray($fetchMode);
     }
 
     /**
@@ -183,9 +180,7 @@ trait ReadTrait
             return $query->all();
         }
 
-        $sql = $query->prepare($this->getDb()->queryBuilder)->createCommand()->rawSql;
-        $command = $this->createCommand($sql);
-        $rows = $command->queryAll($fetchMode);
+        $rows = $query->queryAllAsArray($fetchMode);
         if ($query->indexBy){
             $rows = array_column($rows, null, $query->indexBy);
         }

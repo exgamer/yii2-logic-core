@@ -25,6 +25,22 @@ class ActiveQuery extends Base
         return $this->prepare($modelClass::getDb()->queryBuilder)->createCommand()->rawSql;
     }
 
+    public function queryAllAsArray($fetchMode = null)
+    {
+        $modelClass = $this->modelClass;
+        $command = $modelClass::getDb()->createCommand($this->getSql());
+
+        return $command->queryAll($fetchMode);
+    }
+
+    public function queryOneAsArray($fetchMode = null)
+    {
+        $modelClass = $this->modelClass;
+        $command = $modelClass::getDb()->createCommand($this->getSql());
+
+        return $command->queryOne($fetchMode);
+    }
+
     /**
      * только активные
      */
