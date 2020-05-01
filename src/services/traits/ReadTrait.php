@@ -1,9 +1,8 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
-use concepture\yii2logic\enum\CacheTagsEnum;
 use Yii;
-use yii\data\ActiveDataProvider;
+use concepture\yii2logic\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
