@@ -40,13 +40,9 @@ class ActiveDataProvider extends Base
         }
 
         if (! $this->asArray){
-            return $query->all($this->db);
+            $query->asArray();
         }
 
-        if (! $query instanceof ActiveQuery){
-            throw new InvalidConfigException('The "query" property must be an instance of a class concepture\yii2logic\db\ActiveQuery.');
-        }
-
-        return $query->queryAllAsArray();
+        return $query->all($this->db);
     }
 }

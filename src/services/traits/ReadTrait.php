@@ -143,10 +143,10 @@ trait ReadTrait
         }
 
         if (! $asArray){
-            return $query->one();
+            $query->asArray();
         }
 
-        return $query->queryOneAsArray($fetchMode);
+        return $query->one();
     }
 
     /**
@@ -177,15 +177,10 @@ trait ReadTrait
         }
 
         if (! $asArray){
-            return $query->all();
+            $query->asArray();
         }
 
-        $rows = $query->queryAllAsArray($fetchMode);
-        if ($query->indexBy){
-            $rows = array_column($rows, null, $query->indexBy);
-        }
-
-        return $rows;
+        return $query->all();
     }
 
     /**
