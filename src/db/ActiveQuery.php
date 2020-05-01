@@ -14,6 +14,18 @@ use yii\db\ActiveQuery as Base;
 class ActiveQuery extends Base
 {
     /**
+     * Возвращает собранный sql запрос
+     *
+     * @return string
+     */
+    public function getSql()
+    {
+        $modelClass = $this->modelClass;
+
+        return $this->prepare($modelClass::getDb()->queryBuilder)->createCommand()->rawSql;
+    }
+
+    /**
      * только активные
      */
     public function active()
