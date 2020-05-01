@@ -25,6 +25,10 @@ class ActiveQuery extends Base
         return $this->prepare($modelClass::getDb()->queryBuilder)->createCommand()->rawSql;
     }
 
+    /**
+     * @param null $fetchMode
+     * @return array
+     */
     public function queryAllAsArray($fetchMode = null)
     {
         $modelClass = $this->modelClass;
@@ -33,6 +37,10 @@ class ActiveQuery extends Base
         return $command->queryAll($fetchMode);
     }
 
+    /**
+     * @param null $fetchMode
+     * @return array
+     */
     public function queryOneAsArray($fetchMode = null)
     {
         $modelClass = $this->modelClass;
