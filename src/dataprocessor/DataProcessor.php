@@ -16,6 +16,14 @@ use yii\helpers\Console;
  *     'pageSize' => 5
  * ];
  *
+ *  $config = [
+ *     'dataHandlerClass' => [
+ *         'class' => BookmakerRatingRecountDataHandler::class,
+ *         'someVar' => 12
+ *      ],
+ *     'pageSize' => 5
+ * ];
+ *
  * DataProcessor::exec($config);
  *
  * @package concepture\yii2logic\dataprocessor
