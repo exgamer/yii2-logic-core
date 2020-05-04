@@ -14,6 +14,15 @@ use yii\db\ActiveQuery as Base;
 class ActiveQuery extends Base
 {
     /**
+     * Сброс where
+     */
+    public function resetWhere()
+    {
+        $this->where = [];
+        $this->params = [];
+    }
+
+    /**
      * Возвращает собранный sql запрос
      *
      * @return string
