@@ -62,14 +62,15 @@ abstract class Service extends Component implements ModifyEventInterface
      *
      *
      * @param $data
+     * @param null $key
      */
-    public function setStaticData($data)
+    public function setStaticData($data ,$key = null)
     {
         if (is_callable($data)){
             $data = call_user_func($data, $this->getStaticData());
         }
 
-        static::$static_data[static::class] = $data;
+        static::$static_data[static::class][$key] = $data;
     }
 
     /**
