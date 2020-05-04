@@ -126,8 +126,8 @@ abstract class DataHandler implements DataHandlerInterface
      * @param $key
      * @return mixed|null
      */
-    public function getData()
+    public function getData($key = null)
     {
-        return $this->getProcessor()->getData();
+        return $this->getProcessor()->getData($key);
     }
 }
