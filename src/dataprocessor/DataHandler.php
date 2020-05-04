@@ -112,7 +112,7 @@ abstract class DataHandler implements DataHandlerInterface
 
     /**
      * set temp data
-     *
+     * @see DataProcessor::setData()
      * @param $data
      */
     public function setData($data)
