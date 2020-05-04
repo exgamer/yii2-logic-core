@@ -70,6 +70,9 @@ abstract class Service extends Component implements ModifyEventInterface
     {
         if (is_callable($data)){
             $data = call_user_func($data, $this->getStaticData());
+            static::$static_data[static::class] = $data;
+
+            return true;
         }
 
         if (! $key){
@@ -77,6 +80,8 @@ abstract class Service extends Component implements ModifyEventInterface
         }
 
         static::$static_data[static::class][$key] = $data;
+
+        return true;
     }
 
     /**
