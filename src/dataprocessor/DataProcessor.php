@@ -53,8 +53,7 @@ class DataProcessor extends Component
     public function init()
     {
         parent::init();
-        $dataHandlerClass = $this->dataHandlerClass;
-        $this->dataHandler = new $dataHandlerClass();
+        $this->dataHandler = Yii::createObject($this->dataHandlerClass);
         $this->timeStart = Yii::$app->formatter->asDateTime('now', 'php:Y-m-d H:i:s');
     }
 
