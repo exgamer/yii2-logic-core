@@ -87,6 +87,10 @@ trait CatalogTrait
      */
     public function catalog($from = null, $to = null, $condition = null, $excludeDefault = false, $resetModels = true)
     {
+        /**
+         * @todo сделать ключ для статики если передан $condition
+         * но там может быть массив и анонимка
+         */
         $searchClass = $this->getRelatedSearchModelClass();
         if (! $from && ! $to){
             $from = $searchClass::getListSearchKeyAttribute();
