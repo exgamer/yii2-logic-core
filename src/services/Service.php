@@ -6,6 +6,7 @@ use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\interfaces\ModifyEventInterface;
 use concepture\yii2logic\services\traits\SqlModifyTrait;
 use concepture\yii2logic\services\traits\SqlReadTrait;
+use Exception;
 use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\traits\CacheTrait;
@@ -63,11 +64,16 @@ abstract class Service extends Component implements ModifyEventInterface
      *
      * @param $data
      * @param null $key
+     * @throws Exception
      */
     public function setStaticData($data ,$key = null)
     {
         if (is_callable($data)){
             $data = call_user_func($data, $this->getStaticData());
+        }
+
+        if (! $key){
+            throw new Exception("set key for data");
         }
 
         static::$static_data[static::class][$key] = $data;
