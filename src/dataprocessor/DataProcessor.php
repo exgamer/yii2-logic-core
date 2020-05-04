@@ -3,6 +3,7 @@
 namespace concepture\yii2logic\dataprocessor;
 
 use concepture\yii2logic\services\Service;
+use concepture\yii2logic\traits\DataTrait;
 use Yii;
 use yii\base\Component;
 use concepture\yii2logic\console\traits\OutputTrait;
@@ -32,8 +33,8 @@ use yii\helpers\Console;
 class DataProcessor extends Component
 {
     use OutputTrait;
+    use DataTrait;
 
-    public $data = [];
     public $dataHandlerClass;
     /**
      * @var DataHandler
@@ -49,41 +50,6 @@ class DataProcessor extends Component
 
     /** @var \DateTime Время начала выполнения скрипта */
     protected $timeStart;
-
-    /**
-     * set temp data
-     *
-     * !!! if use callback dont forget return data
-     *   $this->setData(function ($d) use ($data){
-     *       $d['ratings'][$data['domain_id']][] = $data['mark'];
-     *       return $d;
-     *   });
-     *
-     * @param $data
-     */
-    public function setData($data)
-    {
-        if (is_callable($data)){
-            $data = call_user_func($data, $this->getData());
-        }
-
-        $this->data = $data;
-    }
-
-    /**
-     * get temp data
-     *
-     * @param null $key
-     * @return mixed|null
-     */
-    public function getData($key = null)
-    {
-        if (! $key){
-            return $this->data;
-        }
-
-        return $this->data[$key] ?? null;
-    }
 
     public function printMemoryUsage($message = '')
     {
