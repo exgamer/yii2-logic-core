@@ -44,6 +44,50 @@ abstract class Service extends Component implements ModifyEventInterface
     use CacheTrait;
 
     /**
+     * Для хранения статических данных
+     * @var mixed
+     */
+    static $static_data;
+
+    /**
+     * запись статических данных сервиса
+     *
+     * $this->setStaticData(['apple]);
+     *
+     * !!! if use callback dont forget return $staticData
+     *   $this->setStaticData(function ($staticData) use ($data){
+     *       $staticData['ratings'][$data['domain_id']][] = $data['mark'];
+     *       return $staticData;
+     *   });
+     *
+     *
+     * @param $data
+     */
+    public function setStaticData($data)
+    {
+        if (is_callable($data)){
+            $data = call_user_func($data, $this->getStaticData());
+        }
+
+        static::$static_data = $data;
+    }
+
+    /**
+     * получение статических данных сервиса
+     *
+     * @param string|int|null $key
+     * @return mixed|null
+     */
+    public function getStaticData($key = null)
+    {
+        if (! $key){
+            return static::$static_data;
+        }
+
+        return static::$static_data ?? null;
+    }
+
+    /**
      * @param $sql
      * @param array $params
      * @return Command
