@@ -33,6 +33,7 @@ class DataProcessor extends Component
 {
     use OutputTrait;
 
+    public $data = [];
     public $dataHandlerClass;
     /**
      * @var DataHandler
