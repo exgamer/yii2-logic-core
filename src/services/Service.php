@@ -69,7 +69,7 @@ abstract class Service extends Component implements ModifyEventInterface
             $data = call_user_func($data, $this->getStaticData());
         }
 
-        static::$static_data = $data;
+        static::$static_data[static::class] = $data;
     }
 
     /**
@@ -81,10 +81,10 @@ abstract class Service extends Component implements ModifyEventInterface
     public function getStaticData($key = null)
     {
         if (! $key){
-            return static::$static_data;
+            return static::$static_data[static::class] ?? null;
         }
 
-        return static::$static_data[$key] ?? null;
+        return static::$static_data[static::class][$key] ?? null;
     }
 
     /**

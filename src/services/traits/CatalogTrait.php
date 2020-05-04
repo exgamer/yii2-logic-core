@@ -87,22 +87,6 @@ trait CatalogTrait
      */
     public function catalog($from = null, $to = null, $condition = null, $excludeDefault = false, $resetModels = true)
     {
-        /**
-         * @todo сделать ключ для статики если передан $condition
-         * но там может быть массив и анонимка
-         */
-        static $_catalog = null;
-        static $class;
-
-        if($class !== static::class) {
-            $_catalog = null;
-            $class = null;
-        }
-
-        if(! $class) {
-            $class = static::class;
-        }
-
         $searchClass = $this->getRelatedSearchModelClass();
         if (! $from && ! $to){
             $from = $searchClass::getListSearchKeyAttribute();
@@ -113,10 +97,19 @@ trait CatalogTrait
             throw new Exception("please realize getListSearchKeyAttribute() and getListSearchAttribute()  ".$searchClass . ' OR pass $from and $to in method');
         }
 
-        $models =  $_catalog;
+        $catalogKey = 'catalog';
+        if ($catalog = $this->getStaticData($catalogKey)){
+
+            $models =  $catalog;
+        }
+
         if (empty($models) || ! $resetModels || $condition !== null){
             $models = $this->modelsCatalog($excludeDefault, $from, $condition);
-            $_catalog = $models;
+            $this->setStaticData(function ($staticData) use ($catalogKey, $models){
+                $staticData[$catalogKey] = $models;
+
+                return $staticData;
+            });
         }
 
         return ArrayHelper::map($models, $from , $to);
