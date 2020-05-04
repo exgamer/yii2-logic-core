@@ -52,21 +52,36 @@ class DataProcessor extends Component
     /**
      * set temp data
      *
+     * !!! if use callback dont forget return data
+     *   $this->setData(function ($d) use ($data){
+     *       $d['ratings'][$data['domain_id']][] = $data['mark'];
+     *       return $d;
+     *   });
+     *
      * @param $data
      */
     public function setData($data)
     {
+        if (is_callable($data)){
+            $data = call_user_func($data, $this->getData());
+        }
+
         $this->data = $data;
     }
 
     /**
      * get temp data
      *
+     * @param null $key
      * @return mixed|null
      */
-    public function getData()
+    public function getData($key = null)
     {
-        return $this->data;
+        if (! $key){
+            return $this->data;
+        }
+
+        return $this->data[$key] ?? null;
     }
 
     public function printMemoryUsage($message = '')

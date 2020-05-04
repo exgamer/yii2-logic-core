@@ -123,6 +123,7 @@ abstract class DataHandler implements DataHandlerInterface
     /**
      * get temp data
      *
+     * @param $key
      * @return mixed|null
      */
     public function getData()
