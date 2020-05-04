@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\traits;
 
+use Exception;
+
 /**
  * Trait StaticDataTrait
  * @package concepture\yii2logic\traits
