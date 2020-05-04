@@ -16,6 +16,8 @@ abstract class DataHandler implements DataHandlerInterface
 {
     use OutputTrait;
 
+    protected $processor;
+
     /**
      * @return Query
      */
@@ -39,7 +41,7 @@ abstract class DataHandler implements DataHandlerInterface
      * @param type $inputData
      * @return bool
      */
-    public function isExecute(DataProcessor $processor, &$inputData = null)
+    public function isExecute(&$inputData = null)
     {
         return true;
     }
@@ -48,37 +50,37 @@ abstract class DataHandler implements DataHandlerInterface
      * Действия до запуска query
      * @param array $inputData
      */
-    public function beforeExecute(DataProcessor $processor, &$inputData = null){}
+    public function beforeExecute(&$inputData = null){}
     /**
      * дествия после завершения всех запросов
      * @param array $inputData
      */
-    public function afterExecute(DataProcessor $processor, &$inputData = null){}
+    public function afterExecute(&$inputData = null){}
     /**
      * Действия после завершения операции
      * @param type $data
      * @param type $inputData
      */
-    public function finishProcessModel(DataProcessor $processor, &$data, &$inputData = null){}
+    public function finishProcessModel(&$data, &$inputData = null){}
 
     /**
      * Действия после завершения обработки 1 страницы данных
      * @param type $inputData
      */
-    public function afterPageProcess(DataProcessor $processor, &$inputData = null){}
-    public function beforePageProcess(DataProcessor $processor, &$inputData = null){}
+    public function afterPageProcess(&$inputData = null){}
+    public function beforePageProcess(&$inputData = null){}
     /**
      * returns array of prepared data
      * вносим необходимые изменения в данные
      *
      * return array
      */
-    public function prepareModel(DataProcessor $processor, &$data){}
+    public function prepareModel(&$data){}
 
     /**
      * Выполняем необходимые действия с данными
      */
-    public function processModel(DataProcessor $processor, &$data, &$inputData = null){}
+    public function processModel(&$data, &$inputData = null){}
 
     /**
      * настройка основного запроса
@@ -90,5 +92,21 @@ abstract class DataHandler implements DataHandlerInterface
     /**
      * Показываем сообщение после выполнения
      */
-    public function showMessage(DataProcessor $processor, $isUpdate, $model, $endMessage){}
+    public function showMessage($isUpdate, $model, $endMessage){}
+
+    /**
+     * @return DataProcessor
+     */
+    public function getProcessor()
+    {
+        return $this->processor;
+    }
+
+    /**
+     * @param DataProcessor $processor
+     */
+    public function setProcessor($processor)
+    {
+        $this->processor = $processor;
+    }
 }

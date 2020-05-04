@@ -34,6 +34,9 @@ class DataProcessor extends Component
     use OutputTrait;
 
     public $dataHandlerClass;
+    /**
+     * @var DataHandler
+     */
     public $dataHandler;
     public $queryCondition;
     public $pageSize = 50;
@@ -62,6 +65,7 @@ class DataProcessor extends Component
     {
         parent::init();
         $this->dataHandler = Yii::createObject($this->dataHandlerClass);
+        $this->dataHandler->setProcessor($this);
         $this->timeStart = Yii::$app->formatter->asDateTime('now', 'php:Y-m-d H:i:s');
     }
 
@@ -216,7 +220,7 @@ class DataProcessor extends Component
      */
     public function beforeExecute(&$inputData = null)
     {
-        $this->dataHandler->beforeExecute($this, $inputData);
+        $this->dataHandler->beforeExecute($inputData);
     }
 
     /**
@@ -225,7 +229,7 @@ class DataProcessor extends Component
      */
     public function afterExecute(&$inputData = null)
     {
-        $this->dataHandler->afterExecute($this, $inputData);
+        $this->dataHandler->afterExecute($inputData);
     }
 
     /**
@@ -245,7 +249,7 @@ class DataProcessor extends Component
      */
     public function finishProcessModel(&$data, &$inputData = null)
     {
-        $this->dataHandler->finishProcessModel($this, $data, $inputData);
+        $this->dataHandler->finishProcessModel($data, $inputData);
     }
 
     /**
@@ -254,7 +258,7 @@ class DataProcessor extends Component
      */
     public function beforePageProcess(&$inputData = null)
     {
-        $this->dataHandler->beforePageProcess($this, $inputData);
+        $this->dataHandler->beforePageProcess( $inputData);
     }
 
     /**
@@ -263,7 +267,7 @@ class DataProcessor extends Component
      */
     public function afterPageProcess(&$inputData = null)
     {
-        $this->dataHandler->afterPageProcess($this, $inputData);
+        $this->dataHandler->afterPageProcess($inputData);
     }
 
     /**
@@ -285,7 +289,7 @@ class DataProcessor extends Component
      */
     public function prepareModel(&$data)
     {
-        $this->dataHandler->prepareModel($this, $data);
+        $this->dataHandler->prepareModel( $data);
     }
 
     /**
@@ -293,6 +297,6 @@ class DataProcessor extends Component
      */
     public function processModel(&$data, &$inputData = null)
     {
-        $this->dataHandler->processModel($this, $data, $inputData);
+        $this->dataHandler->processModel($data, $inputData);
     }
 }
