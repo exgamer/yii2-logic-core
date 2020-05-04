@@ -6,6 +6,7 @@ use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\interfaces\ModifyEventInterface;
 use concepture\yii2logic\services\traits\SqlModifyTrait;
 use concepture\yii2logic\services\traits\SqlReadTrait;
+use concepture\yii2logic\traits\StaticDataTrait;
 use Exception;
 use Yii;
 use concepture\yii2logic\helpers\ClassHelper;
@@ -43,61 +44,7 @@ abstract class Service extends Component implements ModifyEventInterface
     use CatalogTrait;
     use CopyTrait;
     use CacheTrait;
-
-    /**
-     * Для хранения статических данных
-     * @var mixed
-     */
-    static $static_data;
-
-    /**
-     * запись статических данных сервиса
-     *
-     * $this->setStaticData(['apple], 'fruits');
-     *
-     * !!! if use callback dont forget return $staticData
-     *   $this->setStaticData(function ($staticData) use ($data){
-     *       $staticData['ratings'][$data['domain_id']][] = $data['mark'];
-     *       return $staticData;
-     *   });
-     *
-     *
-     * @param $data
-     * @param null $key
-     * @throws Exception
-     */
-    public function setStaticData($data ,$key = null)
-    {
-        if (is_callable($data)){
-            $data = call_user_func($data, $this->getStaticData());
-            static::$static_data[static::class] = $data;
-
-            return true;
-        }
-
-        if (! $key){
-            throw new Exception("set key for data");
-        }
-
-        static::$static_data[static::class][$key] = $data;
-
-        return true;
-    }
-
-    /**
-     * получение статических данных сервиса
-     *
-     * @param string|int|null $key
-     * @return mixed|null
-     */
-    public function getStaticData($key = null)
-    {
-        if (! $key){
-            return static::$static_data[static::class] ?? null;
-        }
-
-        return static::$static_data[static::class][$key] ?? null;
-    }
+    use StaticDataTrait;
 
     /**
      * @param $sql
