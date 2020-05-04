@@ -84,7 +84,7 @@ abstract class Service extends Component implements ModifyEventInterface
             return static::$static_data;
         }
 
-        return static::$static_data ?? null;
+        return static::$static_data[$key] ?? null;
     }
 
     /**
