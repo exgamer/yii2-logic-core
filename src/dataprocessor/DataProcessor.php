@@ -117,7 +117,7 @@ class DataProcessor extends Component
                 $this->prepareModel($model);
                 $this->processModel($model, $inputData);
                 $this->finishProcessModel($model, $inputData);
-                Console::updateProgress($k, $count);
+                Console::updateProgress($k + 1 , $count);
             } catch (\Exception $dbEx){
                 $this->noDbConnectionExceptionActions($model, $dbEx);
                 continue;
