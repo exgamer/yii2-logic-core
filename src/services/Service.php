@@ -53,7 +53,7 @@ abstract class Service extends Component implements ModifyEventInterface
     /**
      * запись статических данных сервиса
      *
-     * $this->setStaticData(['apple]);
+     * $this->setStaticData(['apple], 'fruits');
      *
      * !!! if use callback dont forget return $staticData
      *   $this->setStaticData(function ($staticData) use ($data){
