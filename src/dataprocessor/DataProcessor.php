@@ -49,6 +49,26 @@ class DataProcessor extends Component
     /** @var \DateTime Время начала выполнения скрипта */
     protected $timeStart;
 
+    /**
+     * set temp data
+     *
+     * @param $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * get temp data
+     *
+     * @return mixed|null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
     public function printMemoryUsage($message = '')
     {
         $memory = memory_get_usage();

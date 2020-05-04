@@ -109,4 +109,24 @@ abstract class DataHandler implements DataHandlerInterface
     {
         $this->processor = $processor;
     }
+
+    /**
+     * set temp data
+     *
+     * @param $data
+     */
+    public function setData($data)
+    {
+        $this->getProcessor()->setData($data);
+    }
+
+    /**
+     * get temp data
+     *
+     * @return mixed|null
+     */
+    public function getData()
+    {
+        return $this->getProcessor()->getData();
+    }
 }
