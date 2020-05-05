@@ -156,7 +156,7 @@ class JsonFieldsBehavior extends Behavior
             }
         }
 
-        $validationResult = $this->validateJsonDataUnique();
+        $validationResult = $this->validateJsonDataUnique($validationResult);
 
         return $validationResult;
     }
@@ -166,9 +166,8 @@ class JsonFieldsBehavior extends Behavior
      *
      * @return bool
      */
-    public function validateJsonDataUnique()
+    public function validateJsonDataUnique($validationResult = true)
     {
-        $validationResult = true;
         $jsonAttrs = $this->getPojoAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
             $uniqueKey = $this->getAttributeConfigData($pojoClass, 'uniqueKey');
