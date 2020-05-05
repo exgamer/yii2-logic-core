@@ -14,9 +14,9 @@ use yii\db\ActiveQuery as Base;
 class ActiveQuery extends Base
 {
     /**
-     * Сброс where
+     * Сброс условий запроса
      */
-    public function resetWhere()
+    public function resetCondition()
     {
         $this->where = [];
         $this->params = [];
