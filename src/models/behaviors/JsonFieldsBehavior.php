@@ -151,7 +151,7 @@ class JsonFieldsBehavior extends Behavior
         $jsonAttrs = $this->getPojoAttributes();
         foreach ($jsonAttrs as $attr => $pojoClass){
             $pojoClass = $this->getAttributeConfigData($pojoClass, 'class');
-            if (! empty($this->owner->{$attr}) && ! $pojoClass::validateMultiple($this->owner->{$attr}) && ! Yii::$app->request->post('refresh-form')){
+            if (! empty($this->owner->{$attr}) && ! $pojoClass::validateMultiple($this->owner->{$attr})){
                 $validationResult = false;
             }
         }
