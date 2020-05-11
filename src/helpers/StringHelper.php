@@ -13,6 +13,32 @@ use yii\helpers\ArrayHelper;
 class StringHelper extends BaseHelper
 {
     /**
+     * Форматы чисел для стран по iso
+     *
+     * @var string[][]
+     */
+    public static $number_formats = [
+        'default' => [2 ,'.', ' '],
+        'en' => [2 ,'.', ','],
+        'fr' => [2, ',', ' '],
+    ];
+
+    /**
+     * Форматирует число по стране
+     *
+     * @param $number
+     * @param string $country_iso
+     * @return bool
+     */
+    public static function numberFormat($number, $country_iso = 'default')
+    {
+        if (isset(static::$number_formats[$country_iso])){
+            return number_format($number, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1], static::$number_formats[$country_iso][2]);
+        }
+
+        return number_format($number);
+    }
+    /**
      * Проверка строки на json
      *
      * @param string $string
