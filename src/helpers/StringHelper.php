@@ -18,22 +18,22 @@ class StringHelper extends BaseHelper
      * @var string[][]
      */
     public static $number_formats = [
-        'default' => [2 ,'.', ' '],
-        'en' => [2 ,'.', ','],
-        'fr' => [2, ',', ' '],
+        'default' => ['.', ' '],
+        'en' => ['.', ','],
+        'fr' => [',', ' '],
     ];
 
     /**
-     * Форматирует число по стране
+     * Форматирует целое число по стране
      *
      * @param $number
      * @param string $country_iso
      * @return bool
      */
-    public static function numberFormat($number, $country_iso = 'default')
+    public static function integerFormat($number, $country_iso = 'default')
     {
         if (isset(static::$number_formats[$country_iso])){
-            return number_format($number, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1], static::$number_formats[$country_iso][2]);
+            return number_format($number, 0, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1]);
         }
 
         return number_format($number);
