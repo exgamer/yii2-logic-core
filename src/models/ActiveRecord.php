@@ -25,6 +25,23 @@ abstract class ActiveRecord extends Base
     use NonPhysicalDeleteTrait;
     use SearchTrait;
 
+    /**
+     * Возвращает тип данных атрибута из базы с учетом пропертей
+     * @param $attribute
+     * @return mixed
+     * @throws InvalidConfigException
+     * @throws \yii\db\Exception
+     */
+    public function getAttrDbType($attribute)
+    {
+        $column = $this->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return $column->dbType;
+        }
+
+        throw new \yii\db\Exception("table not have field " . $attribute);
+    }
+
     public static function find()
     {
         return Yii::createObject(ActiveQuery::class, [get_called_class()]);
