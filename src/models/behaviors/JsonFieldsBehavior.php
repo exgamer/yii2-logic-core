@@ -19,7 +19,7 @@ use yii\db\ActiveRecord;
  *                   'currencies',
  *                   'restricted_countries',
  *                   'social' => [
- *                       'class' => Social::class,
+ *                       'class' => concepture\yii2logic\pojo\Social::class,
  *                       'uniqueKey' => 'social'
  *                   ],
  *                   'spoilers' => [
