@@ -5,6 +5,7 @@ use concepture\yii2logic\helpers\ClassHelper;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use Exception;
 
 /**
  * Поведение для полей являющихся Json строкой
@@ -129,7 +130,7 @@ class JsonFieldsBehavior extends Behavior
                 continue;
             }
 
-            $pojo = new $pojoClass();
+            $pojo = Yii::createObject($pojoClass);
             $pojo->load($value, '');
             $pojo->isNewRecord = false;
             $pogoData[$key] = $pojo;
@@ -161,6 +162,21 @@ class JsonFieldsBehavior extends Behavior
         return $pojoAttrs;
     }
 
+    public function getPojoModels($attribute)
+    {
+        $pojoAttributes = $this->getPojoAttributes();
+        if (! isset($pojoAttributes[$attribute])){
+            throw new Exception($attribute . " is no pojo data");
+        }
+
+        if ($this->owner->{$attribute}){
+            return $this->owner->{$attribute};
+        }
+
+        $pojoClass = $this->getAttributeConfigData($pojoAttributes[$attribute], 'class');
+
+        return [Yii::createObject($pojoClass)];
+    }
 
     /**
      * Валидация
