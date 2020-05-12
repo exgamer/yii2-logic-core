@@ -26,9 +26,9 @@ class JsonFieldsBehavior extends Behavior
             /**
              * setJson не используем потому что фреимворк сам конвертит при сохранении (тестируем)
              */
-//            ActiveRecord::EVENT_BEFORE_INSERT => 'setJson',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'setJson',
 //            ActiveRecord::EVENT_AFTER_VALIDATE => 'setJson',
-//            ActiveRecord::EVENT_BEFORE_UPDATE => 'setJson',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'setJson',
             ActiveRecord::EVENT_AFTER_FIND => 'getJson',
             ActiveRecord::EVENT_AFTER_INSERT=>'getJson',
             ActiveRecord::EVENT_AFTER_UPDATE=>'getJson',
@@ -204,22 +204,30 @@ class JsonFieldsBehavior extends Behavior
     }
 
     /**
-     *
-     */
-
-    /**
-     * @deprecated setJson не используем потому что фреимворк сам конвертит при сохранении (тестируем)
-     * Перед сохранением преобразуем объект в json строку
+     * Перед сохранением преобразуем объект в json строку только если тип поля текстовый
+     * для json полей конвертится само
      */
     public function setJson()
     {
-        if(empty($this->jsonAttr) ){
+        if(empty($this->jsonAttr) ) {
             return null;
         }
-        foreach ($this->jsonAttr as $attr) {
-            if (!is_array($this->owner->{$attr})){
+
+        foreach ($this->jsonAttr as $key => $config) {
+            $attr = $key;
+            if (! is_array($config) ) {
+                $attr = $config;
+            }
+
+            $dbType = $this->owner->getAttrDbType($attr);
+            if (in_array($dbType, ['json', 'jsonb'])) {
                 continue;
             }
+
+            if (! is_array($this->owner->{$attr})) {
+                continue;
+            }
+
             $this->owner->{$attr} = json_encode($this->owner->{$attr});
         }
     }
