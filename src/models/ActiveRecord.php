@@ -26,7 +26,7 @@ abstract class ActiveRecord extends Base
     use SearchTrait;
 
     /**
-     * Возвращает тип данных атрибута из базы с учетом пропертей
+     * Возвращает тип данных атрибута из базы
      * @param $attribute
      * @return mixed
      * @throws InvalidConfigException
