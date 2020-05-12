@@ -174,8 +174,10 @@ class JsonFieldsBehavior extends Behavior
         }
 
         $pojoClass = $this->getAttributeConfigData($pojoAttributes[$attribute], 'class');
+        $pojo = Yii::createObject($pojoClass);
+        $pojo->isNewRecord = true;
 
-        return [Yii::createObject($pojoClass)];
+        return [$pojo];
     }
 
     /**
