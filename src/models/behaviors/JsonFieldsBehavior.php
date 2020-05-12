@@ -9,6 +9,30 @@ use yii\db\ActiveRecord;
 /**
  * Поведение для полей являющихся Json строкой
  *
+ *   public function behaviors()
+ *   {
+ *       return [
+ *           'JsonFieldsBehavior' => [
+ *               'class' => 'concepture\yii2logic\models\behaviors\JsonFieldsBehavior',
+ *               'jsonAttr' => [
+ *                   'languages',
+ *                   'currencies',
+ *                   'restricted_countries',
+ *                   'social' => [
+ *                       'class' => Social::class,
+ *                       'uniqueKey' => 'social'
+ *                   ],
+ *                   'spoilers' => [
+ *                       'class' => Spoiler::class,
+ *                   ],
+ *                   'payment_systems' => [
+ *                       'class' => PaymentSystem::class,
+ *                   ],
+ *               ],
+ *           ],
+ *       ];
+ *   }
+ *
  * @author CitizenZet <exgamer@live.ru>
  */
 class JsonFieldsBehavior extends Behavior
