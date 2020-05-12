@@ -19,6 +19,30 @@ use yii\helpers\ArrayHelper;
 trait HasPropertyTrait
 {
     /**
+     * Возвращает тип данных атрибута из базы с учетом пропертей
+     * @param $attribute
+     * @return mixed
+     * @throws InvalidConfigException
+     * @throws \yii\db\Exception
+     */
+    public function getAttrDbType($attribute)
+    {
+        $column = $this->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return $column->dbType;
+        }
+
+        $propModelClass = static::getPropertyModelClass();
+        $propModel = Yii::createObject($propModelClass);
+        $column = $propModel->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return $column->dbType;
+        }
+
+        throw new \yii\db\Exception("table or property table not have field " . $attribute);
+    }
+
+    /**
      * Возвращает названия полей свойств, которые будут исключены при маппинге данных из основной модели
      *
      * @return array

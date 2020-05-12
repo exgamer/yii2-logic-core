@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\converters\LocaleConverter;
+use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use concepture\yii2logic\db\ActiveQuery;
 use Yii;
@@ -17,6 +18,30 @@ use yii\helpers\ArrayHelper;
  */
 trait HasLocalizationTrait
 {
+    /**
+     * Возвращает тип данных атрибута из базы с учетом пропертей
+     * @param $attribute
+     * @return mixed
+     * @throws InvalidConfigException
+     * @throws \yii\db\Exception
+     */
+    public function getAttrDbType($attribute)
+    {
+        $column = $this->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return $column->dbType;
+        }
+
+        $propModelClass = static::getLocalizationModelClass();
+        $propModel = Yii::createObject($propModelClass);
+        $column = $propModel->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return $column->dbType;
+        }
+
+        throw new \yii\db\Exception("table or property table not have field " . $attribute);
+    }
+
     /**
      * переменная для установки языка модели
      * по умолчнию в запрос будет посдтавлен язык приложения
