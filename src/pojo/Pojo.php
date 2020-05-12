@@ -12,6 +12,10 @@ use concepture\yii2logic\helpers\StringHelper;
  */
 abstract class Pojo extends Model
 {
+    /**
+     * так надо
+     * @var bool
+     */
     public $isNewRecord = false;
 
     /**
