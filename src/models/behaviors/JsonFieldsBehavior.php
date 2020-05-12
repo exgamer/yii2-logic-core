@@ -107,6 +107,7 @@ class JsonFieldsBehavior extends Behavior
 
             $pojo = new $pojoClass();
             $pojo->load($value, '');
+            $pojo->isNewRecord = false;
             $pogoData[$key] = $pojo;
         }
 

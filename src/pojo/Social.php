@@ -14,12 +14,6 @@ class Social extends Pojo
     public $url;
 
     /**
-     * В виджете DynamicForm требуется AR поэтому подсовываем это
-     * @var bool
-     */
-    public $isNewRecord = true;
-
-    /**
      * @inheritDoc
      */
     public function rules()

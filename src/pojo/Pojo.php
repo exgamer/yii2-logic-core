@@ -12,6 +12,8 @@ use concepture\yii2logic\helpers\StringHelper;
  */
 abstract class Pojo extends Model
 {
+    public $isNewRecord = true;
+
     /**
      * @inheritDoc
      */
