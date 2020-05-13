@@ -45,4 +45,12 @@ class ActiveDataProvider extends Base
 
         return $query->all($this->db);
     }
+
+    /**
+     * @TODO метод для получаения количества элементов на след странице
+     */
+    public function getNextPageCount()
+    {
+        throw new \Exception(" Надо сделать :)");
+    }
 }
