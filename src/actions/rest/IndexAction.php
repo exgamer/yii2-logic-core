@@ -5,10 +5,8 @@ use concepture\yii2logic\actions\Action;
 use Yii;
 
 /**
- * Экшен для вывода списка
- *
  * Class IndexAction
- * @package cconcepture\yii2logic\actions\web
+ * @package concepture\yii2logic\actions\rest
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class IndexAction extends Action
