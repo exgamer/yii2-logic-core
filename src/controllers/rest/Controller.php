@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\controllers\rest;
 
+use Yii;
 use yii\filters\Cors;
 use yii\rest\Controller as Base;
 
@@ -19,5 +20,11 @@ class Controller extends Base
         ];
 
         return $b;
+    }
+
+    public function init()
+    {
+        parent::init();
+        Yii::$app->user->enableSession = false;
     }
 }
