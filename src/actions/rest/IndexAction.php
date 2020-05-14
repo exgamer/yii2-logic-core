@@ -22,7 +22,7 @@ class IndexAction extends Action
     public function run()
     {
         $searchModel = null;
-        if (! $this->searchClass) {
+        if ($this->searchClass) {
             $searchModel = Yii::createObject($this->searchClass);
         }
 
