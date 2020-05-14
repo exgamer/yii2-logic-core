@@ -42,13 +42,14 @@ class IndexAction extends Action
         }
 
         $dataProvider =  $this->getService()->{$this->serviceMethod}($requestParams, $this->dataProviderConfig(), $searchModel, '');
+        $models = $dataProvider->getModels();
         Yii::$app->response->headers->set("Total-Count", $dataProvider->getTotalCount());
-        Yii::$app->response->headers->set("Page", $dataProvider->getPagination()->page);
-        Yii::$app->response->headers->set("Page-Count", $dataProvider->getPagination()->pageCount);
-        Yii::$app->response->headers->set("Page-Size", $dataProvider->getPagination()->pageSize);
+        Yii::$app->response->headers->set("Page", $dataProvider->getPagination()->getPage() +1);
+        Yii::$app->response->headers->set("Page-Count", $dataProvider->getPagination()->getPageCount());
+        Yii::$app->response->headers->set("Page-Size", $dataProvider->getPagination()->getPageSize());
         Yii::$app->response->headers->set("Count", $dataProvider->getCount());
 
-        return $dataProvider->getModels();
+        return $models;
     }
 
     public function dataProviderConfig()
@@ -58,7 +59,7 @@ class IndexAction extends Action
                 'pageSize' => $this->pageSize,
                 'pageSizeParam' => false,
                 'forcePageParam' => false,
-                'page' => $this->page,
+                'page' => $this->page > 0 ? $this->page -1 : $this->page,
                 'pageSizeLimit' => [1, 1000]
             ]
         ];
