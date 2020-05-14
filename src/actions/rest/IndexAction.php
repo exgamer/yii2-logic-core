@@ -5,6 +5,11 @@ use concepture\yii2logic\actions\Action;
 use Yii;
 
 /**
+ * http://site.loc/api/entity/index?pageSize=10
+ * http://site.loc/api/entity/index?page=1
+ * http://site.loc/api/entity/index?sort=-id,caption
+ *
+ *
  * Class IndexAction
  * @package concepture\yii2logic\actions\rest
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
