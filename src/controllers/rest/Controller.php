@@ -41,6 +41,20 @@ class Controller extends Base
         return $actions;
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function verbs()
+    {
+        return [
+            'index' => ['GET', 'HEAD'],
+            'view' => ['GET', 'HEAD'],
+            'create' => ['POST'],
+            'update' => ['PUT', 'PATCH'],
+            'delete' => ['DELETE'],
+        ];
+    }
+
     public function behaviors()
     {
         $b = parent::behaviors();
