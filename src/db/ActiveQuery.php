@@ -26,12 +26,12 @@ class ActiveQuery extends Base
      * переустановка условия для выборки проперти с учетом уникального поля
      * для моделей где подключен HasPropertyTrait
      *
-     * @param $id
+     * @param $value
      */
-    public function applyPropertyUniqueId($id)
+    public function applyPropertyUniqueValue($value)
     {
         $modelClass = $this->modelClass;
-        $modelClass::setPropertyJoinQuery($this, $id);
+        $modelClass::setPropertyJoinQuery($this, $value);
     }
 
     /**
