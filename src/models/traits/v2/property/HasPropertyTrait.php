@@ -172,25 +172,41 @@ trait HasPropertyTrait
          * Выборка свойств для текущего uniqueField
          */
         $uniVal = static::uniqueFieldValue();
-        if (! is_array($uniVal)){
-            $uniVal = [$uniVal];
-        }
-
-        $cleanVals = [];
-        foreach ($uniVal as $val){
-            $cleanVals[] = (int) $val;
-        }
-
-        $propertyJoin = static::getPropertyJoin();
-        $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
-            static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
-            . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $uniVal) .")");
+        static::setPropertyJoinQuery($query, $uniVal);
         /**
          * Выборка дефолтных свойств
          */
         $query->leftJoin($m::tableName() . " d", 'd.entity_id = '. static::tableName().'.id AND d.default = 1');
 
         return $query;
+    }
+
+    public static function setPropertyJoinQuery($query, $uniqueValue)
+    {
+        if (! is_array($uniqueValue)){
+            $uniqueValue = [$uniqueValue];
+        }
+
+        $cleanVals = [];
+        foreach ($uniqueValue as $val){
+            $cleanVals[] = (int) $val;
+        }
+        $propertyJoin = static::getPropertyJoin();
+        $m = static::getPropertyModelClass();
+
+        if ($query->join) {
+            foreach ($query->join as $key => $join) {
+                if ($join[1] == $m::tableName() . " ". static::propertyAlias()) {
+
+                    unset($query->join[$key]);
+                    break;
+                }
+            }
+        }
+
+        $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
+            static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
+            . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $cleanVals) .")");
     }
 
     /**
