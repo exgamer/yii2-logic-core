@@ -29,16 +29,16 @@ class Controller extends Base
          * @TODO реализовать остальные рест экшоны
          */
         $actions['view'] = [
-            'class' => 'core\actions\ViewAction',
+            'class' => 'concepture\yii2logic\actions\rest\ViewAction',
         ];
         $actions['create'] = [
-            'class' => 'core\actions\CreateAction',
+            'class' => 'concepture\yii2logic\actions\rest\CreateAction',
         ];
         $actions['update'] = [
-            'class' => 'core\actions\UpdateAction',
+            'class' => 'concepture\yii2logic\actions\rest\UpdateAction',
         ];
         $actions['delete'] = [
-            'class' => 'core\actions\DeleteAction',
+            'class' => 'concepture\yii2logic\actions\rest\DeleteAction',
         ];
 
         return $actions;
