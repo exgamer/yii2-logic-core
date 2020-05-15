@@ -37,7 +37,7 @@ class IndexAction extends Action
 
         if (isset($requestParams['per_page'])) {
             $this->pageSize = $requestParams['per_page'];
-            unset($requestParams['pageSize']);
+            unset($requestParams['per_page']);
         }
 
         if (isset($requestParams['page'])) {
