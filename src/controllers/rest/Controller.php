@@ -25,6 +25,9 @@ class Controller extends Base
         $actions['index'] = [
             'class' => 'concepture\yii2logic\actions\rest\IndexAction',
         ];
+        /**
+         * @TODO реализовать остальные рест экшоны
+         */
         $actions['view'] = [
             'class' => 'core\actions\ViewAction',
         ];
