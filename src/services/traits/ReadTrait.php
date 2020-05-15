@@ -18,12 +18,18 @@ trait ReadTrait
     /**
      * Возвращает QueryBuilder
      *
+     * @param null $model
      * @return ActiveQuery
      */
-    public function getQuery()
+    public function getQuery($model = null)
     {
-        $class = $this->getRelatedModel();
-        $query = $class::find();
+        if (! $model) {
+            $class = $this->getRelatedModel();
+            $query = $class::find();
+        }else {
+            $query = $model::find();
+        }
+
         $this->extendQuery($query);
 
         return $query;
@@ -62,7 +68,7 @@ trait ReadTrait
             $searchModel = $this->getRelatedSearchModel();
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery($searchModel);
         if (is_callable($condition)){
             call_user_func($condition, $query);
         }
