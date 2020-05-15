@@ -5,7 +5,8 @@ use concepture\yii2logic\actions\Action;
 use Yii;
 
 /**
- * http://site.loc/api/entity/index?pageSize=10
+ * http://site.loc/api/entity?fields=id,caption
+ * http://site.loc/api/entity/index?per_page=10
  * http://site.loc/api/entity/index?page=1
  * http://site.loc/api/entity/index?sort=-id,caption
  *
@@ -34,8 +35,8 @@ class IndexAction extends Action
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-        if (isset($requestParams['pageSize'])) {
-            $this->pageSize = $requestParams['pageSize'];
+        if (isset($requestParams['per_page'])) {
+            $this->pageSize = $requestParams['per_page'];
             unset($requestParams['pageSize']);
         }
 
@@ -44,15 +45,7 @@ class IndexAction extends Action
             unset($requestParams['page']);
         }
 
-        $dataProvider =  $this->getService()->{$this->serviceMethod}($requestParams, $this->dataProviderConfig(), $searchModel, '');
-        $models = $dataProvider->getModels();
-        Yii::$app->response->headers->set("Total-Count", $dataProvider->getTotalCount());
-        Yii::$app->response->headers->set("Page", $dataProvider->getPagination()->getPage() +1);
-        Yii::$app->response->headers->set("Page-Count", $dataProvider->getPagination()->getPageCount());
-        Yii::$app->response->headers->set("Page-Size", $dataProvider->getPagination()->getPageSize());
-        Yii::$app->response->headers->set("Count", $dataProvider->getCount());
-
-        return $models;
+        return  $this->getService()->{$this->serviceMethod}($requestParams, $this->dataProviderConfig(), $searchModel, '');
     }
 
     public function dataProviderConfig()
