@@ -1,10 +1,10 @@
 <?php
 namespace concepture\yii2logic\models\traits\v2\property;
 
+use concepture\yii2logic\db\HasPropertyActiveQuery;
 use Exception;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
-use concepture\yii2logic\db\ActiveQuery;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -163,7 +163,7 @@ trait HasPropertyTrait
         /**
          * @var ActiveQuery $query
          */
-        $query = Yii::createObject(ActiveQuery::class, [get_called_class()]);
+        $query = Yii::createObject(HasPropertyActiveQuery::class, [get_called_class()]);
         $m = static::getPropertyModelClass();
         $selectArray = static::constructPropertySelect();
         $selectArray[] = static::tableName(). ".*";
