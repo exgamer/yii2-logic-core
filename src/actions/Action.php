@@ -127,10 +127,6 @@ abstract class Action extends Base
      */
     protected function getController()
     {
-        if (!$this->controller instanceof Controller){
-            throw new \Exception("Controller must be an instance of ". Controller::class);
-        }
-
         return $this->controller;
     }
 

@@ -14,7 +14,7 @@ trait SqlReadTrait
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return array
      */
-    public function queryAll($sql, $params, $fetchMode = null)
+    public function queryAll($sql, $params = [], $fetchMode = null)
     {
         $command = $this->createCommand($sql, $params);
 
@@ -28,7 +28,7 @@ trait SqlReadTrait
      * for valid fetch modes. If this parameter is null, the value set in [[fetchMode]] will be used.
      * @return array
      */
-    public function queryOne($sql, $params, $fetchMode = null)
+    public function queryOne($sql, $params = [], $fetchMode = null)
     {
         $command = $this->createCommand($sql, $params);
 

@@ -23,6 +23,18 @@ class ActiveQuery extends Base
     }
 
     /**
+     * переустановка условия для выборки проперти с учетом уникального поля
+     * для моделей где подключен HasPropertyTrait
+     *
+     * @param $value
+     */
+    public function applyPropertyUniqueValue($value)
+    {
+        $modelClass = $this->modelClass;
+        $modelClass::setPropertyJoinQuery($this, $value);
+    }
+
+    /**
      * Возвращает собранный sql запрос
      *
      * @return string
