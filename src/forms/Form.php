@@ -284,7 +284,7 @@ abstract class Form extends Model
                     continue;
                 }
 
-                $pojo = Yii::createObject($pojoClass);
+                $pojo = new $pojoClass();
                 $pojo->load($value, '');
                 $pogoData[$key] = $pojo;
             }
