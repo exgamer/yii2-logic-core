@@ -16,7 +16,7 @@ trait SqlModifyTrait
      * @return boolean
      * @throws Exception
      */
-    public function execute($sql, $params)
+    public function execute($sql, $params = [])
     {
         $command = $this->createCommand($sql, $params);
 

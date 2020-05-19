@@ -202,6 +202,18 @@ class JsonFieldsBehavior extends Behavior
 
         $validationResult = $this->validateJsonDataUnique($validationResult);
 
+        // Для того чтобы ошибки валидации pojo можно было получить через owner->getErrors()
+        // TODO: Понаблюдать
+        foreach ($jsonAttrs as $attr => $pojoClass) {
+            if (!empty($this->owner->{$attr}) && is_array($this->owner->{$attr})) {
+                foreach ($this->owner->{$attr} as $model) {
+                    if ($error = $model->getFirstError($attr)) {
+                        $this->owner->addError($attr, $error);
+                    }
+                }
+            }
+        }
+
         return $validationResult;
     }
 
