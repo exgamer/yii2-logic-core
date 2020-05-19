@@ -76,7 +76,7 @@ class ActiveQuery extends Base
     public function active()
     {
         $model = Yii::createObject($this->modelClass);
-        $alias = "";
+        $alias = trim($model::tableName(), '{}%') . ".";;
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
             in_array(HasLocalePropertyTrait::class, $traits)){
@@ -108,7 +108,7 @@ class ActiveQuery extends Base
     public function notDeleted()
     {
         $model = Yii::createObject($this->modelClass);
-        $alias = "";
+        $alias = trim($model::tableName(), '{}%') . ".";;
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
             in_array(HasLocalePropertyTrait::class, $traits)){
