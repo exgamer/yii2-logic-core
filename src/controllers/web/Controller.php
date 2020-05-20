@@ -4,6 +4,7 @@ namespace concepture\yii2logic\controllers\web;
 
 use ReflectionException;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller as Base;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -152,6 +153,30 @@ abstract class Controller extends Base
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         return $payload;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnUrlKey()
+    {
+        return $this->module->id . $this->id;
+    }
+
+    /**
+     * @param array|string $url
+     * @param int $statusCode
+     * @return \yii\console\Response|Response
+     */
+    public function redirect($url, $statusCode = 302)
+    {
+        $return = Url::previous($this->getReturnUrlKey());
+        if ($return) {
+            Yii::$app->getResponse()->redirect($return);
+        }
+
+        // calling Url::to() here because Response::redirect() modifies route before calling Url::to()
+        return Yii::$app->getResponse()->redirect(Url::to($url), $statusCode);
     }
 
     /**

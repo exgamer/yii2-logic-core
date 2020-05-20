@@ -25,12 +25,12 @@ abstract class Action extends Base
     public $queryParams = [];
 
     /**
-     * Ключ для урл возврата
      * @return string
+     * @throws \Exception
      */
     protected function getReturnUrlKey()
     {
-        return $this->controller->module->id . $this->controller->id;
+        return $this->getController()->getReturnUrlKey();
     }
 
     /**
@@ -110,14 +110,6 @@ abstract class Action extends Base
      */
     public function redirect($url, $statusCode = 302)
     {
-        /**
-         * Проверка есть ли урл для возврата
-         */
-        $return = Url::previous($this->getReturnUrlKey());
-        if ($return) {
-            return $this->getController()->redirect($return);
-        }
-
         return $this->getController()->redirect($url, $statusCode);
     }
 
