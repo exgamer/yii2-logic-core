@@ -3,6 +3,7 @@ namespace concepture\yii2logic\actions\web\tree;
 
 use concepture\yii2logic\actions\Action;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * Экшен для вывода списка
@@ -18,6 +19,7 @@ class IndexAction extends Action
 
     public function run($parent_id = null)
     {
+        Url::remember('', $this->getReturnUrlKey());
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $searchModel->parent_id = $parent_id;

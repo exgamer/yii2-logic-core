@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\actions\web\localized\tree;
 
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use Yii;
 use yii\db\Exception;
@@ -22,6 +23,7 @@ class IndexAction extends Action
 
     public function run($locale = null, $parent_id = null)
     {
+        Url::remember('', $this->getReturnUrlKey());
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $searchModel->load(Yii::$app->request->queryParams);

@@ -3,6 +3,7 @@ namespace concepture\yii2logic\actions\web\v3;
 
 use concepture\yii2logic\actions\Action;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * @todo эксперимент пока не юзать
@@ -20,6 +21,7 @@ class IndexAction extends Action
 
     public function run()
     {
+        Url::remember('', $this->getReturnUrlKey());
         $searchModel = $this->getService()->getRelatedSearchModel();
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);

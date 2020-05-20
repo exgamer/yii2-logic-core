@@ -7,6 +7,7 @@ use ReflectionException;
 use Yii;
 use yii\base\Action as Base;
 use yii\db\Exception;
+use yii\helpers\Url;
 use yii\web\ServerErrorHttpException;
 use yii\web\BadRequestHttpException;
 
@@ -23,7 +24,14 @@ abstract class Action extends Base
     public $redirectParams = [];
     public $queryParams = [];
 
-
+    /**
+     * Ключ для урл возврата
+     * @return string
+     */
+    protected function getReturnUrlKey()
+    {
+        return $this->controller->module->id . $this->controller->id;
+    }
 
     /**
      * мапит параметры запроса в модель
@@ -102,6 +110,14 @@ abstract class Action extends Base
      */
     public function redirect($url, $statusCode = 302)
     {
+        /**
+         * Проверка есть ли урл для возврата
+         */
+        $return = Url::previous($this->getReturnUrlKey());
+        if ($return) {
+            return $this->redirect($return);
+        }
+
         return $this->getController()->redirect($url, $statusCode);
     }
 
