@@ -183,6 +183,7 @@ abstract class Controller extends Base
     {
         $return = Url::previous($this->getReturnUrlKey());
         if ($return) {
+            Yii::$app->getSession()->remove($this->getReturnUrlKey());
             return Yii::$app->getResponse()->redirect($return);
         }
 
