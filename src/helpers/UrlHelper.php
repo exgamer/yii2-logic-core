@@ -5,6 +5,7 @@ namespace concepture\yii2logic\helpers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
+use yii\helpers\Url;
 
 /**
  * Class UrlHelper
@@ -26,6 +27,17 @@ class UrlHelper
         $urlManagerConfig['baseUrl'] = "";
 
         return Yii::createObject($urlManagerConfig);
+    }
+
+    /**
+     * Возвращает текущую схему урл
+     * @return array|false|int|string|null
+     */
+    public static function getCurrentSchema()
+    {
+        $current = Url::current([], true);
+
+        return parse_url($current, PHP_URL_SCHEME);
     }
 
     /**
