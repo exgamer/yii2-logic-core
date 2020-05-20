@@ -3,6 +3,7 @@ namespace concepture\yii2logic\forms;
 
 use common\pojo\Social;
 use concepture\yii2logic\models\behaviors\JsonFieldsBehavior;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
 use ReflectionException;
@@ -11,6 +12,7 @@ use yii\base\InvalidArgumentException;
 use yii\helpers\Json;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
+use yii\validators\Validator;
 
 /**
  * Базовая форма сущности связанной с  моделью AR
@@ -131,6 +133,40 @@ abstract class Form extends Model
     }
 
     /**
+     * Поддержка кастомных валидаторов
+     *
+     * @return \ArrayObject|ArrayObject
+     * @throws InvalidConfigException
+     * @throws ReflectionException
+     */
+    public function createValidators()
+    {
+        $validators = new \ArrayObject();
+        foreach ($this->rules() as $rule) {
+            if ($rule instanceof Validator) {
+                $validators->append($rule);
+            } elseif (is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
+                /**
+                 * Поддержка кастомных валидаторов функций
+                 * если нет метода пропускаем все равно метод validate() вызовет валидатор связаннйо модели
+                 *
+                 */
+                if (! $this->hasMethod($rule[1])) {
+                    continue;
+                }
+
+                $validator = Validator::createValidator($rule[1], $this, (array) $rule[0], array_slice($rule, 2));
+                $validators->append($validator);
+            } else {
+                throw new InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
+            }
+        }
+
+        return $validators;
+    }
+
+    /**
+     * @todo это поддержка кастомных валидаторов
      * Метод переопределен для возможнсти подстановки в форму связанной модели для валидации при редактировании
      * чтобы корректно работала валидация где нужен id сущности без указания ее в форме
      *
