@@ -151,7 +151,7 @@ abstract class Form extends Model
                  * если нет метода пропускаем все равно метод validate() вызовет валидатор связаннйо модели
                  *
                  */
-                if (! $this->hasMethod($rule[1])) {
+                if (! $this->hasMethod($rule[1]) &&  !isset(Validator::$builtInValidators[$rule[1]])) {
                     continue;
                 }
 
