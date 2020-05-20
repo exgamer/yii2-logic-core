@@ -26,7 +26,7 @@ class IndexAction extends Action
      */
     public function run()
     {
-        Url::remember('', $this->getReturnUrlKey());
+        $this->rememberUrl();
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $this->extendSearch($searchModel);

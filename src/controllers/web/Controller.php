@@ -156,6 +156,14 @@ abstract class Controller extends Base
     }
 
     /**
+     *
+     */
+    public function rememberUrl()
+    {
+        \yii\helpers\Url::remember('', $this->getReturnUrlKey());
+    }
+
+    /**
      * @return string
      */
     public function getReturnUrlKey()

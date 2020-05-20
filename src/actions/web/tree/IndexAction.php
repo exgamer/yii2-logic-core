@@ -19,7 +19,7 @@ class IndexAction extends Action
 
     public function run($parent_id = null)
     {
-        Url::remember('', $this->getReturnUrlKey());
+        $this->rememberUrl();
         $searchClass = $this->getSearchClass();
         $searchModel = Yii::createObject($searchClass);
         $searchModel->parent_id = $parent_id;

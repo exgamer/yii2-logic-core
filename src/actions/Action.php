@@ -25,6 +25,14 @@ abstract class Action extends Base
     public $queryParams = [];
 
     /**
+     * @throws \Exception
+     */
+    public function rememberUrl()
+    {
+        $this->getController()->rememberUrl();
+    }
+
+    /**
      * @return string
      * @throws \Exception
      */

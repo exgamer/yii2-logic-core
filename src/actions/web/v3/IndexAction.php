@@ -21,7 +21,7 @@ class IndexAction extends Action
 
     public function run()
     {
-        Url::remember('', $this->getReturnUrlKey());
+        $this->rememberUrl();
         $searchModel = $this->getService()->getRelatedSearchModel();
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
