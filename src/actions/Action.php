@@ -115,7 +115,7 @@ abstract class Action extends Base
          */
         $return = Url::previous($this->getReturnUrlKey());
         if ($return) {
-            return $this->redirect($return);
+            return $this->getController()->redirect($return);
         }
 
         return $this->getController()->redirect($url, $statusCode);
