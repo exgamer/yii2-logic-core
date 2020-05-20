@@ -175,11 +175,13 @@ abstract class Controller extends Base
     }
 
     /**
-     * @param array|string $url
+     * Редирект с учетом записанного в сессию урл для возврата
+     * 
+     * @param $url
      * @param int $statusCode
-     * @return \yii\console\Response|Response
+     * @return mixed
      */
-    public function redirect($url, $statusCode = 302)
+    public function redirectPrevious($url, $statusCode = 302)
     {
         $return = Url::previous($this->getReturnUrlKey());
         if ($return) {
@@ -188,7 +190,7 @@ abstract class Controller extends Base
         }
 
         // calling Url::to() here because Response::redirect() modifies route before calling Url::to()
-        return Yii::$app->getResponse()->redirect(Url::to($url), $statusCode);
+        return $this->redirect($url, $statusCode);
     }
 
     /**

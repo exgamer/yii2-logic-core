@@ -58,7 +58,7 @@ class UpdateAction extends Action
                     $redirectParams = [$this->redirect, 'id' => $originModel->id];
                     $this->extendRedirectParams($redirectParams);
 
-                    return $this->redirect($redirectParams);
+                    return $this->redirectPrevious($redirectParams);
                 }
             }
 

@@ -63,7 +63,7 @@ class UpdateAction extends Action
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                        return $this->redirect([$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale]);
+                        return $this->redirectPrevious([$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale]);
                     }
                 }
             }

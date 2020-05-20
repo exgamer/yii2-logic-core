@@ -38,7 +38,7 @@ class CreateAction extends Action
                 $redirectParams = [$this->redirect, 'id' => $result->id];
                 $this->extendRedirectParams($redirectParams);
 
-                return $this->redirect($redirectParams);
+                return $this->redirectPrevious($redirectParams);
             }
         }
 

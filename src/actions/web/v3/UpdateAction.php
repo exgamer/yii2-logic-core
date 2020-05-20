@@ -59,7 +59,7 @@ class UpdateAction extends Action
                     }
 
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                        return $this->redirect($this->getRedirectParams($originModel));
+                        return $this->redirectPrevious($this->getRedirectParams($originModel));
                     }
                 }
             }

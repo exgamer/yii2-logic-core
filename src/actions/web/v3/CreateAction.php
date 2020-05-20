@@ -40,7 +40,7 @@ class CreateAction extends Action
 
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
 
-                    return $this->redirect($this->getRedirectParams($result));
+                    return $this->redirectPrevious($this->getRedirectParams($result));
                 } else {
 
                     return $this->redirect(['update', 'id' => $result->id]);

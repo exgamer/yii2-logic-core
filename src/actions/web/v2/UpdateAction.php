@@ -79,7 +79,7 @@ class UpdateAction extends Action
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                        return $this->redirect([$this->redirect]);
+                        return $this->redirectPrevious([$this->redirect]);
                     }
                 }
             }

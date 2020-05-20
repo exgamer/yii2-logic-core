@@ -110,6 +110,11 @@ abstract class Action extends Base
         return $args;
     }
 
+    public function redirectPrevious($url, $statusCode = 302)
+    {
+        return $this->getController()->redirectPrevious($url, $statusCode);
+    }
+
     /**
      * редирект
      *
