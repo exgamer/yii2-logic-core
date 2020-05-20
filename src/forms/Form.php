@@ -133,7 +133,9 @@ abstract class Form extends Model
     }
 
     /**
-     * Поддержка кастомных валидаторов
+     * @todo это поддержка кастомных валидаторов
+     * Метод переопределен для удаления из правил кастомных валидаторов функции модели
+     * равно метод validate() вызовет валидатор связанной модели
      *
      * @return \ArrayObject|ArrayObject
      * @throws InvalidConfigException
@@ -148,7 +150,7 @@ abstract class Form extends Model
             } elseif (is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
                 /**
                  * Поддержка кастомных валидаторов функций
-                 * если нет метода пропускаем все равно метод validate() вызовет валидатор связаннйо модели
+                 * если нет метода пропускаем все равно метод validate() вызовет валидатор связанной модели
                  *
                  */
                 if (! $this->hasMethod($rule[1]) &&  !isset(Validator::$builtInValidators[$rule[1]])) {
