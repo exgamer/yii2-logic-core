@@ -183,7 +183,7 @@ abstract class Controller extends Base
     {
         $return = Url::previous($this->getReturnUrlKey());
         if ($return) {
-            Yii::$app->getResponse()->redirect($return);
+            return Yii::$app->getResponse()->redirect($return);
         }
 
         // calling Url::to() here because Response::redirect() modifies route before calling Url::to()
