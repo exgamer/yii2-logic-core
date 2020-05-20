@@ -25,6 +25,8 @@ abstract class Action extends Base
     public $queryParams = [];
 
     /**
+     * Запомнить текущий адрес
+     *
      * @throws \Exception
      */
     public function rememberUrl()

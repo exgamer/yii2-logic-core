@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\controllers\web;
 
+use Exception;
 use ReflectionException;
 use Yii;
 use yii\helpers\Url;
@@ -103,7 +104,7 @@ abstract class Controller extends Base
             return $this->getTreeLocalizedActions();
         }
 
-        throw new \Exception('Default actions is not found.');
+        throw new Exception('Default actions is not found.');
     }
 
     /**
@@ -156,11 +157,13 @@ abstract class Controller extends Base
     }
 
     /**
+     * Запомнить текущий адрес
      *
+     * @throws Exception
      */
     public function rememberUrl()
     {
-        \yii\helpers\Url::remember('', $this->getReturnUrlKey());
+        Url::remember('', $this->getReturnUrlKey());
     }
 
     /**
