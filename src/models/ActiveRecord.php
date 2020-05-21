@@ -1,12 +1,13 @@
 <?php
 namespace concepture\yii2logic\models;
 
+use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\services\Service;
 use Yii;
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
 use concepture\yii2logic\models\traits\NonPhysicalDeleteTrait;
 use concepture\yii2logic\models\traits\SearchTrait;
 use Exception;
-use Throwable;
 use yii\db\ActiveRecord as Base;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -24,6 +25,17 @@ abstract class ActiveRecord extends Base
     use ModelScenarioTrait;
     use NonPhysicalDeleteTrait;
     use SearchTrait;
+
+    /**
+     * Возвращает сервис
+     * @return Service
+     */
+    public function getService()
+    {
+        $name = ClassHelper::getServiceName($this, "");
+
+        return Yii::$app->{$name};
+    }
 
     /**
      * Возвращает тип данных атрибута из базы
