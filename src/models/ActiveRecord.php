@@ -30,9 +30,9 @@ abstract class ActiveRecord extends Base
      * Возвращает сервис
      * @return Service
      */
-    public function getService()
+    public static function getService()
     {
-        $name = ClassHelper::getServiceName($this, "");
+        $name = ClassHelper::getServiceName(static::class, ['Search']);
 
         return Yii::$app->{$name};
     }
