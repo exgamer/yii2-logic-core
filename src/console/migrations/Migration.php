@@ -53,10 +53,13 @@ abstract class Migration extends Base
         $this->createTable('{{%'.$this->getTableName().'}}', $columns, $this->getTableOptions());
     }
 
-    protected function addPK($columns, $unique = false)
+    protected function addPK($columns, $unique = false, $key_name = null)
     {
         $tableName = $this->getTableName();
-        $key_name = implode("_", $columns)."_pk". "_" . $tableName;
+        if (! $key_name) {
+            $key_name = implode("_", $columns) . "_pk" . "_" . $tableName;
+        }
+
         $this->addPrimaryKey( $key_name, '{{%'.$this->getTableName().'}}', $columns);
     }
 
