@@ -12,6 +12,7 @@ use yii\base\InvalidArgumentException;
 use yii\helpers\Json;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
+use yii\validators\InlineValidator;
 use yii\validators\Validator;
 
 /**
@@ -134,41 +135,6 @@ abstract class Form extends Model
 
     /**
      * @todo это поддержка кастомных валидаторов
-     * Метод переопределен для удаления из правил кастомных валидаторов функции модели
-     * равно метод validate() вызовет валидатор связанной модели
-     *
-     * @return \ArrayObject|ArrayObject
-     * @throws InvalidConfigException
-     * @throws ReflectionException
-     */
-    public function createValidators()
-    {
-        $validators = new \ArrayObject();
-        foreach ($this->rules() as $rule) {
-            if ($rule instanceof Validator) {
-                $validators->append($rule);
-            } elseif (is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
-                /**
-                 * Поддержка кастомных валидаторов функций
-                 * если нет метода пропускаем все равно метод validate() вызовет валидатор связанной модели
-                 *
-                 */
-                if (! $this->hasMethod($rule[1]) &&  !isset(Validator::$builtInValidators[$rule[1]])) {
-                    continue;
-                }
-
-                $validator = Validator::createValidator($rule[1], $this, (array) $rule[0], array_slice($rule, 2));
-                $validators->append($validator);
-            } else {
-                throw new InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
-            }
-        }
-
-        return $validators;
-    }
-
-    /**
-     * @todo это поддержка кастомных валидаторов
      * Метод переопределен для возможнсти подстановки в форму связанной модели для валидации при редактировании
      * чтобы корректно работала валидация где нужен id сущности без указания ее в форме
      *
@@ -201,23 +167,25 @@ abstract class Form extends Model
         }
 
         $attributeNames = (array)$attributeNames;
-        $validationModel = $this;
-        if ($model){
-            $validationModel = $model;
-        }
         foreach ($this->getActiveValidators() as $validator) {
+            if (! $model) {
+                $validator->validateAttributes($this, $attributeNames);
+                continue;
+            }
+
             /**
              * @todo костылище, для обруливания ситуации когда в форме есть атрибуты которых нет в модели, и при валидации выкидвает ошибку
              * @todo придумать что нибудь
+             * @todo если ошибка значит пробуем валидировать форму
              */
             try{
-                $validator->validateAttributes($validationModel, $attributeNames);
+                $validator->validateAttributes($model, $attributeNames);
             }catch (\Exception $ex){
-
+                $validator->validateAttributes($this, $attributeNames);
             }
         }
-        if ($validationModel->hasErrors()){
-            $this->addErrors($validationModel->getErrors());
+        if ($model && $model->hasErrors()){
+            $this->addErrors($model->getErrors());
         }
         $this->afterValidate();
 
