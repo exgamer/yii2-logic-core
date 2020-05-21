@@ -39,12 +39,16 @@ class TranslitValidator extends Validator
             return;
         }
 
-        if (! $model->{$this->source}){
+        if (! $model->{$this->source} && $this->secondary_source){
             $model->{$this->source} = $model->{$this->secondary_source};
         }
 
         if (! $this->source) {
             throw new Exception(Yii::t('yii', 'Свойство {$source} должно быть установлено.'));
+        }
+
+        if (! $model->{$this->source}) {
+            return;
         }
 
         $result = $model->{$this->source};
