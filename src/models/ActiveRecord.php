@@ -3,6 +3,7 @@ namespace concepture\yii2logic\models;
 
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\Service;
+use concepture\yii2logic\traits\ModelSupportTrait;
 use Yii;
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
 use concepture\yii2logic\models\traits\NonPhysicalDeleteTrait;
@@ -25,6 +26,7 @@ abstract class ActiveRecord extends Base
     use ModelScenarioTrait;
     use NonPhysicalDeleteTrait;
     use SearchTrait;
+    use ModelSupportTrait;
 
     /**
      * Возвращает сервис
