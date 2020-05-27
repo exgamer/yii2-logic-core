@@ -18,7 +18,7 @@ trait ModelSupportTrait
     public function getRequiredAttributes()
     {
         $required = [];
-        foreach ($this->attributes as $attribute) {
+        foreach ($this->attributes as $attribute => $value) {
             if ($this->isAttributeRequired($attribute)) {
                 $required[] = $attribute;
             }
