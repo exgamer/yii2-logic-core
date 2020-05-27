@@ -26,4 +26,21 @@ trait ModelSupportTrait
 
         return $required;
     }
+
+    /**
+     * Заполнены ли обязательные аттрибуты
+     * @return boolean
+     */
+    public function isAllRequiredEmpty()
+    {
+        $required = $this->getRequiredAttributes();
+        $empty = true;
+        foreach ($required as $attribute) {
+            if (! in_array($this->{$attribute}, [null, ''])) {
+                $empty = false;
+            }
+        }
+
+        return $empty;
+    }
 }
