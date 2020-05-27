@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\forms;
 
 use concepture\yii2logic\actions\traits\ModelScenarioTrait;
+use concepture\yii2logic\traits\ModelSupportTrait;
 use yii\base\Model as Base;
 
 /**
@@ -12,4 +13,5 @@ use yii\base\Model as Base;
 abstract class Model extends Base
 {
     use ModelScenarioTrait;
+    use ModelSupportTrait;
 }

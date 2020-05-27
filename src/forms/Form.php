@@ -3,7 +3,6 @@ namespace concepture\yii2logic\forms;
 
 use common\pojo\Social;
 use concepture\yii2logic\models\behaviors\JsonFieldsBehavior;
-use concepture\yii2logic\traits\ModelSupportTrait;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
@@ -25,7 +24,7 @@ use yii\validators\Validator;
  */
 abstract class Form extends Model
 {
-    use ModelSupportTrait;
+
 
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
