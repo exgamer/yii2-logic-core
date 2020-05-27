@@ -24,8 +24,6 @@ use yii\validators\Validator;
  */
 abstract class Form extends Model
 {
-
-
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
      * @return array
