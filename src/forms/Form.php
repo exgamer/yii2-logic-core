@@ -280,10 +280,17 @@ abstract class Form extends Model
         }
 
         $jsonAttrs = $model->getPojoAttributes();
-        foreach ($jsonAttrs as $attr => $pojoClass){
+        foreach ($jsonAttrs as $attr => $pojoClass) {
             $pojoClass = $model->getAttributeConfigData($pojoClass, 'class');
             $className = ClassHelper::getShortClassName($pojoClass);
-            $this->{$attr} = $data[$className] ?? [];
+            $value = [];
+            if (isset($data[$className])) {
+                $value = $data[$className];
+            } else if (isset($data[$attr])){
+                $value = $data[$attr];
+            }
+
+            $this->{$attr} = $value;
             $pogoData = [];
             foreach ($this->{$attr} as $key => $value){
                 if (! is_array($value) ){
@@ -295,7 +302,9 @@ abstract class Form extends Model
                 $pogoData[$key] = $pojo;
             }
 
-            $this->{$attr} = $pogoData;
+            if ($pogoData) {
+                $this->{$attr} = $pogoData;
+            }
         }
     }
 }
