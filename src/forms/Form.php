@@ -24,6 +24,8 @@ use yii\validators\Validator;
  */
 abstract class Form extends Model
 {
+
+
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
      * @return array
@@ -300,6 +302,11 @@ abstract class Form extends Model
                 $pojo = Yii::createObject($pojoClass);
                 $pojo->load($value, '');
                 $pogoData[$key] = $pojo;
+            }
+
+            if (count($pogoData) == 1 && $pogoData[0]->isAllRequiredEmpty()) {
+                $this->{$attr} = [];
+                continue;
             }
 
             if ($pogoData) {
