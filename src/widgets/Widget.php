@@ -14,6 +14,12 @@ abstract class Widget extends BaseWidget
     use WidgetTrait;
 
     /**
+     * параметры для передачи на вьюшку
+     * @var array
+     */
+    public $viewParams = [];
+
+    /**
      * @inheritDoc
      */
     public function beforeRun()
