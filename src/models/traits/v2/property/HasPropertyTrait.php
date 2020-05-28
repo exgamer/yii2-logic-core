@@ -18,6 +18,20 @@ use yii\helpers\ArrayHelper;
  */
 trait HasPropertyTrait
 {
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->saveProperty($insert, $changedAttributes);
+
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function beforeDelete()
+    {
+        $this->deleteProperties();
+
+        return parent::beforeDelete();
+    }
+
     /**
      * Возвращает тип данных атрибута из базы с учетом пропертей
      * @param $attribute
