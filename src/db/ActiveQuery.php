@@ -20,6 +20,8 @@ class ActiveQuery extends Base
     {
         $this->where = [];
         $this->params = [];
+
+        return $this;
     }
 
     /**
