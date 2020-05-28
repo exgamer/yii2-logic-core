@@ -201,20 +201,6 @@ class Bookmaker extends ActiveRecord
             'is_deleted' => \Yii::t('common', 'Удален'),
         ];
     }
-
-    public function afterSave($insert, $changedAttributes)
-    {
-        $this->saveProperty($insert, $changedAttributes);
-
-        return parent::afterSave($insert, $changedAttributes);
-    }
-
-    public function beforeDelete()
-    {
-        $this->deleteProperties();
-
-        return parent::beforeDelete();
-    }
 }
 
 
