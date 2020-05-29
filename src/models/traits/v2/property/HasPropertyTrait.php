@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\db\ActiveQuery;
 
 /**
  * Треит для работы с данными у которых свойства хранятся в другой таблице
@@ -128,12 +129,12 @@ trait HasPropertyTrait
         $propertyClass = static::getPropertyModelClass();
         $property = Yii::createObject($propertyClass);
         $result = [];
-        foreach ($property->attributes() as $attribute){
-            if (in_array($attribute, static::excludedPropertyFields())){
+        foreach ($property->attributes() as $attribute) {
+            if (in_array($attribute, static::excludedPropertyFields())) {
                 continue;
             }
 
-            if (in_array($attribute, static::excludedPropertyDefaultValues())){
+            if (in_array($attribute, static::excludedPropertyDefaultValues())) {
                 $result[] = static::propertyAlias() . "." . $attribute;
                 continue;
             }
@@ -180,7 +181,7 @@ trait HasPropertyTrait
         $query = Yii::createObject(HasPropertyActiveQuery::class, [get_called_class()]);
         $m = static::getPropertyModelClass();
         $selectArray = static::constructPropertySelect();
-        $selectArray[] = static::tableName(). ".*";
+        $selectArray[] = static::tableName() . ".*";
         $query->select($selectArray);
         /**
          * Выборка свойств для текущего uniqueField
@@ -190,9 +191,19 @@ trait HasPropertyTrait
         /**
          * Выборка дефолтных свойств
          */
-        $query->leftJoin($m::tableName() . " d", 'd.entity_id = '. static::tableName().'.id AND d.default = 1');
+        $query->leftJoin($m::tableName() . " d", 'd.entity_id = ' . static::tableName() . '.id AND d.default = 1');
+        static::extendFind($query);
 
         return $query;
+    }
+
+    /**
+     * Дополнить $query без переопределния find()
+     * @param ActiveQuery $query
+     */
+    public static function extendFind(ActiveQuery $query)
+    {
+
     }
 
     public static function setPropertyJoinQuery($query, $uniqueValue)
