@@ -24,8 +24,6 @@ use yii\validators\Validator;
  */
 abstract class Form extends Model
 {
-
-
     /**
      * возвращает массив содержащий правила связанной модели и текущей формы
      * @return array
@@ -35,7 +33,7 @@ abstract class Form extends Model
     {
         $model = static::getModel();
 
-        return array_merge($this->formRules(), $model->rules());
+        return array_merge($model->rules(), $this->formRules());
     }
 
     /**
@@ -54,7 +52,7 @@ abstract class Form extends Model
     {
         $model = static::getModel();
 
-        return array_merge($this->formBehaviors(), $model->behaviors());
+        return array_merge($model->behaviors(), $this->formBehaviors());
     }
 
     /**
