@@ -286,7 +286,7 @@ abstract class Form extends Model
             $value = [];
             if (isset($data[$className])) {
                 $value = $data[$className];
-            } else if (isset($data[$attr])){
+            } else if (isset($data[$attr])) {
                 $value = $data[$attr];
             }
 

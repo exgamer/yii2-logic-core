@@ -1,10 +1,13 @@
 <?php
 namespace concepture\yii2logic\models\behaviors;
 
+use common\models\Review;
 use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\helpers\StringHelper;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 use Exception;
 
 /**
@@ -100,7 +103,7 @@ class JsonFieldsBehavior extends Behavior
             return;
         }
 
-        $this->owner->{$attribute} = json_decode($this->owner->{$attribute}, true) ? json_decode($this->owner->{$attribute}, true) : [];
+        $this->owner->{$attribute} = Json::decode($this->owner->{$attribute}, true) ?? [];
     }
 
     /**
@@ -109,7 +112,7 @@ class JsonFieldsBehavior extends Behavior
      */
     protected function resolveAttribute($attribute, $attributeConfig)
     {
-        if (! $attributeConfig){
+        if (! $attributeConfig) {
             return;
         }
 
@@ -284,7 +287,14 @@ class JsonFieldsBehavior extends Behavior
                 continue;
             }
 
-            $this->owner->{$attr} = json_encode($this->owner->{$attr});
+            $items = $this->owner->{$attr};
+            foreach ($items as &$item) {
+                if(is_string($item) && StringHelper::isJson($item)) {
+                    $item = Json::decode($item);
+                }
+            }
+
+            $this->owner->{$attr} = Json::encode($items);
         }
     }
 }
