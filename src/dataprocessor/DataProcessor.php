@@ -159,7 +159,7 @@ class DataProcessor extends Component
     /**
      *  get rows by sql
      */
-    private function executeQuery($inputData = null)
+    protected function executeQuery($inputData = null)
     {
         $query = $this->dataHandler->getQuery();
         $this->dataHandler->setupQuery($query, $inputData);

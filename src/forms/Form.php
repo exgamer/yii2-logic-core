@@ -290,6 +290,10 @@ abstract class Form extends Model
                 $value = $data[$attr];
             }
 
+            if (empty($value)) {
+                continue;
+            }
+
             $this->{$attr} = $value;
             $pogoData = [];
             foreach ($this->{$attr} as $key => $value){
