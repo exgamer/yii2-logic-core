@@ -5,7 +5,7 @@ namespace concepture\yii2logic\dataprocessor;
 use yii\base\Exception;
 
 /**
- * Вспомогательный класс для обработки данных
+ * Вспомогательный класс для обработки данных полученных через апи
  *
  * @author CitizenZet
  */

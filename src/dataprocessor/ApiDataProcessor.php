@@ -7,7 +7,25 @@ use Yii;
 use yii\base\Exception;
 use yii\helpers\Console;
 
-
+/**
+ * Class DataProcessor
+ *
+ *  $config = [
+ *     'dataHandlerClass' => ApiSitemapDataHandler::class,
+ * ];
+ *
+ *  $config = [
+ *     'dataHandlerClass' => [
+ *         'class' => ApiBookmakerRatingRecountDataHandler::class,
+ *         'someVar' => 12
+ *      ],
+ * ];
+ *
+ * ApiDataProcessor::exec($config);
+ *
+ * @package concepture\yii2logic\dataprocessor
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
+ */
 class ApiDataProcessor extends DataProcessor
 {
     public $bySinglePage = true;
