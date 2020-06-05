@@ -148,7 +148,7 @@ class DataProcessor extends Component
     public function isDone()
     {
 
-        return $this->isDone;
+        return $this->isDone || $this->bySinglePage;
     }
 
     protected function getQuery()
