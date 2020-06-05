@@ -214,6 +214,14 @@ trait ModifyTrait
         }
         $this->setPrimaryKeysToFrom($form, $model);
         $this->afterModelSave($form, $model, $is_new_record);
+        # todo: понаблюдать не разъебет ли все к ебеням
+        foreach ($model->attributes as $attribute => $value) {
+            if(! $form->hasProperty($attribute)) {
+                continue;
+            }
+
+            $form->{$attribute} = $value;
+        }
 
         return $model;
     }
