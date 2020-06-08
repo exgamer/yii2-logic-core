@@ -269,24 +269,24 @@ abstract class Form extends Model
         $this->jsonDataLoad($data);
     }
 
-    /**
-     * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
-     *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     * @throws ReflectionException
-     */
-    public function __call($method, $parameters)
-    {
-        $model = static::getModel();
-        $model->load($this->attributes, '');
-        if (! method_exists($this, $method)){
-            return call_user_func_array([$model, $method], $parameters);
-        }
-
-        parent::__call($method, $parameters);
-    }
+//    /**
+//     * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
+//     *
+//     * @param $method
+//     * @param $parameters
+//     * @return mixed
+//     * @throws ReflectionException
+//     */
+//    public function __call($method, $parameters)
+//    {
+//        $model = static::getModel();
+//        $model->load($this->attributes, '');
+//        if (! method_exists($this, $method)){
+//            return call_user_func_array([$model, $method], $parameters);
+//        }
+//
+//        parent::__call($method, $parameters);
+//    }
 
     /**
      * Метод для тог очтобы можно было установить метку для сущности
