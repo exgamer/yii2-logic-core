@@ -99,9 +99,27 @@ class JsonFieldsBehavior extends Behavior
      */
     protected function attributeToArray($attribute)
     {
-        if(! is_string($this->owner->{$attribute})){
+        if(! is_string($this->owner->{$attribute})) {
+            /**
+             * @TODO Сделано для того чтобы при получении поста с массивом json строк данные возвращались в виде массива
+             */
+            if (is_array($this->owner->{$attribute})) {
+                $data = [];
+                $res = $this->owner->{$attribute};
+                foreach ($res as $value) {
+                    if (is_string($value) && StringHelper::isJson($value)) {
+                        $data[] = Json::decode($value);
+                    }
+                }
+
+                if ($data) {
+                    $this->owner->{$attribute} = $data;
+                }
+            }
+
             return;
         }
+
 
         $this->owner->{$attribute} = Json::decode($this->owner->{$attribute}, true) ?? [];
     }
