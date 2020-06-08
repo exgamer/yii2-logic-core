@@ -3,6 +3,9 @@ namespace concepture\yii2logic\forms;
 
 use common\pojo\Social;
 use concepture\yii2logic\models\behaviors\JsonFieldsBehavior;
+use concepture\yii2logic\validators\DomainBasedUniqueValidator;
+use concepture\yii2logic\validators\UniqueLocalizedValidator;
+use concepture\yii2logic\validators\v2\UniquePropertyValidator;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use concepture\yii2logic\helpers\ClassHelper;
@@ -16,6 +19,8 @@ use yii\validators\InlineValidator;
 use yii\validators\Validator;
 
 /**
+ * @TODO Тестим
+ *
  * Базовая форма сущности связанной с  моделью AR
  *
  * Class Form
@@ -25,15 +30,69 @@ use yii\validators\Validator;
 abstract class Form extends Model
 {
     /**
+     * Валидаторы которые будут исключены при валидации формы
+     * для валидаторов которые используют БД
+     * @var string[]
+     */
+    public $excludedValidators = [
+        UniquePropertyValidator::class,
+        DomainBasedUniqueValidator::class,
+        UniqueLocalizedValidator::class,
+        \concepture\yii2logic\validators\UniquePropertyValidator::class
+    ];
+
+    /**
      * возвращает массив содержащий правила связанной модели и текущей формы
+     * Исключает уникальные валидаторы, кастомные валидаторы которые есть только в модели
+     *
      * @return array
      * @throws ReflectionException
      */
     public function rules()
     {
         $model = static::getModel();
+        $modelRules = $model->rules();
+        $result = [];
+        $built = Validator::$builtInValidators;
+        foreach ($modelRules as $rule) {
+            if (is_array($rule) && isset($rule[0], $rule[1])) {
+                $type = $rule[1];
+                $yes = false;
+                /**
+                 * Если валидатор анонимка
+                 */
+                if ($type instanceof \Closure) {
+                    $yes = true;
+                }
 
-        return array_merge($model->rules(), $this->formRules());
+                /**
+                 * Если валидатор метод
+                 */
+                if ($this->hasMethod($type)) {
+                    $yes = true;
+                }
+
+                /**
+                 * если валидатор стандартный и это не уникальность
+                 */
+                if (isset($built[$type]) && $type != 'unique') {
+                    $yes = true;
+                }
+
+                /**
+                 * Если валидатор не является исключением
+                 */
+                if (class_exists($type) && ! in_array($type, $this->excludedValidators)) {
+                    $yes = true;
+                }
+
+                if ($yes) {
+                    $result[] = $rule;
+                }
+            }
+        }
+
+        return array_merge($result, $this->formRules());
     }
 
     /**
@@ -134,65 +193,6 @@ abstract class Form extends Model
     }
 
     /**
-     * @todo это поддержка кастомных валидаторов
-     * Метод переопределен для возможнсти подстановки в форму связанной модели для валидации при редактировании
-     * чтобы корректно работала валидация где нужен id сущности без указания ее в форме
-     *
-     * @param null $attributeNames
-     * @param bool $clearErrors
-     * @param null $model
-     * @return bool
-     */
-    public function validate($attributeNames = null, $clearErrors = true, $model = null)
-    {
-        if ($clearErrors) {
-            $this->clearErrors();
-            if ($model){
-                $model->clearErrors();
-            }
-        }
-
-        if (!$this->beforeValidate()) {
-            return false;
-        }
-
-        $scenarios = $this->scenarios();
-        $scenario = $this->getScenario();
-        if (!isset($scenarios[$scenario])) {
-            throw new InvalidArgumentException("Unknown scenario: $scenario");
-        }
-
-        if ($attributeNames === null) {
-            $attributeNames = $this->activeAttributes();
-        }
-
-        $attributeNames = (array)$attributeNames;
-        foreach ($this->getActiveValidators() as $validator) {
-            if (! $model) {
-                $validator->validateAttributes($this, $attributeNames);
-                continue;
-            }
-
-            /**
-             * @todo костылище, для обруливания ситуации когда в форме есть атрибуты которых нет в модели, и при валидации выкидвает ошибку
-             * @todo придумать что нибудь
-             * @todo если ошибка значит пробуем валидировать форму
-             */
-            try{
-                $validator->validateAttributes($model, $attributeNames);
-            }catch (\Exception $ex){
-                $validator->validateAttributes($this, $attributeNames);
-            }
-        }
-        if ($model && $model->hasErrors()){
-            $this->addErrors($model->getErrors());
-        }
-        $this->afterValidate();
-
-        return !$this->hasErrors();
-    }
-
-    /**
      * метод для заполнения формы кастомными данными из модели
      * например используется для заполнения данных в UpdateAction
      *
@@ -224,25 +224,6 @@ abstract class Form extends Model
     public function afterLoad($data)
     {
         $this->jsonDataLoad($data);
-    }
-
-    /**
-     * переопределен для возможности запроса данных из связанной модели формы при перезагрузке формы
-     *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     * @throws ReflectionException
-     */
-    public function __call($method, $parameters)
-    {
-        $model = static::getModel();
-        $model->load($this->attributes, '');
-        if (! method_exists($this, $method)){
-            return call_user_func_array([$model, $method], $parameters);
-        }
-
-        parent::__call($method, $parameters);
     }
 
     /**
