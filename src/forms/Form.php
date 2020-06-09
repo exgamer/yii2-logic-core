@@ -287,7 +287,7 @@ abstract class Form extends Model
                 $pogoData[$key] = $pojo;
             }
 
-            if (count($pogoData) == 1 && $pogoData[0]->isAllRequiredEmpty()) {
+            if (count($pogoData) == 1 && reset($pogoData)->isAllRequiredEmpty()) {
                 $this->{$attr} = [];
                 continue;
             }
