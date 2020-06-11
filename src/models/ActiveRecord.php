@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\models;
 
+use concepture\yii2logic\enum\StatusEnum;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\services\Service;
 use concepture\yii2logic\traits\ModelSupportTrait;
@@ -27,6 +28,15 @@ abstract class ActiveRecord extends Base
     use NonPhysicalDeleteTrait;
     use SearchTrait;
     use ModelSupportTrait;
+
+    /**
+     * Для случаев когда значение активного статуса отличается от стандартного
+     * @return integer
+     */
+    public function getActiveStatusValue()
+    {
+        return StatusEnum::ACTIVE;
+    }
 
     /**
      * Возвращает сервис
