@@ -24,4 +24,13 @@ class IsDeletedEnum extends Enum
             self::DELETED => Yii::t('core', "Да"),
         ];
     }
+
+    public static function canDelete($is_deleted)
+    {
+        if (in_array($is_deleted, [static::NOT_DELETED])) {
+            return true;
+        }
+
+        return false;
+    }
 }
