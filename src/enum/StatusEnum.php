@@ -23,4 +23,22 @@ class StatusEnum extends Enum
             self::INACTIVE => Yii::t('core', "Черновик"),
         ];
     }
+
+    public static function canActivate($status)
+    {
+        if (in_array($status, [static::INACTIVE])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function canDeactivate($status)
+    {
+        if (in_array($status, [static::ACTIVE])) {
+            return true;
+        }
+
+        return false;
+    }
 }
