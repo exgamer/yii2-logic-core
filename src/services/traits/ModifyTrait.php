@@ -145,10 +145,14 @@ trait ModifyTrait
      * @param bool $validate
      * @return bool|ActiveRecord|Form
      */
-    public function updateById($id, $data, $formName = '', $validate = true)
+    public function updateById($id, $data, $formName = '', $validate = true, $scenario = null)
     {
         $model = $this->findById($id);
         $form = $this->getRelatedForm();
+        if($scenario) {
+            $form->scenario = $scenario;
+        }
+        
         $form->setAttributes($model->attributes, false);
         if (method_exists($form, 'customizeForm')) {
             $form->customizeForm($model);
