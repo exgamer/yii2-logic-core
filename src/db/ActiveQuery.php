@@ -78,6 +78,14 @@ class ActiveQuery extends Base
     public function active()
     {
         $model = Yii::createObject($this->modelClass);
+        /**
+         * Для случаев когда активный статус отличаетсяот стандартного
+         */
+        $activeStatusValue = StatusEnum::ACTIVE;
+        if (method_exists($model,'getActiveStatusValue')) {
+            $activeStatusValue = $model->getActiveStatusValue();
+        }
+
         $alias = trim($model::tableName(), '{}%') . ".";;
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
@@ -98,7 +106,7 @@ class ActiveQuery extends Base
         }
 
         if ($model->hasAttribute('status')) {
-            $this->andWhere([$alias . 'status' => StatusEnum::ACTIVE]);
+            $this->andWhere([$alias . 'status' => $activeStatusValue]);
         }
 
         return $this;
