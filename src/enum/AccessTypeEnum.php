@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\enum;
 
+use Yii;
+
 /**
  * Class AccessTypeEnum
  * @package concepture\yii2logic\enum
