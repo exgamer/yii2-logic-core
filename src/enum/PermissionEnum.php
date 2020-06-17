@@ -19,4 +19,12 @@ class PermissionEnum extends Enum
      * _STAFF
      */
     const STAFF = "STAFF";
+    /**
+     * Это полномочие имеет доступ на редактирование к указанным доменам
+     */
+    const DOMAINEDITOR = "DOMAINEDITOR";
+    /**
+     * Это полномочие имеет доступ на чтение к указанным доменам
+     */
+    const DOMAINREADER = "DOMAINREADER";
 }
