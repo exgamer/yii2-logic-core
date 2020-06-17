@@ -19,4 +19,9 @@ class PermissionEnum extends Enum
      * _STAFF
      */
     const STAFF = "STAFF";
+    /**
+     * Это полномочие  имеет доступ к указанным доменам
+     * _DOMAIN
+     */
+    const DOMAIN = "DOMAIN";
 }
