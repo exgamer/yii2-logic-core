@@ -20,7 +20,7 @@ trait SearchTrait
     public function getSelectedFilterCount()
     {
         $request = Yii::$app->request->get($this->formName());
-        $result = 0;
+        $result = [];
         foreach ($this->getValidators() as $validator) {
             $attrs = $validator->attributes;
             foreach ($attrs as $attr) {
@@ -28,11 +28,11 @@ trait SearchTrait
                     continue;
                 }
 
-                $result++;
+                $result[$attr] = $attr;
             }
         }
 
-        return $result;
+        return count($result);
     }
 
     /**
