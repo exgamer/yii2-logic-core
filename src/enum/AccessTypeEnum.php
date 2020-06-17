@@ -19,17 +19,12 @@ class AccessTypeEnum extends Enum
      * запись
      */
     const WRITE = "w";
-    /**
-     * чтение и запись
-     */
-    const READ_WRITE = "rw";
 
     public static function labels()
     {
         return [
             self::READ => Yii::t('core', "Чтение"),
             self::WRITE => Yii::t('core', "Запись"),
-            self::READ_WRITE => Yii::t('core', "Чтение и запись"),
         ];
     }
 }
