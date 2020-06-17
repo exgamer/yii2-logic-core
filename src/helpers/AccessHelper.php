@@ -124,7 +124,7 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getAccessPermission($controller, PermissionEnum::READER),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getAccessPermission($controller, PermissionEnum::DOMAINREADER),
             ];
         }
 
@@ -136,7 +136,7 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getAccessPermission($controller, PermissionEnum::DOMAINEDITOR),
             ];
         }
 
@@ -147,7 +147,7 @@ class AccessHelper
                 AccessEnum::ADMIN,
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getAccessPermission($controller, PermissionEnum::DOMAINEDITOR),
             ];
         }
 

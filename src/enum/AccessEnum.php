@@ -28,7 +28,11 @@ class AccessEnum extends Enum
      */
     const STAFF = "STAFF";
     /**
-     * Эта роль имеет доступ к указанным доменам
+     * Эта роль имеет доступ на редактирование к указанным доменам
      */
-    const DOMAIN = "DOMAIN";
+    const DOMAINEDITOR = "DOMAINEDITOR";
+    /**
+     * Эта роль имеет доступ на чтение к указанным доменам
+     */
+    const DOMAINREADER = "DOMAINREADER";
 }
