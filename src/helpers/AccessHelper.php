@@ -97,6 +97,7 @@ class AccessHelper
             $controller = Yii::$app->controller;
         }
 
+        $params['action'] = $name;
         $permissions = static::getPermissionsByAction($controller, $name);
         foreach ($permissions as $permission){
             if (Yii::$app->user->can($permission, $params)){

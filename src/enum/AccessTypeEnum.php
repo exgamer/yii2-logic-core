@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\enum;
 
+use Yii;
+
 /**
  * Class AccessTypeEnum
  * @package concepture\yii2logic\enum
@@ -17,8 +19,12 @@ class AccessTypeEnum extends Enum
      * запись
      */
     const WRITE = "w";
-    /**
-     * чтение и запись
-     */
-    const READ_WRITE = "rw";
+
+    public static function labels()
+    {
+        return [
+            self::READ => Yii::t('core', "Чтение"),
+            self::WRITE => Yii::t('core', "Запись"),
+        ];
+    }
 }
