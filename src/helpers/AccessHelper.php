@@ -125,7 +125,7 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getAccessPermission($controller, PermissionEnum::READER),
-                static::getAccessPermission($controller, PermissionEnum::DOMAINREADER),
+                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
             ];
         }
 
@@ -137,7 +137,7 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAINEDITOR),
+                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
             ];
         }
 
@@ -148,7 +148,7 @@ class AccessHelper
                 AccessEnum::ADMIN,
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAINEDITOR),
+                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
             ];
         }
 
@@ -171,6 +171,9 @@ class AccessHelper
             'actions' => static::$_read_actions,
             'allow' => true,
             'roles' => static::getPermissionsByAction($controller, static::$_read_actions),
+            'roleParams' => [
+                'action' => static::$_read_actions,
+            ]
         ];
         /**
          * Модификация
@@ -179,6 +182,9 @@ class AccessHelper
             'actions' => static::$_edit_actions,
             'allow' => true,
             'roles' => static::getPermissionsByAction($controller, static::$_edit_actions),
+            'roleParams' => [
+                'action' => static::$_read_actions,
+            ]
         ];
         /**
          * Сортировка
@@ -187,6 +193,9 @@ class AccessHelper
             'actions' => static::$_sort_actions,
             'allow' => true,
             'roles' => static::getPermissionsByAction($controller, static::$_sort_actions),
+            'roleParams' => [
+                'action' => static::$_read_actions,
+            ]
         ];
 
         return $rules;

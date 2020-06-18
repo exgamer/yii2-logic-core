@@ -30,9 +30,5 @@ class AccessEnum extends Enum
     /**
      * Эта роль имеет доступ на редактирование к указанным доменам
      */
-    const DOMAINEDITOR = "DOMAINEDITOR";
-    /**
-     * Эта роль имеет доступ на чтение к указанным доменам
-     */
-    const DOMAINREADER = "DOMAINREADER";
+    const DOMAIN = "DOMAIN";
 }

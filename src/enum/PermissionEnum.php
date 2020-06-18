@@ -26,5 +26,5 @@ class PermissionEnum extends Enum
     /**
      * Это полномочие имеет доступ на чтение к указанным доменам
      */
-    const DOMAINREADER = "DOMAINREADER";
+    const DOMAIN = "DOMAIN";
 }
