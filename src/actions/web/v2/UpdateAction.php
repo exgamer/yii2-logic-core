@@ -79,6 +79,12 @@ class UpdateAction extends Action
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                        $redirectStore = $this->getController()->redirectStoreUrl();
+                        if($redirectStore) {
+                            return $redirectStore;
+                        }
+
+                        # todo: криво пашет
                         return $this->redirectPrevious([$this->redirect]);
                     }
                 }
