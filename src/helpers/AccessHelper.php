@@ -48,6 +48,8 @@ class AccessHelper
     ];
 
     /**
+     * Проверка прав доступа к текущему роуту
+     *
      * @param array $params
      * @return bool
      */
