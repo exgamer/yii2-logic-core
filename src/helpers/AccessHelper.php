@@ -48,6 +48,15 @@ class AccessHelper
     ];
 
     /**
+     * @param array $params
+     * @return bool
+     */
+    public static function checkCurrentRouteAccess( $params = [])
+    {
+        return static::checkAccess([Yii::$app->requestedRoute], $params);
+    }
+
+    /**
      * Проверка прав доступа
      *
      * Пример:
