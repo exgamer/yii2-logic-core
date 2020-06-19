@@ -139,7 +139,11 @@ abstract class ActiveRecord extends Base
      *
      * @param ActiveDataProvider $dataProvider
      */
-    public function extendDataProvider(ActiveDataProvider $dataProvider){}
+    public function extendDataProvider(ActiveDataProvider $dataProvider) {
+        if( ! $dataProvider->sort->defaultOrder && $this->hasAttribute('id')) {
+            $dataProvider->sort->defaultOrder = ['id' => SORT_DESC];
+        }
+    }
 
     /**
      * Аттрибут модели который будет использован для ключа в выпадающих списках
