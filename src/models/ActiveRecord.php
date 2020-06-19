@@ -141,7 +141,7 @@ abstract class ActiveRecord extends Base
      */
     public function extendDataProvider(ActiveDataProvider $dataProvider) {
         if( ! $dataProvider->sort->defaultOrder && $this->hasAttribute('id')) {
-            $dataProvider->sort->defaultOrder = ['id' => SORT_DESC];
+            $dataProvider->sort->defaultOrder = [trim(static::tableName(), '{}') . ".id" => SORT_DESC];
         }
     }
 
