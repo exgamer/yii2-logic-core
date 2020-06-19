@@ -57,6 +57,15 @@ abstract class Controller extends Base
     public $tree = false;
 
     /**
+     * @return mixed|\yii\web\Session
+     */
+    protected function getSession()
+    {
+        return Yii::$app->session;
+    }
+
+
+    /**
      * @return array
      */
     protected function getAccessRules()
@@ -210,6 +219,30 @@ abstract class Controller extends Base
         }
 
         return false;
+    }
+
+    /**
+     * @todo: понаблюдать, мб как то абстрагировать
+     *
+     * Сохранение текущего адреса в сессию
+     */
+    public function storeUrl()
+    {
+        $this->getSession()->set('storage-url', Url::current());
+    }
+
+    /**
+     * Перенаправление на адрес из сессии
+     *
+     * @return Response|null
+     */
+    public function redirectStoreUrl()
+    {
+        if(! $this->getSession()->has('store-url')) {
+            return null;
+        }
+
+        return $this->redirect(Yii::$app->getSession()->get('store-url'));
     }
 
     /**

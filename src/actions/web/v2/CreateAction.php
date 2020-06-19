@@ -46,12 +46,19 @@ class CreateAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
+                # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                 if ( RequestHelper::isMagicModal()){
                     return $this->controller->responseJson([
                         'data' => $result,
                     ]);
                 }
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                    $redirectStore = $this->getController()->redirectStoreUrl();
+                    if($redirectStore) {
+                        return $redirectStore;
+                    }
+
+                    # todo: криво пашет
                     return $this->redirectPrevious([$this->redirect, 'id' => $result->id]);
                 } else {
                     return $this->redirect(['update', 'id' => $result->id]);

@@ -37,6 +37,11 @@ class CreateAction extends Action
                     ]);
                 }
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                    $redirectStore = $this->getController()->redirectStoreUrl();
+                    if($redirectStore) {
+                        return $redirectStore;
+                    }
+
                     return $this->redirectPrevious([$this->redirect, 'id' => $result->id, 'locale' => $localeId, 'parent_id' => $parent_id]);
                 } else {
                     return $this->redirect(['update', 'id' => $result->id, 'locale' => $localeId]);

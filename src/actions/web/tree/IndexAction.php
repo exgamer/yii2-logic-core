@@ -14,9 +14,23 @@ use yii\helpers\Url;
  */
 class IndexAction extends Action
 {
+    /**
+     * @var string
+     */
     public $view = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'getDataProvider';
 
+    /**
+     * @var bool
+     */
+    public $storeUrl = true;
+
+    /**
+     * @inheritDoc
+     */
     public function run($parent_id = null)
     {
         $this->rememberUrl();
@@ -26,6 +40,9 @@ class IndexAction extends Action
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
+        if($this->storeUrl) {
+            $this->getController()->storeUrl();
+        }
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,

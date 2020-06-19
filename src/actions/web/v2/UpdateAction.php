@@ -73,12 +73,19 @@ class UpdateAction extends Action
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
+                    # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
                         return $this->controller->responseJson([
                             'data' => $result,
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                        $redirectStore = $this->getController()->redirectStoreUrl();
+                        if($redirectStore) {
+                            return $redirectStore;
+                        }
+
+                        # todo: криво пашет
                         return $this->redirectPrevious([$this->redirect]);
                     }
                 }

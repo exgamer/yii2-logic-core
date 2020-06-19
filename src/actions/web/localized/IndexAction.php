@@ -21,9 +21,23 @@ class IndexAction extends Action
 {
     use LocalizedTrait;
 
+    /**
+     * @var string
+     */
     public $view = 'index';
+    /**
+     * @var string
+     */
     public $serviceMethod = 'getDataProvider';
 
+    /**
+     * @var bool
+     */
+    public $storeUrl = true;
+
+    /**
+     * @inheritDoc
+     */
     public function run($locale = null)
     {
         $this->rememberUrl();
@@ -32,6 +46,9 @@ class IndexAction extends Action
         $searchModel->load(Yii::$app->request->queryParams);
         $searchModel::setLocale($locale);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
+        if($this->storeUrl) {
+            $this->getController()->storeUrl();
+        }
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,
