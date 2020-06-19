@@ -81,6 +81,7 @@ abstract class Controller extends Base
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'ruleConfig' => ['class' => 'concepture\yii2logic\filters\AccessRule'],
                 'rules' => $this->getAccessRules()
             ],
             'verbs' => [

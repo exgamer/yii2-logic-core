@@ -28,6 +28,7 @@ class AccessHelper
     static $_edit_actions = [
         'create',
         'update',
+        'update-multiple',
         'delete',
         'undelete',
         'status-change',
