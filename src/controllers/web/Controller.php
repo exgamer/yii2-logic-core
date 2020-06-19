@@ -227,7 +227,7 @@ abstract class Controller extends Base
      */
     public function storeUrl()
     {
-        $this->getSession()->set('storage-url', Url::current());
+        return $this->getSession()->set('store-url', Url::current());
     }
 
     /**
