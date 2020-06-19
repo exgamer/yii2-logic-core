@@ -60,6 +60,11 @@ class UpdateAction extends Action
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                        $redirectStore = $this->getController()->redirectStoreUrl();
+                        if($redirectStore) {
+                            return $redirectStore;
+                        }
+
                         return $this->redirectPrevious([$this->redirect, 'id' => $originModel->id, 'locale' => $model->locale, 'parent_id' => $parent_id]);
                     }
                 }

@@ -24,7 +24,12 @@ class IndexAction extends Action
     public $serviceMethod = 'getDataProvider';
 
     /**
-     * @return string HTML
+     * @var bool
+     */
+    public $storeUrl = true;
+
+    /**
+     * @inheritDoc
      */
     public function run()
     {
@@ -34,8 +39,9 @@ class IndexAction extends Action
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider =  $this->getService()->{$this->serviceMethod}([], [], $searchModel);
-
-        $this->getController()->storeUrl();
+        if($this->storeUrl) {
+            $this->getController()->storeUrl();
+        }
 
         return $this->render($this->view, [
             'searchModel' => $searchModel,

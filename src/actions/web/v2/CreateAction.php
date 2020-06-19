@@ -46,6 +46,7 @@ class CreateAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
+                # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                 if ( RequestHelper::isMagicModal()){
                     return $this->controller->responseJson([
                         'data' => $result,

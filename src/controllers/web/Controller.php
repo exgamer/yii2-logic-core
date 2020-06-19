@@ -221,9 +221,11 @@ abstract class Controller extends Base
     }
 
     /**
+     * @todo: понаблюдать, мб как то абстрагировать
+     *
      * Сохранение текущего адреса в сессию
      */
-    protected function storeUrl()
+    public function storeUrl()
     {
         $this->getSession()->set('storage-url', Url::current());
     }
@@ -233,7 +235,7 @@ abstract class Controller extends Base
      *
      * @return Response|null
      */
-    protected function redirectStoreUrl()
+    public function redirectStoreUrl()
     {
         if(! $this->getSession()->has('store-url')) {
             return null;

@@ -39,6 +39,10 @@ class CreateAction extends Action
                 }
 
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
+                    $redirectStore = $this->getController()->redirectStoreUrl();
+                    if($redirectStore) {
+                        return $redirectStore;
+                    }
 
                     return $this->redirectPrevious($this->getRedirectParams($result));
                 } else {

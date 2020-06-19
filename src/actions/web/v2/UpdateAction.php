@@ -73,6 +73,7 @@ class UpdateAction extends Action
             $originModel->setAttributes($model->attributes);
             if ($model->validate(null, true, $originModel)) {
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
+                    # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
                         return $this->controller->responseJson([
                             'data' => $result,
