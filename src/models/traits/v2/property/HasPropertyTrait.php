@@ -116,6 +116,11 @@ trait HasPropertyTrait
         return "p";
     }
 
+    public static function defaultPropertyAlias()
+    {
+        return "d";
+    }
+
     /**
      * Возвращает массив с select для свойств
      * с помощью этого для незполненных свойств текущей записи будет заполнена из записи где default = 1
@@ -125,6 +130,7 @@ trait HasPropertyTrait
      */
     public static function constructPropertySelect()
     {
+        $defaultPropertyAlias = static::defaultPropertyAlias();
         $propertyAlias = static::propertyAlias();
         $propertyClass = static::getPropertyModelClass();
         $property = Yii::createObject($propertyClass);
@@ -141,7 +147,7 @@ trait HasPropertyTrait
 
             $result[] = new Expression("CASE 
                                WHEN {$propertyAlias}.{$attribute} IS NULL
-                                   THEN d.{$attribute}
+                                   THEN {$defaultPropertyAlias}.{$attribute}
                                    ELSE
                                        {$propertyAlias}.{$attribute}
                                        END as {$attribute}");
@@ -188,10 +194,11 @@ trait HasPropertyTrait
          */
         $uniVal = static::uniqueFieldValue();
         static::setPropertyJoinQuery($query, $uniVal);
+        $defaultPropertyAlias = static::defaultPropertyAlias();
         /**
          * Выборка дефолтных свойств
          */
-        $query->leftJoin($m::tableName() . " d", 'd.entity_id = ' . static::tableName() . '.id AND d.default = 1');
+        $query->leftJoin($m::tableName() . " {$defaultPropertyAlias}", "{$defaultPropertyAlias}.entity_id = " . static::tableName() . ".id AND {$defaultPropertyAlias}.default = 1");
         static::extendFind($query);
 
         return $query;
