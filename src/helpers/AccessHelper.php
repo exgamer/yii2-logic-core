@@ -129,6 +129,7 @@ class AccessHelper
      * Возвращает полномочия по экшену или массиву экшенов
      * @param $controller
      * @param $action
+     * @param null $domain_id
      * @return array
      */
     public static function getPermissionsByAction($controller, $action, $domain_id = null)
@@ -243,6 +244,7 @@ class AccessHelper
      *
      * @param $controller
      * @param $permission
+     * @param null $domain_id
      * @return string
      */
     public static function getDomainAccessPermission($controller, $permission, $domain_id = null)
