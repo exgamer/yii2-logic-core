@@ -110,7 +110,12 @@ class AccessHelper
         }
 
         $params['action'] = $name;
-        $permissions = static::getPermissionsByAction($controller, $name);
+        $domain_id = null;
+        if (isset($params['domain_id'])) {
+            $domain_id = $params['domain_id'];
+        }
+
+        $permissions = static::getPermissionsByAction($controller, $name, $domain_id);
         foreach ($permissions as $permission){
             if (Yii::$app->user->can($permission, $params)){
                 return true;
@@ -126,7 +131,7 @@ class AccessHelper
      * @param $action
      * @return array
      */
-    public static function getPermissionsByAction($controller, $action)
+    public static function getPermissionsByAction($controller, $action, $domain_id = null)
     {
         if ((! is_array($action) && in_array($action, static::$_read_actions) )
             || (is_array($action) && $action === static::$_read_actions)){
@@ -137,9 +142,9 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getAccessPermission($controller, PermissionEnum::READER),
-                static::getDomainAccessPermission($controller, PermissionEnum::STAFF),
-                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getDomainAccessPermission($controller, PermissionEnum::READER),
+                static::getDomainAccessPermission($controller, PermissionEnum::STAFF, $domain_id),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
+                static::getDomainAccessPermission($controller, PermissionEnum::READER, $domain_id),
             ];
         }
 
@@ -151,8 +156,8 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getDomainAccessPermission($controller, PermissionEnum::STAFF),
-                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
+                static::getDomainAccessPermission($controller, PermissionEnum::STAFF, $domain_id),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
             ];
         }
 
@@ -163,7 +168,7 @@ class AccessHelper
                 AccessEnum::ADMIN,
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
             ];
         }
 
@@ -240,7 +245,7 @@ class AccessHelper
      * @param $permission
      * @return string
      */
-    public static function getDomainAccessPermission($controller, $permission)
+    public static function getDomainAccessPermission($controller, $permission, $domain_id = null)
     {
         if (is_object($controller)) {
             $name = ClassHelper::getShortClassName($controller, 'Controller', true);
@@ -248,7 +253,12 @@ class AccessHelper
             $name = str_replace("-", '', strtoupper($controller));
         }
 
-        $data = Yii::$app->domainService->getCurrentDomainData();
+        if (! $domain_id) {
+            $data = Yii::$app->domainService->getCurrentDomainData();
+        }else{
+            $data = Yii::$app->domainService->getDomainDataById($domain_id);
+        }
+
         $alias = $data['alias'] ?? "_";
 
         return $name . "_" . strtoupper($alias) . "_" . $permission;
