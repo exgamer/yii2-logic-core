@@ -27,8 +27,4 @@ class AccessEnum extends Enum
      * Эта роль имеет доступ только к свом записям
      */
     const STAFF = "STAFF";
-    /**
-     * Эта роль имеет доступ на редактирование к указанным доменам
-     */
-    const DOMAIN = "DOMAIN";
 }

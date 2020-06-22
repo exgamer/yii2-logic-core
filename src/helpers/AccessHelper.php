@@ -1,9 +1,9 @@
 <?php
 namespace concepture\yii2logic\helpers;
 
+use Yii;
 use concepture\yii2logic\enum\AccessEnum;
 use concepture\yii2logic\enum\PermissionEnum;
-use Yii;
 
 /**
  * Класс содержит вспомогательные методы для рабоыт с rbac
@@ -137,7 +137,9 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getAccessPermission($controller, PermissionEnum::READER),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getDomainAccessPermission($controller, PermissionEnum::STAFF),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
+                static::getDomainAccessPermission($controller, PermissionEnum::READER),
             ];
         }
 
@@ -149,7 +151,8 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::STAFF),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getDomainAccessPermission($controller, PermissionEnum::STAFF),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
             ];
         }
 
@@ -160,7 +163,7 @@ class AccessHelper
                 AccessEnum::ADMIN,
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
-                static::getAccessPermission($controller, PermissionEnum::DOMAIN),
+                static::getDomainAccessPermission($controller, PermissionEnum::EDITOR),
             ];
         }
 
@@ -228,5 +231,26 @@ class AccessHelper
         }
 
         return $name . "_" . $permission;
+    }
+
+    /**
+     * Возвращает значение полномочия для переданного контроллера на доступ к текущему домену
+     *
+     * @param $controller
+     * @param $permission
+     * @return string
+     */
+    public static function getDomainAccessPermission($controller, $permission)
+    {
+        if (is_object($controller)) {
+            $name = ClassHelper::getShortClassName($controller, 'Controller', true);
+        }else{
+            $name = str_replace("-", '', strtoupper($controller));
+        }
+
+        $data = Yii::$app->domainService->getCurrentDomainData();
+        $alias = $data['alias'] ?? "_";
+
+        return $name . "_" . strtoupper($alias) . "_" . $permission;
     }
 }
