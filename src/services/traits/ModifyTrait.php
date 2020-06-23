@@ -51,7 +51,7 @@ trait ModifyTrait
         $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
         $update = [];
         foreach ($fields as $field){
-            $update[] = $field."= VALUES($field)";
+            $update[] = "`" . $field."`= VALUES(`$field`)";
         }
         if ($this->isMysql()){
             $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
