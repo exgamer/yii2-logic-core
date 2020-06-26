@@ -40,19 +40,4 @@ use kamaelkz\yii2admin\v1\controllers\traits\ControllerTrait;
 class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
     use ControllerTrait;
-
-    /**
-    * @return array
-    */
-    protected function getAccessRules()
-    {
-    return [
-            [
-                'actions' => ['index', 'view','create', 'update', 'delete'],
-                'allow' => true,
-                'roles' => [UserRoleEnum::ADMIN],
-            ]
-        ];
-    }
-
 }
