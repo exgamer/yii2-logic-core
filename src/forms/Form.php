@@ -92,7 +92,7 @@ abstract class Form extends Model
             }
         }
 
-        return array_merge($result, $this->formRules());
+        return array_merge($this->formRules(), $result);
     }
 
     /**
@@ -104,14 +104,14 @@ abstract class Form extends Model
     {
         $model = static::getModel();
 
-        return array_merge($model->attributeLabels(), $this->formAttributeLabels());
+        return array_merge($this->formAttributeLabels(), $model->attributeLabels());
     }
 
     public function behaviors()
     {
         $model = static::getModel();
 
-        return array_merge($model->behaviors(), $this->formBehaviors());
+        return array_merge($this->formBehaviors(), $model->behaviors());
     }
 
     /**

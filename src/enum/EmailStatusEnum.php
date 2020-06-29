@@ -12,11 +12,13 @@ use Yii;
 class EmailStatusEnum extends Enum
 {
     const SENT = 250;
+    const NOT_SENT = 0;
 
     public static function labels()
     {
         return [
             self::SENT => Yii::t('common', "Отправлено"),
+            self::NOT_SENT => Yii::t('common', "Не отправлено"),
         ];
     }
 }
