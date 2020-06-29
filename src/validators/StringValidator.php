@@ -27,6 +27,10 @@ class StringValidator extends Base
      * @var bool
      */
     public $lower = true;
+    /**
+     * @var bool
+     */
+    public $modify_origin_value = false;
 
     /**
      * @inheritDoc
@@ -49,7 +53,7 @@ class StringValidator extends Base
         }
 
         $result = parent::validateAttribute($model, $attribute);
-        if(null !== $originalValue) {
+        if(null !== $originalValue && !$this->modify_origin_value) {
             $model->{$attribute} = $originalValue;
         }
 

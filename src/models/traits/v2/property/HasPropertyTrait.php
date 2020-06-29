@@ -400,7 +400,7 @@ trait HasPropertyTrait
             }
 
             if (! $property->{$uniqueField}) {
-                $property->{$uniqueField} = static::uniqueFieldValue();
+                $property->{$uniqueField} = $this->{$uniqueField} ;
             }
         }else {
             if ($property->hasAttribute("is_deleted")) {

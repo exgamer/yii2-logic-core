@@ -18,6 +18,9 @@ use concepture\yii2logic\actions\web\v2\DeleteAction;
 use concepture\yii2logic\actions\web\v2\IndexAction;
 use concepture\yii2logic\actions\web\v2\UpdateAction;
 use concepture\yii2logic\actions\web\v2\ViewAction;
+# действия с доменом
+use concepture\yii2logic\actions\web\v2\domain\CreateAction as DomainCreateAction;
+use concepture\yii2logic\actions\web\v2\domain\UpdateAction as DomainUpdateAction;
 # локализованные действия
 use concepture\yii2logic\actions\web\localized\CreateAction as LocalizedCreateAction;
 use concepture\yii2logic\actions\web\localized\UpdateAction as LocalizedUpdateAction;
@@ -55,6 +58,11 @@ abstract class Controller extends Base
      * @var boolean
      */
     public $tree = false;
+
+    /**
+     * @var bool
+     */
+    public $domain = false;
 
     /**
      * @return mixed|\yii\web\Session
@@ -98,6 +106,10 @@ abstract class Controller extends Base
      */
     public function actions()
     {
+        if($this->domain) {
+            return $this->getDefaultActions();
+        }
+
         if(! $this->localized && ! $this->tree) {
             return $this->getDefaultActions();
         }
@@ -254,8 +266,8 @@ abstract class Controller extends Base
     {
         return [
             'index' => IndexAction::class,
-            'create' => CreateAction::class,
-            'update' => UpdateAction::class,
+            'create' => $this->domain ? DomainCreateAction::class : CreateAction::class,
+            'update' => $this->domain ? DomainUpdateAction::class : UpdateAction::class,
             'view' => ViewAction::class,
             'delete' => DeleteAction::class,
         ];
