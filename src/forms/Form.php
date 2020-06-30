@@ -111,7 +111,8 @@ abstract class Form extends Model
     {
         $model = static::getModel();
 
-        return array_merge($this->formBehaviors(), $model->behaviors());
+        return array_merge($this->formBehaviors(), $model->behaviors()
+        );
     }
 
     /**
