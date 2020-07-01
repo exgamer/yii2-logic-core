@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\controllers\console;
 
+use Yii;
+
 /**
  * Базовый класс для конcольных команд
  *
@@ -40,6 +42,7 @@ abstract class ConsoleCommand extends \yii\console\Controller
      */
     public function outputSuccess($text , $color = 'green')
     {
+        Yii::warning($text);
        $color = $this->f_colors[$color] ?? \yii\helpers\Console::FG_GREEN;
        
        echo $this->ansiFormat($text . PHP_EOL,  $color); 
@@ -54,6 +57,7 @@ abstract class ConsoleCommand extends \yii\console\Controller
      */
     public function outputDone($text, $color = 'red')
     {
+        Yii::warning($text);
         $color = $this->f_colors[$color] ?? \yii\helpers\Console::FG_RED;
         
         echo $this->ansiFormat($text . PHP_EOL,  $color); 
