@@ -2,11 +2,10 @@
 
 namespace concepture\yii2logic\console\traits;
 
+use Yii;
 use yii\helpers\Console;
 
 /**
- *
- * Trait OutputTrait
  * @package concepture\yii2logic\traits
  */
 trait OutputTrait
@@ -33,7 +32,7 @@ trait OutputTrait
     public function outputSuccess($text , $color = 'green')
     {
         $color = isset($this->getColors()[$color]) ? $this->getColors()[$color] : \yii\helpers\Console::FG_GREEN;
-
+        Yii::warning($text);
         echo $this->aFormat($text . PHP_EOL,  $color);
     }
 
@@ -47,7 +46,7 @@ trait OutputTrait
     public function outputDone($text, $color = 'red')
     {
         $color = isset($this->getColors()[$color]) ? $this->getColors()[$color] : \yii\helpers\Console::FG_RED;
-
+        Yii::warning($text);
         echo $this->aFormat($text . PHP_EOL,  $color);
     }
 
