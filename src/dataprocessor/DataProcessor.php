@@ -114,7 +114,13 @@ class DataProcessor extends Component
     public function _execute(&$inputData = null)
     {
         $models = $this->executeQuery($inputData);
-        $this->outputSuccess( "START PROCESS PAGE : " . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) );
+        $pagesCount = ceil($this->totalCount/$this->pageSize);
+        $currentPage = $this->currentPage;
+        if ($pagesCount == 0) {
+            $currentPage = 0;
+        }
+
+        $this->outputSuccess( "START PROCESS PAGE : " . $currentPage . " of " . $pagesCount );
         $this->beforePageProcess($inputData);
         $count = count($models);
         Console::startProgress(0, $count);
@@ -136,7 +142,7 @@ class DataProcessor extends Component
 
         $models = null;
         $memory = memory_get_usage()/1024;
-        $this->outputSuccess( "END PROCESS PAGE : "  . $this->currentPage . " of " . ceil($this->totalCount/$this->pageSize) . "; MEMORY USED: {$memory}");
+        $this->outputSuccess( "END PROCESS PAGE : "  . $currentPage . " of " . $pagesCount . "; MEMORY USED: {$memory}");
 
         return true;
     }
