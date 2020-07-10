@@ -196,6 +196,7 @@ trait ModifyTrait
         #флаг для понимания операции создания/редактирования
         $is_new_record = $model->isNewRecord;
         #заполнениe атрибутов
+        $this->beforeModelLoad($form, $model);
         $data = $form->attributes;
         /**
          * Блок закоментирован из за того, что когда ключ составной он вырезается из данных
@@ -302,6 +303,17 @@ trait ModifyTrait
                 ])
             );
         }
+    }
+
+    /**
+     * Дефствия перед загрузкой формы в модель $model->load($data) в функции save
+     *
+     * @param Model $form
+     * @param ActiveRecord|null $model
+     */
+    protected function beforeModelLoad(Model $form , ActiveRecord $model = null)
+    {
+
     }
 
     /**
