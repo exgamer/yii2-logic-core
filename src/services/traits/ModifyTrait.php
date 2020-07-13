@@ -46,25 +46,32 @@ trait ModifyTrait
      */
     public function batchInsert($fields, $rows)
     {
-        $this->beforeBatchInsert($fields, $rows);
         $db = $this->getDb();
-        $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
-        $update = [];
-        foreach ($fields as $field){
-            $update[] = "`" . $field."`= VALUES(`$field`)";
-        }
-        if ($this->isMysql()){
-            $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
-        }
+        $transaction = $db->beginTransaction();
+        try {
+            $this->beforeBatchInsert($fields, $rows);
+            $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
+            $update = [];
+            foreach ($fields as $field){
+                $update[] = "`" . $field."`= VALUES(`$field`)";
+            }
 
-        /**
-         * @TODO дописать для постгреса
-         */
-        if ($this->isPostgres()){
-            $result = $db->createCommand($sql . ' ON CONFLICT DO NOTHING ')->execute();
-        }
+            if ($this->isMysql()){
+                $result = $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update))->execute();
+            }
 
-        $this->afterBatchInsert($fields, $rows);
+            /**
+             * @TODO дописать для постгреса
+             */
+            if ($this->isPostgres()){
+                $result = $db->createCommand($sql . ' ON CONFLICT DO NOTHING ')->execute();
+            }
+
+            $this->afterBatchInsert($fields, $rows);
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
+        }
 
         return $result;
     }
