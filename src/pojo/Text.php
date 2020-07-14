@@ -8,7 +8,7 @@ namespace concepture\yii2logic\pojo;
  * Class Social
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class String extends Pojo
+class Text extends Pojo
 {
     public $content;
 
