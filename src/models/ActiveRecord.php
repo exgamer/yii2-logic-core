@@ -50,6 +50,23 @@ abstract class ActiveRecord extends Base
     }
 
     /**
+     * Првоерка является ли атрибут полем в бд
+     *
+     * @param $attribute
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function isDbField($attribute)
+    {
+        $column = $this->getTableSchema()->getColumn($attribute);
+        if ($column) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Возвращает тип данных атрибута из базы
      * @param $attribute
      * @return mixed
