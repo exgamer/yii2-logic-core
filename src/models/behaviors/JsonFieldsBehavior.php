@@ -297,12 +297,12 @@ class JsonFieldsBehavior extends Behavior
                 $attr = $config;
             }
 
-            if ($this->owner->isDbField($attr)) {
+//            if ($this->owner->isDbField($attr)) {
                 $dbType = $this->owner->getAttrDbType($attr);
                 if (in_array($dbType, ['json', 'jsonb'])) {
                     continue;
                 }
-            }
+//            }
 
             if (! is_array($this->owner->{$attr})) {
                 continue;
