@@ -71,7 +71,11 @@ trait ToJsonAttributesTrait
         if (! in_array($dbType, ['json', 'jsonb'])) {
             $this->{$jsonFieldName} = Json::decode($this->owner->{$attribute}, true) ?? [];
         }
-        
+
+        if (!$this->{$jsonFieldName}) {
+            $this->{$jsonFieldName} = [];
+        }
+
         foreach ($this->{$jsonFieldName} as $attribute => $value) {
             $this->{$attribute} = $value;
         }
