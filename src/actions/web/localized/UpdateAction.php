@@ -93,6 +93,10 @@ class UpdateAction extends Action
      */
     protected function getModel($id, $locale = null)
     {
+        if (method_exists($this->getController(),'getModel')) {
+            return $this->getController()->getModel($id, $locale);
+        }
+
         $originModelClass = $this->getService()->getRelatedModel();
         $originModelClass::setLocale($locale);
         $model = $this->getService()->findById($id);
