@@ -104,9 +104,12 @@ trait ModifyTrait
 
             if ($this->isMysql()){
                 $command->setSql($command->getSql() . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update));
-                foreach ($params as $k => $v) {
-                    $command->bindValue($k, $v);
-                };
+                if ($params && is_array($params)) {
+                    foreach ($params as $k => $v) {
+                        $command->bindValue($k, $v);
+                    };
+                }
+
                 $result = $command->execute();
             }
 
@@ -115,9 +118,12 @@ trait ModifyTrait
              */
             if ($this->isPostgres()){
                 $command->setSql($command->getSql() . ' ON CONFLICT DO NOTHING ');
-                foreach ($params as $k => $v) {
-                    $command->bindValue($k, $v);
-                };
+                if ($params && is_array($params)) {
+                    foreach ($params as $k => $v) {
+                        $command->bindValue($k, $v);
+                    };
+                }
+                
                 $result = $command->execute();
             }
 
