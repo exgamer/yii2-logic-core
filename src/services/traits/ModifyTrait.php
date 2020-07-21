@@ -3,6 +3,7 @@
 namespace concepture\yii2logic\services\traits;
 
 use Yii;
+use yii\db\Command;
 use yii\helpers\Json;
 use yii\base\Exception;
 use concepture\yii2logic\forms\Model;
@@ -65,6 +66,59 @@ trait ModifyTrait
              */
             if ($this->isPostgres()){
                 $result = $db->createCommand($sql . ' ON CONFLICT DO NOTHING ')->execute();
+            }
+
+            $this->afterBatchInsert($fields, $rows);
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
+        }
+
+        return $result;
+    }
+
+    /**
+     * TODO переделать batchInsert на подобное либо использовать это
+     * TODO убрать вызов batchInsertTemporary в проекте
+     *
+     * метод выше не работает с Expression проблема в том вызывается execute с новым экземпляром Command
+     * при этом все параметры забинденные при вызове $db->queryBuilder->batchInsert() обнуляются
+     *
+     * @param array $fields
+     * @param array $rows
+     * @return int
+     */
+    public function batchInsertTemporary($fields, $rows)
+    {
+        $db = $this->getDb();
+        $transaction = $db->beginTransaction();
+        try {
+            $this->beforeBatchInsert($fields, $rows);
+            /** @var Command $command */
+            $command = $db->createCommand()->batchInsert($this->getTableName(), $fields, $rows);
+            $params = $command->params;
+            $update = [];
+            foreach ($fields as $field){
+                $update[] = "`" . $field."`= VALUES(`$field`)";
+            }
+
+            if ($this->isMysql()){
+                $command->setSql($command->getSql() . ' ON DUPLICATE KEY UPDATE ' . implode(",", $update));
+                foreach ($params as $k => $v) {
+                    $command->bindValue($k, $v);
+                };
+                $result = $command->execute();
+            }
+
+            /**
+             * @TODO дописать для постгреса
+             */
+            if ($this->isPostgres()){
+                $command->setSql($command->getSql() . ' ON CONFLICT DO NOTHING ');
+                foreach ($params as $k => $v) {
+                    $command->bindValue($k, $v);
+                };
+                $result = $command->execute();
             }
 
             $this->afterBatchInsert($fields, $rows);
