@@ -92,4 +92,14 @@ class StringHelper extends BaseHelper
     {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
+
+    /**
+     * Проверка содердит ли строка HTML
+     *
+     * @param $string
+     * @return bool
+     */
+    public static function isHTML($string){
+        return $string != strip_tags($string) ? true:false;
+    }
 }
