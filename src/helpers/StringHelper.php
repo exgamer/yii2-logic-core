@@ -99,7 +99,8 @@ class StringHelper extends BaseHelper
      * @param $string
      * @return bool
      */
-    public static function isHTML($string){
+    public static function isHTML($string)
+    {
         return $string != strip_tags($string) ? true:false;
     }
 }
