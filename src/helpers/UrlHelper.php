@@ -74,5 +74,48 @@ class UrlHelper
 
         return $frontendUrlManager->createUrl($urlParams);
     }
+
+    /**
+     * добавляет слеш перед queryString
+     *
+     * @param string $url
+     * @return mixed
+     */
+    public function addSlash($url)
+    {
+        $parsed = parse_url($url);
+        if (isset($parsed['path'])) {
+            $path = trim($parsed['path'], '/');
+            $path = "/" . $path . "/";
+            $parsed['path'] = $path;
+        }
+
+        return static::buildUrl($parsed);
+    }
+
+    /**
+     * Собирает url из массива который возвращает parse_url()
+     *
+     * @param array $parts
+     * @return string
+     */
+    public static function buildUrl(array $parts)
+    {
+        $scheme   = isset($parts['scheme']) ? ($parts['scheme'] . '://') : '';
+
+        $host     = ($parts['host'] ?? '');
+        $port     = isset($parts['port']) ? (':' . $parts['port']) : '';
+
+        $user     = ($parts['user'] ?? '');
+
+        $pass     = isset($parts['pass']) ? (':' . $parts['pass'])  : '';
+        $pass     = ($user || $pass) ? "$pass@" : '';
+
+        $path     = ($parts['path'] ?? '');
+        $query    = isset($parts['query']) ? ('?' . $parts['query']) : '';
+        $fragment = isset($parts['fragment']) ? ('#' . $parts['fragment']) : '';
+
+        return implode('', [$scheme, $user, $pass, $host, $port, $path, $query, $fragment]);
+    }
 }
 
