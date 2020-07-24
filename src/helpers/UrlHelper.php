@@ -81,7 +81,7 @@ class UrlHelper
      * @param string $url
      * @return mixed
      */
-    public function addSlash($url)
+    public static function addSlash($url)
     {
         $parsed = parse_url($url);
         if (isset($parsed['path'])) {
