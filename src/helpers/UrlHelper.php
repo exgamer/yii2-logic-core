@@ -93,6 +93,8 @@ class UrlHelper
             }
 
             $parsed['path'] = $path;
+        }else{
+            $parsed['path'] = "/";
         }
 
         return static::buildUrl($parsed);
