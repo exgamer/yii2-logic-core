@@ -85,7 +85,8 @@ class UrlHelper
     {
         $parsed = parse_url($url);
         if (isset($parsed['path'])) {
-            $path = trim($parsed['path'], '/');
+            $path = rtrim($parsed['path'], '//');
+            $path = rtrim($path, '/');
             if ($path !== '') {
                 $path = "/" . $path . "/";
             }else{
