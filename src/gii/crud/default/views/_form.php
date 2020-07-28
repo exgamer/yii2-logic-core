@@ -31,6 +31,8 @@ $saveButton = Html::saveButton();
         <?= "<?= " ?> $saveRedirectButton?>
         <?= "<?= " ?> $saveButton?>
     </div>
+</div>
+<div class="card">
     <div class="card-body">
         <div class="row">
             <?php foreach ($generator->getColumnNames() as $attribute) {
@@ -61,6 +63,8 @@ $saveButton = Html::saveButton();
     </div>
 
 
+</div>
+<div class="card">
     <div class="card-body text-right">
         <?= "<?= " ?> $saveRedirectButton?>
         <?= "<?= " ?> $saveButton?>
