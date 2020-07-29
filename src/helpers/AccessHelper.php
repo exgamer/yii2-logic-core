@@ -66,13 +66,14 @@ class AccessHelper
      *
      * AccessHelper::checkAccess('create');
      * AccessHelper::checkAccess(['site/index]);
-     * AccessHelper::checkAccess(['site/CUSTOM_PEMISSION]);
+     *
+     * AccessHelper::checkAccess(PermissionEnum::RATE_EDITOR, [], true) проверка на конкретное полномочие
      *
      * @param $name
      * @param array $params
      * @return bool
      */
-    public static function checkAccess($name, $params = [])
+    public static function checkAccess($name, $params = [], $asPermission = false)
     {
         $action = null;
         $controller = null;
@@ -95,6 +96,27 @@ class AccessHelper
             $name = $action;
         }
 
+        if (! $controller){
+            $controller = Yii::$app->controller;
+        }
+
+        //значит передали навзание полномочия
+        if ($asPermission) {
+            $customPerms = [
+                static::getAccessPermission($controller, $name),
+                static::getDomainAccessPermission($controller, $name)
+            ];
+            foreach ($customPerms as $p) {
+                if (Yii::$app->user->can($p, $params)){
+                    return true;
+                }
+            }
+
+            // если полномочия были кастомные и у юзера нет доступа возвращает false
+            return false;
+        }
+
+
         if (in_array($name, [ 'activate', 'deactivate' ])){
             $name = 'status-change';
         }
@@ -103,36 +125,8 @@ class AccessHelper
          * Если экшен не является дефолтно заданным значит нужно проверку ставить вручную
          */
         if (! in_array($name, static::$_edit_actions) && ! in_array($name, static::$_read_actions) && ! in_array($name, static::$_sort_actions)){
-            //сначала проверяем может это кастмное полномочие
-            $customPerms = [
-                static::getAccessPermission($controller, $name),
-                static::getDomainAccessPermission($controller, $name)
-            ];
-
-            $existsPerm = [];
-            foreach ($customPerms as $perm) {
-                if (Yii::$app->rbacService->getPermission($perm)) {
-                    $existsPerm[] = $perm;
-                }
-            }
-
-            if ($existsPerm) {
-                foreach ($existsPerm as $p) {
-                    if (Yii::$app->user->can($p, $params)){
-                        return true;
-                    }
-                }
-
-                // если полномочия были кастомные и у юзера нет доступа возвращает false
-                return false;
-            }
-
             // если полночоие не кастомное надо вернуть true иначе сломается rbac
             return true;
-        }
-
-        if (! $controller){
-            $controller = Yii::$app->controller;
         }
 
         $params['action'] = $name;
