@@ -66,6 +66,7 @@ class AccessHelper
      *
      * AccessHelper::checkAccess('create');
      * AccessHelper::checkAccess(['site/index]);
+     * AccessHelper::checkAccess(['site/CUSTOM_PEMISSION]);
      *
      * @param $name
      * @param array $params
@@ -102,7 +103,20 @@ class AccessHelper
          * Если экшен не является дефолтно заданным значит нужно проверку ставить вручную
          */
         if (! in_array($name, static::$_edit_actions) && ! in_array($name, static::$_read_actions) && ! in_array($name, static::$_sort_actions)){
-            return true;
+            //сначала проверяем может это кастмное полномочие
+            $permissions = [
+                static::getAccessPermission($controller, $name),
+                static::getDomainAccessPermission($controller, $name)
+            ];
+
+            foreach ($permissions as $permission) {
+                if (Yii::$app->user->can($permission, $params)){
+                    return true;
+                }
+            }
+
+
+            return false;
         }
 
         if (! $controller){
@@ -248,7 +262,7 @@ class AccessHelper
     /**
      * Возвращает значение полномочия для переданного контроллера на доступ к текущему домену
      *
-     * @param $controller - параметр первый потому что пришлось сделать его необязательным. оставил так чтобы не менять везде 
+     * @param $controller
      * @param $permission
      * @param null $domain_id
      * @return string
