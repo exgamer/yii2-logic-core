@@ -71,6 +71,7 @@ class AccessHelper
      *
      * @param $name
      * @param array $params
+     * @param bool $asPermission если true то $name будет проверена как полномочие
      * @return bool
      */
     public static function checkAccess($name, $params = [], $asPermission = false)
