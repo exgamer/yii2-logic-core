@@ -146,6 +146,9 @@ class AccessHelper
                 static::getDomainAccessPermission($controller, PermissionEnum::STAFF, $domain_id),
                 static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
                 static::getDomainAccessPermission($controller, PermissionEnum::READER, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::STAFF, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::EDITOR, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::READER, $domain_id),
             ];
         }
 
@@ -159,6 +162,8 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getDomainAccessPermission($controller, PermissionEnum::STAFF, $domain_id),
                 static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::STAFF, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::EDITOR, $domain_id),
             ];
         }
 
@@ -170,6 +175,7 @@ class AccessHelper
                 static::getAccessPermission($controller, PermissionEnum::ADMIN),
                 static::getAccessPermission($controller, PermissionEnum::EDITOR),
                 static::getDomainAccessPermission($controller, PermissionEnum::EDITOR, $domain_id),
+                static::getDomainAccessPermission(null, PermissionEnum::EDITOR, $domain_id),
             ];
         }
 
@@ -247,12 +253,16 @@ class AccessHelper
      * @param null $domain_id
      * @return string
      */
-    public static function getDomainAccessPermission($controller, $permission, $domain_id = null)
+    public static function getDomainAccessPermission($controller = null, $permission, $domain_id = null)
     {
-        if (is_object($controller)) {
-            $name = ClassHelper::getShortClassName($controller, 'Controller', true);
-        }else{
-            $name = str_replace("-", '', strtoupper($controller));
+        $name = '';
+        if ($controller) {
+            if (is_object($controller)) {
+                $name = ClassHelper::getShortClassName($controller, 'Controller', true);
+            } else {
+                $name = str_replace("-", '', strtoupper($controller));
+            }
+            $name .= "_" ;
         }
 
         if (! $domain_id) {
@@ -263,6 +273,12 @@ class AccessHelper
 
         $alias = $data['alias'] ?? "_";
 
-        return $name . "_" . strtoupper($alias) . "_" . $permission;
+        $role = $name . strtoupper($alias) . "_" . $permission;
+
+        if ($controller) {
+            return $role;
+        }
+
+        return str_replace('_', '', $role);
     }
 }
