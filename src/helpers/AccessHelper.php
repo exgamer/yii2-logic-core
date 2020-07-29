@@ -116,7 +116,7 @@ class AccessHelper
             }
 
 
-            return false;
+            return true;
         }
 
         if (! $controller){
