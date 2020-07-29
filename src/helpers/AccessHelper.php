@@ -104,18 +104,30 @@ class AccessHelper
          */
         if (! in_array($name, static::$_edit_actions) && ! in_array($name, static::$_read_actions) && ! in_array($name, static::$_sort_actions)){
             //сначала проверяем может это кастмное полномочие
-            $permissions = [
+            $customPerms = [
                 static::getAccessPermission($controller, $name),
                 static::getDomainAccessPermission($controller, $name)
             ];
 
-            foreach ($permissions as $permission) {
-                if (Yii::$app->user->can($permission, $params)){
-                    return true;
+            $existsPerm = [];
+            foreach ($customPerms as $perm) {
+                if (Yii::$app->rbacService->getPermission($perm)) {
+                    $existsPerm[] = $perm;
                 }
             }
 
+            if ($existsPerm) {
+                foreach ($existsPerm as $p) {
+                    if (Yii::$app->user->can($p, $params)){
+                        return true;
+                    }
+                }
 
+                // если полномочия были кастомные и у юзера нет доступа возвращает false
+                return false;
+            }
+
+            // если полночоие не кастомное надо вернуть true иначе сломается rbac
             return true;
         }
 
