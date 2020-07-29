@@ -248,7 +248,7 @@ class AccessHelper
     /**
      * Возвращает значение полномочия для переданного контроллера на доступ к текущему домену
      *
-     * @param $controller
+     * @param $controller - параметр первый потому что пришлось сделать его необязательным. оставил так чтобы не менять везде 
      * @param $permission
      * @param null $domain_id
      * @return string
