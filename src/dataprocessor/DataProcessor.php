@@ -94,6 +94,7 @@ class DataProcessor extends Component
                 gc_collect_cycles();
                 $this->_execute($inputData);
             } catch (\Exception $dbEx){
+                Yii::error($dbEx->getMessage());
                 $this->noDbConnectionExceptionActions([], $dbEx);
                 continue;
             }
