@@ -219,16 +219,36 @@ trait ModifyTrait
         if($scenario) {
             $form->scenario = $scenario;
         }
-        
+
         $form->setAttributes($model->attributes, false);
         if (method_exists($form, 'customizeForm')) {
             $form->customizeForm($model);
         }
 
+        $scope = $formName === null ? $form->formName() : $formName;
+        if ($scope !== '' && isset($data[$scope])) {
+            $data = $data[$scope];
+        }
+
+        if (empty($data)) {
+            return $form;
+        }
+
+        $needUpdate = false;
         /**
-         * Это сделано специально для возможность простого пересохранения сущности
+         * Присваивание атрибутов делаем явно, потому что если сделать load
+         * потеряются атрибуты типа json и pojo которые затираются загрузке в форму, если их нет в data
          */
-        if (! empty($data) && ! $form->load($data, $formName)) {
+        foreach ($data as $attribute => $value) {
+            if (! property_exists($form, $attribute)) {
+                continue;
+            }
+
+            $needUpdate = true;
+            $form->{$attribute} = $value;
+        }
+
+        if ($needUpdate === false) {
 
             return $form;
         }

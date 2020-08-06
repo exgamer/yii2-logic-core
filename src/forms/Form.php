@@ -225,6 +225,7 @@ abstract class Form extends Model
      */
     public function afterLoad($data, $formName = null)
     {
+        $this->jsonDataResolve($data, $formName);
         $this->pojoDataLoad($data);
     }
 
@@ -251,6 +252,37 @@ abstract class Form extends Model
     }
 
     /**
+     * Метод для зачистки json поля в случае когда в load не пришло данных для атрибута, что значит что пользователь удалил их
+     *
+     * @param $data
+     * @param null $formName
+     * @return bool
+     * @throws InvalidConfigException
+     */
+    public function jsonDataResolve($data, $formName = null)
+    {
+        $scope = $formName === null ? $this->formName() : $formName;
+        $model = static::getModel();
+        if (! ClassHelper::getBehavior($model, JsonFieldsBehavior::class)){
+            return;
+        }
+
+        if ($scope !== '' && isset($data[$scope])) {
+            $data = $data[$scope];
+        }
+
+        $jsonAttrs = $model->getJsonAttributes();
+        foreach ($jsonAttrs as $attr) {
+            $value = [];
+            if (! isset($data[$attr])) {
+                $this->{$attr} = [];
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * load pojo данных
      *
      * @param $data
@@ -271,10 +303,6 @@ abstract class Form extends Model
                 $value = $data[$className];
             } else if (isset($data[$attr])) {
                 $value = $data[$attr];
-            }
-
-            if (empty($value)) {
-                continue;
             }
 
             $this->{$attr} = $value;
