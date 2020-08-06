@@ -212,7 +212,7 @@ abstract class Form extends Model
             return $result;
         }
 
-        $this->afterLoad($data);
+        $this->afterLoad($data, $formName);
 
         return $result;
     }
@@ -221,10 +221,11 @@ abstract class Form extends Model
      * Действия с формой после загрузки в нее данных
      * используется в UpdateAction
      * @param null $data
+     * @param null $formName
      */
-    public function afterLoad($data)
+    public function afterLoad($data, $formName = null)
     {
-        $this->jsonDataLoad($data);
+        $this->pojoDataLoad($data);
     }
 
     /**
@@ -250,11 +251,11 @@ abstract class Form extends Model
     }
 
     /**
-     * load json данных
+     * load pojo данных
      *
      * @param $data
      */
-    protected function jsonDataLoad($data)
+    protected function pojoDataLoad($data)
     {
         $model = static::getModel();
         if (! ClassHelper::getBehavior($model, JsonFieldsBehavior::class)){
@@ -278,7 +279,7 @@ abstract class Form extends Model
 
             $this->{$attr} = $value;
             $pogoData = [];
-            foreach ($this->{$attr} as $key => $value){
+            foreach ($this->{$attr} as $key => $value) {
                 if (! is_array($value) ){
                     continue;
                 }

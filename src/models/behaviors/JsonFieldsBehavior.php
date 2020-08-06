@@ -183,6 +183,20 @@ class JsonFieldsBehavior extends Behavior
         return $pojoAttrs;
     }
 
+    public function getJsonAttributes()
+    {
+        $behavior = ClassHelper::getBehavior($this->owner, JsonFieldsBehavior::class);
+        $attrs = $behavior['jsonAttr'] ?? [];
+        $jsonAttrs = [];
+        foreach ($attrs as $key => $value){
+            if ( filter_var($key, FILTER_VALIDATE_INT) !== false ) {
+                $jsonAttrs[] = $value;
+            }
+        }
+
+        return $jsonAttrs;
+    }
+
     public function getPojoModels($attribute)
     {
         $pojoAttributes = $this->getPojoAttributes();
