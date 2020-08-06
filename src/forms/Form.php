@@ -273,7 +273,6 @@ abstract class Form extends Model
 
         $jsonAttrs = $model->getJsonAttributes();
         foreach ($jsonAttrs as $attr) {
-            $value = [];
             if (! isset($data[$attr])) {
                 $this->{$attr} = [];
             }
