@@ -49,7 +49,7 @@ trait ModifyTrait
     {
         $db = $this->getDb();
         $transaction = $db->beginTransaction();
-        try {
+        //try {
             $this->beforeBatchInsert($fields, $rows);
             $sql = $db->queryBuilder->batchInsert($this->getTableName(), $fields, $rows);
             $update = [];
@@ -70,11 +70,11 @@ trait ModifyTrait
 
             $this->afterBatchInsert($fields, $rows);
             $transaction->commit();
-        } catch(Exception $e) {
-            $transaction->rollback();
-        }
+//        } catch(Exception $e) {
+//            $transaction->rollback();
+//        }
 
-        return $result;
+        return $result ?? false;
     }
 
     /**
@@ -133,7 +133,7 @@ trait ModifyTrait
             $transaction->rollback();
         }
 
-        return $result;
+        return $result ?? false;
     }
 
     /**
