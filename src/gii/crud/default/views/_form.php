@@ -32,6 +32,7 @@ $saveButton = Html::saveButton();
         <?= "<?= " ?> $saveButton?>
     </div>
 </div>
+<?= "<?= " ?> $form->errorSummary($model);?>
 <div class="card">
     <div class="card-body">
         <div class="row">

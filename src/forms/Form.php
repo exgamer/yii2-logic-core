@@ -212,7 +212,7 @@ abstract class Form extends Model
             return $result;
         }
 
-        $this->afterLoad($data);
+        $this->afterLoad($data, $formName);
 
         return $result;
     }
@@ -221,10 +221,12 @@ abstract class Form extends Model
      * Действия с формой после загрузки в нее данных
      * используется в UpdateAction
      * @param null $data
+     * @param null $formName
      */
-    public function afterLoad($data)
+    public function afterLoad($data, $formName = null)
     {
-        $this->jsonDataLoad($data);
+        $this->jsonDataResolve($data, $formName);
+        $this->pojoDataLoad($data);
     }
 
     /**
@@ -250,11 +252,41 @@ abstract class Form extends Model
     }
 
     /**
-     * load json данных
+     * Метод для зачистки json поля в случае когда в load не пришло данных для атрибута, что значит что пользователь удалил их
+     *
+     * @param $data
+     * @param null $formName
+     * @return bool
+     * @throws InvalidConfigException
+     */
+    public function jsonDataResolve($data, $formName = null)
+    {
+        $scope = $formName === null ? $this->formName() : $formName;
+        $model = static::getModel();
+        if (! ClassHelper::getBehavior($model, JsonFieldsBehavior::class)){
+            return;
+        }
+
+        if ($scope !== '' && isset($data[$scope])) {
+            $data = $data[$scope];
+        }
+
+        $jsonAttrs = $model->getJsonAttributes();
+        foreach ($jsonAttrs as $attr) {
+            if (! isset($data[$attr])) {
+                $this->{$attr} = [];
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * load pojo данных
      *
      * @param $data
      */
-    protected function jsonDataLoad($data)
+    protected function pojoDataLoad($data)
     {
         $model = static::getModel();
         if (! ClassHelper::getBehavior($model, JsonFieldsBehavior::class)){
@@ -272,13 +304,9 @@ abstract class Form extends Model
                 $value = $data[$attr];
             }
 
-            if (empty($value)) {
-                continue;
-            }
-
             $this->{$attr} = $value;
             $pogoData = [];
-            foreach ($this->{$attr} as $key => $value){
+            foreach ($this->{$attr} as $key => $value) {
                 if (! is_array($value) ){
                     continue;
                 }
