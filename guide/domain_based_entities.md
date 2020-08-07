@@ -11,7 +11,6 @@
 
 
 1. Создаем модель AR унаследованную от *concepture\yii2logic\models\ActiveRecord* и подключаем треит concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait
-   и реализовать поведения afterSave, beforeDelete
    
    Создаем модель для таблицы со свойствами BookmakerProperty
 
