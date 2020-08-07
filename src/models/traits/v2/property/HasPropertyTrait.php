@@ -391,6 +391,10 @@ trait HasPropertyTrait
             $this->{$uniqueField} = static::uniqueFieldValue();
         }
 
+        if (! $propertyM->hasAttribute("entity_id")) {
+            throw  new Exception('property table must have `entity_id` field');
+        }
+
         $property = $propertyM::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
         if (! $property){
             $property = Yii::createObject($propertyClass);
