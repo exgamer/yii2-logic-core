@@ -396,9 +396,11 @@ trait HasPropertyTrait
             $property = Yii::createObject($propertyClass);
             $property->entity_id = $this->id;
             if ($insert){
-                if ($property->hasAttribute("default")) {
-                    $property->default = 1;
+                if (! $property->hasAttribute("default")) {
+                    throw  new Exception('property table must have `default` field');
                 }
+
+                $property->default = 1;
             }
 
             if (! $property->{$uniqueField}) {
