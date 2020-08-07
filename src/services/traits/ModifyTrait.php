@@ -74,7 +74,7 @@ trait ModifyTrait
             $transaction->rollback();
         }
 
-        return $result;
+        return $result ?? false;
     }
 
     /**
@@ -133,7 +133,7 @@ trait ModifyTrait
             $transaction->rollback();
         }
 
-        return $result;
+        return $result ?? false;
     }
 
     /**
