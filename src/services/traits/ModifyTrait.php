@@ -230,11 +230,6 @@ trait ModifyTrait
             $data = $data[$scope];
         }
 
-        if (empty($data)) {
-            return $form;
-        }
-
-        $needUpdate = false;
         /**
          * Присваивание атрибутов делаем явно, потому что если сделать load
          * потеряются атрибуты типа json и pojo которые затираются загрузке в форму, если их нет в data
@@ -244,13 +239,7 @@ trait ModifyTrait
                 continue;
             }
 
-            $needUpdate = true;
             $form->{$attribute} = $value;
-        }
-
-        if ($needUpdate === false) {
-
-            return $form;
         }
 
         $model->setAttributes($form->attributes);
