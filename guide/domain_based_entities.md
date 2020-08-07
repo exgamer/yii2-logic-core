@@ -3,9 +3,17 @@
 
 # В этом случае данне будут собираться в зависимости от текущего domain_id
 
+# Для работы с сущностью имеющей свойства
+    - создается основная таблица например bookmaker
+    - создается таблица со свойствами bookmaker_property (постфикс _property обязателен)
+    - для таблицы со свойствами нужно создать простую модель BookmakerProperty(правила необязательны класс будет пустой) 
+    - таблица со свойствами должна обязательно содержать поля (entity_id, deafult и поле по которому будет определяться уникальность в этмо случае domain_id) 
+
 
 1. Создаем модель AR унаследованную от *concepture\yii2logic\models\ActiveRecord* и подключаем треит concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait
    и реализовать поведения afterSave, beforeDelete
+   
+   Создаем модель для таблицы со свойствами BookmakerProperty
 
 
 ```php
