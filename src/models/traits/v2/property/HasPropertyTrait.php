@@ -391,6 +391,10 @@ trait HasPropertyTrait
             $this->{$uniqueField} = static::uniqueFieldValue();
         }
 
+        if (! $propertyM->hasAttribute($uniqueField)) {
+            throw  new Exception('property table must have `' . $uniqueField . '` field');
+        }
+
         if (! $propertyM->hasAttribute("entity_id")) {
             throw  new Exception('property table must have `entity_id` field');
         }
