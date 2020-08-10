@@ -17,6 +17,6 @@ abstract class NoModelForm extends Form
      */
     public static function getModelClass()
     {
-        return Yii::createObject(static::class);
+        return static::class;
     }
 }
