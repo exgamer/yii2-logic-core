@@ -2,6 +2,7 @@
 namespace concepture\yii2logic\forms;
 
 use Yii;
+use yii\validators\Validator;
 
 /**
  * Class NoModelForm
@@ -10,6 +11,21 @@ use Yii;
  */
 abstract class NoModelForm extends Form
 {
+    public function rules()
+    {
+        return [];
+    }
+
+    public function behaviors()
+    {
+        return [];
+    }
+
+    public function attributeLabels()
+    {
+        return [];
+    }
+
     /**
      * возвращает класс модели
      *
