@@ -45,7 +45,7 @@ trait ModifyTrait
     {
         return $this->getDb()->createCommand()->insert($this->getTableName(), $data)->execute();
     }
-    
+
     /**
      * Мультивставка записей если их нет
      *
