@@ -565,4 +565,30 @@ trait HasPropertyTrait
 
         return $ids;
     }
+
+    /**
+     * Возвращает properties по id сущности
+     *
+     * @param integer|integer[] $id
+     * @param callable|array $condition
+     * @return mixed
+     */
+    public static function findProperties($id, $condition = null)
+    {
+        $propertyClass = static::getPropertyModelClass();
+
+        $query = $propertyClass::find()->andWhere(['entity_id' => $id]);
+
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
+
+        return $query->all();
+    }
 }
