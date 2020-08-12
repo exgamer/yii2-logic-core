@@ -36,6 +36,17 @@ trait ModifyTrait
     private $oldData = [];
 
     /**
+     * Вставка 1 записи
+     *
+     * @param $data
+     * @return bool
+     */
+    public function insert($data)
+    {
+        return $this->getDb()->createCommand()->insert($this->getTableName(), $data)->execute();
+    }
+    
+    /**
      * Мультивставка записей если их нет
      *
      * поля которые нужно встатвить
