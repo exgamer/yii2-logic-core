@@ -17,6 +17,33 @@ use Yii;
 trait PropertyTrait
 {
     /**
+     * Возвращает пропертюшку по дефолному значению уникального поля
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function getPropertyByDefaultUniqueValue($condition)
+    {
+        $modelClass = $this->getRelatedModelClass();
+        $models = $modelClass::findProperties($condition, function (\concepture\yii2logic\db\ActiveQuery $query) use($modelClass) {
+            $propertyUniqueAttribute = $modelClass::uniqueField();
+            $propertyUniqueAttributeValue = $modelClass::uniqueFieldValue();
+            $query->andWhere(
+                [
+                    $propertyUniqueAttribute => $propertyUniqueAttributeValue
+                ]
+            );
+
+        });
+
+        if (! $models) {
+            return null;
+        }
+
+        return array_shift($models);
+    }
+
+    /**
      * Возвращает список аписей дял копирования по уникальному полю
      *
      * @param string $key

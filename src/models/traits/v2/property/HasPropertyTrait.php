@@ -569,7 +569,7 @@ trait HasPropertyTrait
     /**
      * Возвращает properties по id сущности
      *
-     * @param integer|integer[] $id
+     * @param integer|integer[]|callable|[] $id
      * @param callable|array $condition
      * @return mixed
      */
@@ -577,7 +577,15 @@ trait HasPropertyTrait
     {
         $propertyClass = static::getPropertyModelClass();
 
-        $query = $propertyClass::find()->andWhere(['entity_id' => $id]);
+        $query = $propertyClass::find();
+
+        if (filter_var($id, FILTER_VALIDATE_INT) !== false || (is_array($id) && ! ArrayHelper::isAssociative($id))) {
+            $query->andWhere(['entity_id' => $id]);
+        }elseif (is_callable($id)){
+            call_user_func($id, $query);
+        }elseif (is_array($id)){
+            $query->andWhere($id);
+        }
 
         if (is_callable($condition)){
             call_user_func($condition, $query);
