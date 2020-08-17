@@ -6,9 +6,9 @@ use frontend\components\cdn\AssetsBundle;
 use common\helpers\AppHelper;
 
 /**
- * Обищие ресурсы приложения
- *
- * @author kamaelkz <kamaelkz@yandex.kz>
+ * Class JSCoreBundle
+ * @package concepture\yii2logic\bundles\jscore
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class JSCoreBundle extends AssetsBundle
 {
