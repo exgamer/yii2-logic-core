@@ -2,15 +2,14 @@
 
 namespace concepture\yii2logic\bundles\jscore;
 
-use frontend\components\cdn\AssetsBundle;
-use common\helpers\AppHelper;
+use concepture\yii2logic\bundles\Bundle;
 
 /**
  * Class JSCoreBundle
  * @package concepture\yii2logic\bundles\jscore
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class JSCoreBundle extends AssetsBundle
+class JSCoreBundle extends Bundle
 {
     public $js = [];
 
