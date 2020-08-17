@@ -24,12 +24,8 @@ class JSCoreBundle extends AssetsBundle
             'scripts/core/helpers/modal/bootstrap-modal.js',
             'scripts/core/helpers/app-helpers.js',
             'scripts/core/app.js',
-            'scripts/app.js',
             [
                 'scripts/modernizr-custom.js',
-            ],
-            [
-                'scripts/main.js',
             ],
             [
                 'scripts/autosize.min.js',

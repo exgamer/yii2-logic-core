@@ -34,3 +34,5 @@ App.prototype.t = function (key, params = {}) {
 
     return message;
 };
+
+var app = new App();
