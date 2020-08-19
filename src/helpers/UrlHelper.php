@@ -35,6 +35,10 @@ class UrlHelper
      */
     public static function getCurrentSchema()
     {
+        if (! Yii::$app->controller) {
+            return 'http';
+        }
+
         $current = Url::current([], true);
 
         return parse_url($current, PHP_URL_SCHEME);
