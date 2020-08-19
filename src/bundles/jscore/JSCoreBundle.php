@@ -18,13 +18,13 @@ class JSCoreBundle extends Bundle
         $this->js = [
             'scripts/jquery-3.5.1.min.js',
             'scripts/core/helpers/lodash.js',
+            'scripts/core/helpers/modal/util.js',
+            'scripts/core/helpers/modal/bootstrap-modal.js',
+            'scripts/core/helpers/app-helpers.js',
             'scripts/core/components/form.js',
             'scripts/core/components/modal.js',
             'scripts/core/components/module.js',
-            'scripts/core/helpers/modal/util.js',
             'scripts/fingerprint2.min.js',
-            'scripts/core/helpers/modal/bootstrap-modal.js',
-            'scripts/core/helpers/app-helpers.js',
             'scripts/core/app.js',
             [
                 'scripts/modernizr-custom.js',
