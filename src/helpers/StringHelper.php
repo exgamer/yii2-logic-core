@@ -53,6 +53,29 @@ class StringHelper extends BaseHelper
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
+
+    /**
+     * проверка что строка это валидный json массив
+     *
+     * @param $string
+     * @param null $decode
+     * @return bool
+     */
+    public static function isJsonArray($string, &$decode = null)
+    {
+        $decode = json_decode($string);
+        if (json_last_error() != JSON_ERROR_NONE) {
+
+            return false;
+        }
+
+        if ($decode == $string) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Приобразует json в массив
      *
