@@ -94,11 +94,11 @@ class PhoneValidator extends Validator
         // if none and strict
         if (!isset($country) && $this->strict) {
 
-            return false;
+            return true;
         }
 
         if (!isset($country)) {
-            return null;
+            return true;
         }
 
         $phoneUtil = PhoneNumberUtil::getInstance();
@@ -108,14 +108,14 @@ class PhoneValidator extends Validator
                 if (is_numeric($this->format)) {
                     $value = $phoneUtil->format($numberProto, $this->format);
                 }
-                return null;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } catch (NumberParseException $e) {
-            return false;
+            return true;
         } catch (Exception $e) {
-            return false;
+            return true;
         }
     }
 
