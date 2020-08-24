@@ -79,7 +79,7 @@ class PhoneValidator extends Validator
         }
     }
 
-    public function validateValue($value)
+    protected function validateValue($value)
     {
         if ($this->format === true) {
             $this->format = PhoneNumberFormat::INTERNATIONAL;
