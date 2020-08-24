@@ -107,7 +107,7 @@ class JsonFieldsBehavior extends Behavior
                 $data = [];
                 $res = $this->owner->{$attribute};
                 foreach ($res as $value) {
-                    if (is_string($value) && StringHelper::isJson($value)) {
+                    if (is_string($value) && StringHelper::isJsonArray($value)) {
                         $data[] = Json::decode($value);
                     }
                 }
