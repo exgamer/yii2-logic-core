@@ -79,4 +79,44 @@ class PhoneValidator extends Validator
         }
     }
 
+    public function validateValue($value)
+    {
+        if ($this->format === true) {
+            $this->format = PhoneNumberFormat::INTERNATIONAL;
+        }
+
+        // if country is fixed
+        if (!isset($country) && isset($this->country)) {
+            $country = $this->country;
+        }
+
+
+        // if none and strict
+        if (!isset($country) && $this->strict) {
+
+            return false;
+        }
+
+        if (!isset($country)) {
+            return null;
+        }
+
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        try {
+            $numberProto = $phoneUtil->parse($value, $country);
+            if ($phoneUtil->isValidNumber($numberProto)) {
+                if (is_numeric($this->format)) {
+                    $value = $phoneUtil->format($numberProto, $this->format);
+                }
+                return null;
+            } else {
+                return false;
+            }
+        } catch (NumberParseException $e) {
+            return false;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }
