@@ -1,14 +1,14 @@
 <?php
 namespace concepture\yii2logic\models\behaviors;
 
-use common\models\Review;
-use concepture\yii2logic\helpers\ClassHelper;
-use concepture\yii2logic\helpers\StringHelper;
 use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
 use Exception;
+use yii\web\Application;
+use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\helpers\StringHelper;
 
 /**
  * Поведение для полей являющихся Json строкой
@@ -66,6 +66,19 @@ class JsonFieldsBehavior extends Behavior
 
     public function validatePojo($event)
     {
+        // todo: static::$refreshParam, перенести переменные в базовые модели (сейчас они в админке)
+        if(
+            Yii::$app instanceof Application
+            && (
+                Yii::$app->request->post('refresh-form')
+                || Yii::$app->request->get('refresh-form')
+            )
+        ) {
+            $event->isValid = false;
+
+            return;
+        }
+
         $this->getJson();
         $event->isValid = $this->validateJsonData();
     }
