@@ -280,6 +280,8 @@ trait ModifyTrait
         if($model === null){
             $model = $this->getRelatedModel();
         }
+
+        $model->setScenario($form->scenario);
         #флаг для понимания операции создания/редактирования
         $is_new_record = $model->isNewRecord;
         #заполнениe атрибутов
