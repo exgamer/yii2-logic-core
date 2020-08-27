@@ -4,6 +4,7 @@ namespace concepture\yii2logic\actions\web\v2;
 
 use concepture\yii2logic\actions\Action;
 use concepture\yii2logic\helpers\AccessHelper;
+use kamaelkz\yii2admin\v1\enum\FlashAlertEnum;
 use ReflectionException;
 use yii\web\NotFoundHttpException;
 use yii\db\ActiveRecord;
@@ -38,11 +39,22 @@ class UndeleteAction extends Action
             throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
-        $this->getService()->{$this->serviceMethod}($model);
+        $result = $this->getService()->{$this->serviceMethod}($model);
+        $controller = $this->getController();
 
-        if($this->redirect) {
+        if ($this->redirect) {
+            if ($result) {
+                $controller->setSuccessFlash();
+            } else {
+                $controller->setErrorFlash();
+            }
             return $this->redirect([$this->redirect]);
         }
+
+        if ($result) {
+            return $controller->responseNotify(FlashAlertEnum::SUCCESS, $controller->getSuccessFlash());
+        }
+        return $controller->responseNotify(FlashAlertEnum::WARNING, $controller->getErrorFlash());
     }
 
     /**
