@@ -19,8 +19,9 @@ trait StatusTrait
     {
         $this->beforeStatusChange($model, $status);
         $model->status = $status;
-        $model->save(false);
+        $result = $model->save(false);
         $this->afterStatusChange($model, $status);
+        return $result;
     }
 
     protected function beforeStatusChange(ActiveRecord $model, $status)
