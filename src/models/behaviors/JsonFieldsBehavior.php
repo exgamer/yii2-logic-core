@@ -240,7 +240,14 @@ class JsonFieldsBehavior extends Behavior
     {
         $validationResult = true;
         $jsonAttrs = $this->getPojoAttributes();
-        foreach ($jsonAttrs as $attr => $pojoClass){
+        $scenarios = $this->owner->scenarios();
+        $scenarioAttributes = $scenarios[$this->owner->scenario];
+        foreach ($jsonAttrs as $attr => $pojoClass) {
+            # проверка наличия атрибута в сценарии
+            if(! in_array($attr, $scenarioAttributes)) {
+                continue;
+            }
+
             $pojoClass = $this->getAttributeConfigData($pojoClass, 'class');
             $pojoObject = Yii::createObject($pojoClass);
             if (! empty($this->owner->{$attr}) && ! $pojoObject::validateMultiple($this->owner->{$attr})){
