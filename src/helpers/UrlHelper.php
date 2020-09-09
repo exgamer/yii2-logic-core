@@ -128,5 +128,20 @@ class UrlHelper
 
         return implode('', [$scheme, $user, $pass, $host, $port, $path, $query, $fragment]);
     }
+
+    /**
+     * Делает из абсолютной ссылки относительную
+     *
+     * @param string $url
+     * @return mixed
+     */
+    public static function buildRelativeUrl($url)
+    {
+        $parts = parse_url($url);
+        $path     = ($parts['path'] ?? '');
+        $query    = isset($parts['query']) ? ('?' . $parts['query']) : '';
+        $fragment = isset($parts['fragment']) ? ('#' . $parts['fragment']) : '';
+        return self::addSlash("{$path}{$query}{$fragment}");
+    }
 }
 
