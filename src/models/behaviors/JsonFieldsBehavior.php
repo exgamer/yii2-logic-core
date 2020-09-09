@@ -241,10 +241,10 @@ class JsonFieldsBehavior extends Behavior
         $validationResult = true;
         $jsonAttrs = $this->getPojoAttributes();
         $scenarios = $this->owner->scenarios();
-        $scenarioAttributes = $scenarios[$this->owner->scenario];
+        $scenarioAttributes = $scenarios[$this->owner->scenario] ?? null;
         foreach ($jsonAttrs as $attr => $pojoClass) {
             # проверка наличия атрибута в сценарии
-            if(! in_array($attr, $scenarioAttributes)) {
+            if($scenarioAttributes && ! in_array($attr, $scenarioAttributes)) {
                 continue;
             }
 

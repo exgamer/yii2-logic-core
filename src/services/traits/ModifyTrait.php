@@ -281,7 +281,10 @@ trait ModifyTrait
             $model = $this->getRelatedModel();
         }
 
-        $model->setScenario($form->scenario);
+        $scenarios = $model->scenarios();
+        if(isset($scenarios[$form->scenario])) {
+            $model->setScenario($form->scenario);
+        }
         #флаг для понимания операции создания/редактирования
         $is_new_record = $model->isNewRecord;
         #заполнениe атрибутов
