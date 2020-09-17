@@ -24,6 +24,27 @@ class StatusEnum extends Enum
         ];
     }
 
+    /**
+     * @return array
+     */
+    public static function colors()
+    {
+        return [
+            self::ACTIVE => 'success',
+            self::INACTIVE => 'danger',
+        ];
+    }
+
+    /**
+     * @param $value
+     * @return mixed|null
+     */
+    public static function color($value)
+    {
+        $items = self::colors();
+        return $items[$value] ?? null;
+    }
+
     public static function canActivate($status)
     {
         if (in_array($status, [static::INACTIVE])) {
