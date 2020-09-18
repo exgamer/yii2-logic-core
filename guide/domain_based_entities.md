@@ -301,3 +301,126 @@ class BookmakerSearch extends Bookmaker
 
 
 ```    
+
+
+## Сущности с несколькими уникальными полями в проперти
+### Пример создание сущности с уникальностью по домену и языку для каждого домена
+
+1. В таблицу property добавляем поля domain_id и locale_id
+2. Первичный ключ (entity_id, domain_id, locale_id)
+3. В модель добавляем
+
+```php
+
+<?php
+
+namespace common\models;
+
+use Yii;
+use yii\helpers\ArrayHelper;
+use concepture\yii2logic\models\ActiveRecord;
+use concepture\yii2handbook\converters\LocaleConverter;
+use concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait;
+use concepture\yii2handbook\models\traits\DomainTrait;
+use concepture\yii2user\models\traits\UserTrait;
+use concepture\yii2handbook\models\traits\TagsTrait;
+use kamaelkz\yii2cdnuploader\traits\ModelTrait;
+use common\validators\HtmlContentFilter;
+
+/**
+ * Модель постов
+ *
+ * @author kamaelkz <kamaelkz@yandex.kz>
+ */
+class Post extends ActiveRecord
+{
+    use HasDomainPropertyTrait;
+
+    /**
+     * Возвращает название поля по которому будет разделение свойств
+     *
+     * @return array
+     */
+    public static function uniqueField()
+    {
+        return [
+            "domain_id",
+            "locale_id",
+        ];
+    }
+
+    /**
+     * Возвращает значение поля по которому будет разделение свойств
+     *
+     * @return mixed
+     */
+    public static function uniqueFieldValue()
+    {
+        return [
+            "domain_id" => Yii::$app->domainService->getCurrentDomainId(),
+            "locale_id" => Yii::$app->domainService->getCurrentDomainLocaleId(),
+        ];
+    }
+
+}
+
+
+
+
+```
+
+3. В сервис при создании добавляем установку локали указанного домена
+
+```php
+
+<?php
+
+namespace common\services;
+
+use common\models\PostCategoryProperty;
+use common\models\PostProperty;
+use common\services\traits\RedirectSupportTrait;
+use Yii;
+use yii\db\ActiveQuery;
+use common\components\likes\traits\LikesServiceTrait;
+use concepture\yii2handbook\services\interfaces\SitemapServiceInterface;
+use concepture\yii2article\models\Post;
+use concepture\yii2article\services\PostService as Base;
+use concepture\yii2handbook\services\interfaces\UrlHistoryInterface;
+use concepture\yii2logic\forms\Model;
+use concepture\yii2handbook\services\traits\SitemapSupportTrait;
+use common\components\copy_property\interfaces\CopyPropertyInterface;
+use common\components\copy_property\services\traits\CopyPropertyTrait;
+use yii\db\Expression;
+use yii\db\Query;
+
+/**
+ * Сервис для поста
+ * переопределяет \concepture\yii2article\services\PostService в common/config/definitions.php
+ *
+ * Class PostService
+ * @package common\services
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
+ */
+class PostService extends Base implements UrlHistoryInterface, SitemapServiceInterface , CopyPropertyInterface
+{
+    use concepture\yii2handbook\services\traits\ModifySupportTrait;
+
+
+    protected function beforeCreate(Model $form)
+    {
+        parent::beforeCreate($form);
+        // установка текущего домена
+        $this->setCurrentDomain($form);
+        //установка локали указанного домена обязательно после утсановки domain_id
+        $this->setCurrentDomainLocale($form);
+    }
+
+
+}
+
+
+
+
+
+```
