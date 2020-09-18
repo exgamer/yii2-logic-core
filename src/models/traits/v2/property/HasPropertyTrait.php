@@ -65,12 +65,11 @@ trait HasPropertyTrait
      */
     public static function excludedPropertyFields()
     {
-        return [
+        return ArrayHelper::merge([
             'id',
             'entity_id',
             'default',
-            static::uniqueField(),
-        ];
+        ], static::getUniqueFieldAsArray());
     }
 
     /**
@@ -96,6 +95,22 @@ trait HasPropertyTrait
     }
 
     /**
+     * Возвращает уникальное поле как массив
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getUniqueFieldAsArray()
+    {
+        $uniqueField = static::uniqueField();
+        if (! is_array($uniqueField)) {
+            $uniqueField = [$uniqueField];
+        }
+
+        return $uniqueField;
+    }
+
+    /**
      * Возвращает значение поля по которому будет разделение свойств
      *
      * @return mixed
@@ -104,6 +119,47 @@ trait HasPropertyTrait
     public static function uniqueFieldValue()
     {
         throw new Exception("please set unique field value");
+    }
+
+    /**
+     * Возвращает дефолтное значение уникального поля проперти
+     *
+     * @param string|null $attribute
+     * @return array|mixed|string
+     * @throws Exception
+     */
+    public static function getUniqueFieldValue($attribute = null)
+    {
+        $val = static::uniqueFieldValue();
+        if (! is_array($val)) {
+            return $val;
+        }
+
+        if (! $attribute) {
+            throw new Exception("attribute parameter not passed");
+        }
+
+        if (! isset($val[$attribute])) {
+            return null;
+        }
+
+        return $val[$attribute];
+    }
+
+    /**
+     * @return array|mixed
+     * @throws Exception
+     */
+    public static function getUniqueData()
+    {
+        $val = static::uniqueField();
+        if (is_array($val)) {
+            return static::uniqueFieldValue();
+        }
+
+        return [
+            static::uniqueField() => static::uniqueFieldValue()
+        ];
     }
 
     /**
@@ -153,10 +209,12 @@ trait HasPropertyTrait
                                        END as {$attribute}");
         }
 
-        /**
-         * Добавялем в выборку uniqueField
-         */
-        $result[] = static::propertyAlias() . "." . static::uniqueField();
+        $uniqueFields = static::getUniqueFieldAsArray();
+        foreach ($uniqueFields as $field) {
+            //Добавялем в выборку uniqueField
+            $result[] = static::propertyAlias() . "." . $field;
+        }
+
 
         return $result;
     }
@@ -189,9 +247,7 @@ trait HasPropertyTrait
         $selectArray = static::constructPropertySelect();
         $selectArray[] = static::tableName() . ".*";
         $query->select($selectArray);
-        /**
-         * Выборка свойств для текущего uniqueField
-         */
+        //Выборка свойств для текущего uniqueField
         $uniVal = static::uniqueFieldValue();
         static::setPropertyJoinQuery($query, $uniVal);
         $defaultPropertyAlias = static::defaultPropertyAlias();
@@ -213,19 +269,39 @@ trait HasPropertyTrait
 
     }
 
+    /**
+     * Установка join для выбора проперти
+     *
+     * @param $query
+     * @param $uniqueValue
+     * @throws Exception
+     */
     public static function setPropertyJoinQuery($query, $uniqueValue)
     {
-        if (! is_array($uniqueValue)){
-            $uniqueValue = [$uniqueValue];
+        $fields = static::getUniqueFieldAsArray();
+        //если уникальных полей больше 1 то параметр $uniqueValue должен быть ассоциативным массивом
+        if (count($fields) > 1 && ! ArrayHelper::isAssociative($uniqueValue)) {
+            throw new Exception("model has multiple unique property fields. You must pass uniqueValue param as associative array");
         }
 
-        $cleanVals = [];
-        foreach ($uniqueValue as $val){
-            $cleanVals[] = (int) $val;
+        // если уникальное поле 1 то делаем $uniqueValue ассоциативным массивом
+        if (count($fields) == 1) {
+            $tmp[$fields[0]] = $uniqueValue;
+            $uniqueValue = $tmp;
         }
+
+        $tmp = [];
+        foreach ($uniqueValue as $attr => $value) {
+            if (! is_array($value)){
+                $value = [$value];
+            }
+
+            $tmp[$attr] = $value;
+        }
+
+        $uniqueValue = $tmp;
         $propertyJoin = static::getPropertyJoin();
         $m = static::getPropertyModelClass();
-
         if ($query->join) {
             foreach ($query->join as $key => $join) {
                 if ($join[1] == $m::tableName() . " ". static::propertyAlias()) {
@@ -236,9 +312,20 @@ trait HasPropertyTrait
             }
         }
 
+        //сбор массива для запроса
+        $queryArray = [];
+        foreach ($uniqueValue as $attr => $value) {
+            $cleanVals = [];
+            foreach ($value as $val){
+                $cleanVals[] = (int) $val;
+            }
+
+            $queryArray[] = static::propertyAlias() . '.' . $attr . ' IN (' . implode(",", $cleanVals) . ")";
+        }
+
         $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
             static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
-            . static::propertyAlias() . '.' . static::uniqueField() .' IN ('. implode(",", $cleanVals) .")");
+            . implode(' AND ', $queryArray));
     }
 
     /**
@@ -264,7 +351,7 @@ trait HasPropertyTrait
         $propertyAttributes = $propertyModel->attributes();
         $propertyAttributes = array_flip($propertyAttributes);
         foreach (static::excludedPropertyFields() as $field){
-            if ($field == static::uniqueField()){
+            if (in_array($field, static::getUniqueFieldAsArray())) {
                 continue;
             }
 
@@ -384,22 +471,28 @@ trait HasPropertyTrait
      */
     public function saveProperty($insert, $changedAttributes)
     {
-        $uniqueField = static::uniqueField();
+        $uniqueFields = static::getUniqueFieldAsArray();
         $propertyClass = static::getPropertyModelClass();
         $propertyM = Yii::createObject($propertyClass);
-        if (! $this->{$uniqueField}) {
-            $this->{$uniqueField} = static::uniqueFieldValue();
-        }
+        $propertyCondition = [];
+        foreach ($uniqueFields as $field) {
+            if (! $this->{$field}) {
+                $this->{$field} = static::getUniqueFieldValue($field);
+            }
 
-        if (! $propertyM->hasAttribute($uniqueField)) {
-            throw  new Exception('property table must have `' . $uniqueField . '` field');
+            if (! $propertyM->hasAttribute($field)) {
+                throw  new Exception('property table must have `' . $field . '` field');
+            }
+
+            $propertyCondition[$field] = $this->{$field};
         }
 
         if (! $propertyM->hasAttribute("entity_id")) {
             throw  new Exception('property table must have `entity_id` field');
         }
 
-        $property = $propertyM::find()->where([$uniqueField => $this->{$uniqueField}, 'entity_id' => $this->id])->one();
+        $propertyCondition['entity_id'] = $this->id;
+        $property = $propertyM::find()->where($propertyCondition)->one();
         if (! $property){
             $property = Yii::createObject($propertyClass);
             $property->entity_id = $this->id;
@@ -411,8 +504,10 @@ trait HasPropertyTrait
                 $property->default = 1;
             }
 
-            if (! $property->{$uniqueField}) {
-                $property->{$uniqueField} = $this->{$uniqueField} ;
+            foreach ($uniqueFields as $field) {
+                if (! $property->{$field}) {
+                    $property->{$field} = $this->{$field};
+                }
             }
         }else {
             if ($property->hasAttribute("is_deleted")) {
@@ -432,7 +527,7 @@ trait HasPropertyTrait
             $property->{$attribute} = $this->{$attribute};
         }
 
-        if(!$property->save()){
+        if(! $property->save()){
             throw new Exception("property not saved");
         }
 
@@ -462,8 +557,10 @@ trait HasPropertyTrait
         }
 
         if ($clearUniqueAttribute){
-            $uAttr = static::uniqueField();
-            $this->{$uAttr} = null;
+            $uAttrs = static::getUniqueFieldAsArray();
+            foreach ($uAttrs as $uAttr) {
+                $this->{$uAttr} = null;
+            }
         }
     }
 
@@ -520,9 +617,15 @@ trait HasPropertyTrait
     public function getProperty()
     {
         $propertyClass = static::getPropertyModelClass();
+        $condition = [];
+        $data = static::getUniqueData();
+        foreach ($data as $field => $val) {
+            $condition[static::propertyAlias() . '.' . $field] = $val;
+        }
+
         return $this->hasOne($propertyClass::className(), ['entity_id' => 'id'])
             ->alias(static::propertyAlias())
-            ->andOnCondition([static::propertyAlias() . '.' . static::uniqueField() => static::uniqueFieldValue()]);
+            ->andOnCondition($condition);
     }
 
     /**
@@ -535,7 +638,10 @@ trait HasPropertyTrait
         $propertyClass = static::getPropertyModelClass();
         $query =  $this->hasMany($propertyClass, ['entity_id' => 'id']);
         $query->where = [];
-        $query->indexBy(static::uniqueField());
+        $field = static::uniqueField();
+        if (! is_array($field)) {
+            $query->indexBy(static::uniqueField());
+        }
 
         return $query;
     }
@@ -545,8 +651,9 @@ trait HasPropertyTrait
      * @return array
      * @throws Exception
      */
-    public function getPropertiesUniqueValues()
+    public function getPropertiesUniqueValues($attribute = null)
     {
+        $fields = static::getUniqueFieldAsArray();
         $properties = [];
         if (isset($this->properties)){
             $properties = $this->properties;
@@ -556,14 +663,27 @@ trait HasPropertyTrait
             return $properties;
         }
 
-        $field = static::uniqueField();
-        $ids = array_keys($properties);
-        $key = array_search($this->{$field}, $ids);
-        $first = $ids[$key];
-        unset($ids[$key]);
-        array_unshift($ids, $first);
+        $data = [];
+        foreach ($properties as $property) {
+            foreach ($fields as $field) {
+                $data[$field][] = $property->{$field};
+            }
+        }
 
-        return $ids;
+        $tmp = [];
+        foreach ($data as $attr => $val) {
+            $tmp[$attr] = array_unique($val);
+        }
+
+        if (count($tmp) > 1) {
+            if ($attribute){
+                return $tmp[$attribute];
+            }
+
+            return $tmp;
+        }
+
+        return array_shift($tmp);
     }
 
     /**

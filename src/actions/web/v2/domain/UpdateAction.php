@@ -115,9 +115,14 @@ class UpdateAction extends Action
     protected function getModel($id, $domain_id)
     {
         $originModelClass = $this->getService()->getRelatedModel();
-        $model = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id) {
+        $fields = $originModelClass::uniqueField();
+        $model = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id, $fields) {
             $query->andWhere(['id' => $id]);
-            $query->applyPropertyUniqueValue($domain_id);
+            if (is_array($fields) && count($fields) > 1) {
+                $query->applyPropertyUniqueValue(['domain_id' => $domain_id]);
+            }else {
+                $query->applyPropertyUniqueValue($domain_id);
+            }
         });
         if (! $model){
 
