@@ -46,9 +46,9 @@ class UpdateAction extends Action
      *
      * @return string HTML
      */
-    public function run($id, $domain_id)
+    public function run($id, $domain_id, $locale_id = null)
     {
-        $originModel = $this->getModel($id, $domain_id);
+        $originModel = $this->getModel($id, $domain_id, $locale_id);
         if (! $originModel){
             if (! $this->originModelNotFoundCallback) {
                 throw new NotFoundHttpException();
@@ -67,6 +67,10 @@ class UpdateAction extends Action
         $model->scenario = $this->scenario;
         $model->setAttributes($originModel->attributes, false);
         $model->domain_id = $domain_id;
+        if (property_exists($model, 'locale_id')) {
+            $model->locale_id = $locale_id;
+        }
+
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }
@@ -100,6 +104,7 @@ class UpdateAction extends Action
             'model' => $model,
             'originModel' => $originModel,
             'domain_id' => $domain_id,
+            'locale_id' => $locale_id,
         ]);
     }
 
@@ -112,14 +117,14 @@ class UpdateAction extends Action
      * @return ActiveRecord
      * @throws ReflectionException
      */
-    protected function getModel($id, $domain_id)
+    protected function getModel($id, $domain_id, $locale_id = null)
     {
         $originModelClass = $this->getService()->getRelatedModel();
         $fields = $originModelClass::uniqueField();
-        $model = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id, $fields) {
+        $model = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id, $locale_id, $fields) {
             $query->andWhere(['id' => $id]);
             if (is_array($fields) && count($fields) > 1) {
-                $query->applyPropertyUniqueValue(['domain_id' => $domain_id]);
+                $query->applyPropertyUniqueValue(['domain_id' => $domain_id, 'locale_id' => $locale_id]);
             }else {
                 $query->applyPropertyUniqueValue($domain_id);
             }

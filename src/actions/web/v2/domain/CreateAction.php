@@ -39,7 +39,7 @@ class CreateAction extends Action
      *
      * @return string HTML
      */
-    public function run($domain_id = null)
+    public function run($domain_id = null, $locale_id = null)
     {
         $model = $this->getForm();
         $model->scenario = $this->scenario;
@@ -48,6 +48,10 @@ class CreateAction extends Action
         }
 
         $model->domain_id = $domain_id;
+        if (property_exists($model, 'locale_id')) {
+            $model->locale_id = $locale_id;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
                 # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
@@ -56,6 +60,7 @@ class CreateAction extends Action
                         'data' => $result,
                     ]);
                 }
+
                 if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
                     $redirectStore = $this->getController()->redirectStoreUrl();
                     if($redirectStore) {
@@ -73,6 +78,7 @@ class CreateAction extends Action
         return $this->render($this->view, [
             'model' => $model,
             'domain_id' => $domain_id,
+            'locale_id' => $locale_id,
         ]);
     }
 }
