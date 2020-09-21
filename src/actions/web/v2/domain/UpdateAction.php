@@ -124,7 +124,12 @@ class UpdateAction extends Action
         $model = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id, $locale_id, $fields) {
             $query->andWhere(['id' => $id]);
             if (is_array($fields) && count($fields) > 1) {
-                $query->applyPropertyUniqueValue(['domain_id' => $domain_id, 'locale_id' => $locale_id]);
+                $params = ['domain_id' => $domain_id];
+                if ($locale_id) {
+                    $params['locale_id'] = $locale_id;
+                }
+
+                $query->applyPropertyUniqueValue($params);
             }else {
                 $query->applyPropertyUniqueValue($domain_id);
             }
