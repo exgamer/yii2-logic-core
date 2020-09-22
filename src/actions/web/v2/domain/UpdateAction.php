@@ -43,12 +43,19 @@ class UpdateAction extends Action
     /**
      * @param integer $id
      * @param integer $domain_id
+     * @param integer $edited_domain_id
      *
+     * @param null $locale_id
      * @return string HTML
+     * @throws ReflectionException
      */
-    public function run($id, $domain_id, $locale_id = null)
+    public function run($id, $domain_id, $edited_domain_id = null, $locale_id = null)
     {
-        $originModel = $this->getModel($id, $domain_id, $locale_id);
+        if (! $edited_domain_id) {
+            $edited_domain_id = $domain_id;
+        }
+
+        $originModel = $this->getModel($id, $edited_domain_id, $locale_id);
         if (! $originModel){
             if (! $this->originModelNotFoundCallback) {
                 throw new NotFoundHttpException();
@@ -66,7 +73,7 @@ class UpdateAction extends Action
         $model = $this->getForm();
         $model->scenario = $this->scenario;
         $model->setAttributes($originModel->attributes, false);
-        $model->domain_id = $domain_id;
+        $model->domain_id = $edited_domain_id;
         if (property_exists($model, 'locale_id')) {
             $model->locale_id = $locale_id;
         }
@@ -105,6 +112,7 @@ class UpdateAction extends Action
             'originModel' => $originModel,
             'domain_id' => $domain_id,
             'locale_id' => $locale_id,
+            'edited_domain_id' => $edited_domain_id
         ]);
     }
 

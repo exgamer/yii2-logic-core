@@ -34,12 +34,14 @@ class CreateAction extends Action
     public $scenario = ScenarioEnum::INSERT;
 
     /**
-     * @param integer $id
      * @param integer $domain_id
+     * @param integer $edited_domain_id
      *
+     * @param null $locale_id
      * @return string HTML
+     * @throws \ReflectionException
      */
-    public function run($domain_id = null, $locale_id = null)
+    public function run($domain_id = null, $edited_domain_id = null, $locale_id = null)
     {
         $model = $this->getForm();
         $model->scenario = $this->scenario;
@@ -47,7 +49,11 @@ class CreateAction extends Action
             $model->customizeForm();
         }
 
-        $model->domain_id = $domain_id;
+        if (! $edited_domain_id) {
+            $edited_domain_id = $domain_id;
+        }
+
+        $model->domain_id = $edited_domain_id;
         if (property_exists($model, 'locale_id')) {
             $model->locale_id = $locale_id;
         }
@@ -68,9 +74,9 @@ class CreateAction extends Action
                     }
 
                     # todo: криво пашет
-                    return $this->redirectPrevious([$this->redirect, 'id' => $result->id, 'domain_id' => $domain_id]);
+                    return $this->redirectPrevious([$this->redirect, 'id' => $result->id, 'domain_id' => $domain_id, 'edited_domain_id' => $edited_domain_id]);
                 } else {
-                    return $this->redirect(['update', 'id' => $result->id, 'domain_id' => $domain_id]);
+                    return $this->redirect(['update', 'id' => $result->id, 'domain_id' => $domain_id, 'edited_domain_id' => $edited_domain_id]);
                 }
             }
         }
@@ -79,6 +85,7 @@ class CreateAction extends Action
             'model' => $model,
             'domain_id' => $domain_id,
             'locale_id' => $locale_id,
+            'edited_domain_id' => $edited_domain_id
         ]);
     }
 }
