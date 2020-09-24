@@ -55,6 +55,10 @@ class UpdateAction extends Action
             $edited_domain_id = $domain_id;
         }
 
+        if (! $locale_id) {
+            $locale_id = Yii::$app->domainService->getDomainLocaleId($edited_domain_id);
+        }
+
         $originModel = $this->getModel($id, $edited_domain_id, $locale_id);
         if (! $originModel){
             if (! $this->originModelNotFoundCallback) {
@@ -65,12 +69,7 @@ class UpdateAction extends Action
                 return call_user_func($this->originModelNotFoundCallback, $this);
             }
         }
-
-
-        if (! $locale_id && $originModel->hasAttribute('locale_id') && ! $originModel->locale_id) {
-            $locale_id = Yii::$app->domainService->getDomainLocaleId($edited_domain_id);
-        }
-
+        
         if (! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
             throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
