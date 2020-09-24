@@ -67,7 +67,7 @@ trait HasDomainPropertyTrait
         if (!empty($where)) {
             $query->andWhere($where);
         }
-        
+
         return $query;
     }
 }
