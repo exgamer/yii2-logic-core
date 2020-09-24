@@ -69,7 +69,7 @@ class UpdateAction extends Action
                 return call_user_func($this->originModelNotFoundCallback, $this);
             }
         }
-        
+
         if (! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
             throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }

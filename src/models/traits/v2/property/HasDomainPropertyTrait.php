@@ -51,6 +51,7 @@ trait HasDomainPropertyTrait
                 $domainAlias = $relationModel::propertyAlias() . ".";
             }
         }
+
         if (in_array(HasLocalizationTrait::class, $traits)){
             $propModelClass = $relationModel::getLocalizationModelClass();
             $propModel = Yii::createObject($propModelClass);
@@ -58,12 +59,15 @@ trait HasDomainPropertyTrait
                 $domainAlias = $relationModel::propertyAlias() . ".";
             }
         }
-        if ($relationModel->hasAttribute('domain_id')) {
+
+        if ($relationModel->hasAttribute('domain_id') && $this->domain_id) {
             $where[$domainAlias . 'domain_id'] = $this->domain_id;
         }
+
         if (!empty($where)) {
             $query->andWhere($where);
         }
+        
         return $query;
     }
 }
