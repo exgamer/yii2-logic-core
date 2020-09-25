@@ -53,6 +53,21 @@ class CreateAction extends Action
             $edited_domain_id = $domain_id;
         }
 
+        //Для случая создания сущности, когда у домена указаны используемые языки версий, чтобы подставить верную связку домена и языка
+        if (! $locale_id) {
+            $domainsData = Yii::$app->domainService->getDomainsData();
+            $domainsDataByAlias = \yii\helpers\ArrayHelper::index($domainsData, 'alias');
+            $editedDomainData = $domainsData[$edited_domain_id];
+            if (isset($editedDomainData['languages']) && ! empty($editedDomainData['languages'])) {
+                foreach ($editedDomainData['languages'] as $domain => $language) {
+                    $data = $domainsDataByAlias[$domain];
+                    $edited_domain_id = $data['domain_id'];
+                    $locale_id = Yii::$app->localeService->catalogKey($language, 'id', 'locale');
+                    break;
+                }
+            }
+        }
+
         $model->domain_id = $edited_domain_id;
         if (property_exists($model, 'locale_id')) {
             $model->locale_id = $locale_id;
