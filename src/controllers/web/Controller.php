@@ -65,6 +65,13 @@ abstract class Controller extends Base
     public $domain = false;
 
     /**
+     * Для сущностей где проперти являются переводами нужно выставить true
+     *
+     * @var bool
+     */
+    public $domainByLocale = false;
+
+    /**
      * @return mixed|\yii\web\Session
      */
     protected function getSession()
@@ -266,7 +273,11 @@ abstract class Controller extends Base
     {
         return [
             'index' => IndexAction::class,
-            'create' => $this->domain ? DomainCreateAction::class : CreateAction::class,
+            'create' => $this->domain ?
+                [
+                    'class' => DomainCreateAction::class,
+                    'domainByLocale' => $this->domainByLocale,
+                ]: CreateAction::class,
             'update' => $this->domain ? DomainUpdateAction::class : UpdateAction::class,
             'view' => ViewAction::class,
             'delete' => DeleteAction::class,
