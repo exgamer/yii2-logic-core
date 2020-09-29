@@ -57,7 +57,7 @@ trait ReadTrait
      * function(ActiveQuery $query) {
      *       $query->andWhere("object_type = :object_type", [':object_type' => 2]);
      * }
-     * 
+     *
      * @param callable|array $condition
      *
      * @return ActiveDataProvider
@@ -95,6 +95,7 @@ trait ReadTrait
 
         $searchModel->extendQuery($query);
         $searchModel->extendDataProvider($dataProvider);
+        $this->extendDataProviderModels($dataProvider);
 
         return $dataProvider;
     }
@@ -148,7 +149,10 @@ trait ReadTrait
             $query->asArray();
         }
 
-        return $query->one();
+        $model = $query->one();
+        $this->extendModel($model);
+
+        return $model;
     }
 
     /**
@@ -180,8 +184,22 @@ trait ReadTrait
             $query->asArray();
         }
 
-        return $query->all();
+        $models = $query->all();
+        $this->extendModels($models);
+
+        return $models;
     }
+
+    public function extendDataProviderModels(\yii\data\ActiveDataProvider $dataProvider)
+    {
+        $models = $dataProvider->getModels();
+        $this->extendModels($models);
+        $dataProvider->setModels($models);
+    }
+
+    public function extendModels(&$models){}
+
+    public function extendModel(&$model){}
 
     /**
      * Возвращает количество записей
