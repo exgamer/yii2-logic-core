@@ -190,6 +190,11 @@ trait ReadTrait
         return $models;
     }
 
+    /**
+     * Дополнение данными моделей дата провайдера
+     *
+     * @param \yii\data\ActiveDataProvider $dataProvider
+     */
     public function extendDataProviderModels(\yii\data\ActiveDataProvider $dataProvider)
     {
         $models = $dataProvider->getModels();
@@ -197,8 +202,18 @@ trait ReadTrait
         $dataProvider->setModels($models);
     }
 
+    /**
+     * Дополненеи данными списка моделей
+     *
+     * @param $models
+     */
     public function extendModels(&$models){}
 
+    /**
+     * Дополнение данными модели
+     *
+     * @param $model
+     */
     public function extendModel(&$model){}
 
     /**
