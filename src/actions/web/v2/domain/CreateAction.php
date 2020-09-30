@@ -33,6 +33,10 @@ class CreateAction extends Action
      */
     public $scenario = ScenarioEnum::INSERT;
 
+    /**
+     * @deprecated
+     * @var bool
+     */
     public $domainByLocale = false;
 
     /**
@@ -56,7 +60,7 @@ class CreateAction extends Action
         }
 
         //Для случая создания сущности, когда у домена указаны используемые языки версий, чтобы подставить верную связку домена и языка
-        if (! $locale_id && $this->domainByLocale) {
+        if (! $locale_id && $this->controller->domainByLocale) {
             $domainsData = Yii::$app->domainService->getDomainsData();
             $domainsDataByAlias = \yii\helpers\ArrayHelper::index($domainsData, 'alias');
             $editedDomainData = $domainsData[$edited_domain_id];
