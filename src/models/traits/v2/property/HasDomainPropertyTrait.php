@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\models\traits\v2\property;
 
+use common\models\Sports;
 use concepture\yii2logic\db\HasPropertyActiveQuery;
 use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\models\traits\HasLocalizationTrait;
@@ -77,17 +78,18 @@ trait HasDomainPropertyTrait
             return $query;
         }
 
-        // для случаенв когда связь с доменной сущностью
         $relationModel = Yii::createObject($class);
         $fields = static::getUniqueFieldAsArray();
         $params = [];
         foreach ($fields as $key => $attribute) {
-            if ($relationModel->hasAttribute($attribute)) {
+            if ($relationModel->hasAttribute($attribute) && $this->{$attribute}) {
                 $params[$attribute] = $this->{$attribute};
             }
         }
 
-        $query->applyPropertyUniqueValue($params);
+        if ($params) {
+            $query->applyPropertyUniqueValue($params);
+        }
 
         return $query;
     }
