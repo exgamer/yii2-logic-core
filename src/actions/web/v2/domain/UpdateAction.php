@@ -76,7 +76,6 @@ class UpdateAction extends Action
         $model = $this->getForm();
         $model->scenario = $this->scenario;
         $model->setAttributes($originModel->attributes, false);
-        $model->domain_id = $edited_domain_id;
         if (method_exists($model, 'customizeForm')) {
             $model->customizeForm($originModel);
         }
