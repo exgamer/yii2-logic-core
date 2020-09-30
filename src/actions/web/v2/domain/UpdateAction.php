@@ -55,24 +55,8 @@ class UpdateAction extends Action
             $edited_domain_id = $domain_id;
         }
 
-        if (! $locale_id) {
-            $locale_id = Yii::$app->domainService->getDomainLocaleId($edited_domain_id);
-        }
-
         //Для случая создания сущности, когда у домена указаны используемые языки версий, чтобы подставить верную связку домена и языка
-        if (! $locale_id  && $this->controller->domainByLocale) {
-            $domainsData = Yii::$app->domainService->getDomainsData();
-            $domainsDataByAlias = \yii\helpers\ArrayHelper::index($domainsData, 'alias');
-            $editedDomainData = $domainsData[$edited_domain_id];
-            if (isset($editedDomainData['languages']) && ! empty($editedDomainData['languages'])) {
-                foreach ($editedDomainData['languages'] as $domain => $language) {
-                    $data = $domainsDataByAlias[$domain];
-                    $edited_domain_id = $data['domain_id'];
-                    $locale_id = Yii::$app->localeService->catalogKey($language, 'id', 'locale');
-                    break;
-                }
-            }
-        }
+        Yii::$app->domainService->resolveLocaleId($edited_domain_id, $locale_id, $this->controller->domainByLocale);
 
         $originModel = $this->getModel($id, $edited_domain_id, $locale_id);
         if (! $originModel){
