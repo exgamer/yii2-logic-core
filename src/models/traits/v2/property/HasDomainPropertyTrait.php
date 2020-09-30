@@ -77,6 +77,7 @@ trait HasDomainPropertyTrait
             return $query;
         }
 
+        // для случаенв когда связь с доменной сущностью
         $relationModel = Yii::createObject($class);
         $fields = static::getUniqueFieldAsArray();
         $params = [];
