@@ -22,11 +22,17 @@ class UrlHelper
      */
     public static function getFrontendUrlManager()
     {
+        if (Yii::$app->has('frontendUrlManager')) {
+            return Yii::$app->frontendUrlManager;
+        }
         $config = require(Yii::getAlias('@frontend/config/main.php'));
         $urlManagerConfig = $config['components']['urlManager'];
         $urlManagerConfig['baseUrl'] = "";
+        Yii::$app->setComponents([
+            'frontendUrlManager' => $config['components']['urlManager'],
+        ]);
 
-        return Yii::createObject($urlManagerConfig);
+        return Yii::$app->frontendUrlManager;
     }
 
     /**
