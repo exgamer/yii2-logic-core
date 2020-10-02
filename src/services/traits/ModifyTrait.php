@@ -215,17 +215,17 @@ trait ModifyTrait
     }
 
     /**
-     * Обновление записи по id
+     * Обновление модели
      *
-     * @param $id
+     * @param $model
      * @param array $data
      * @param string|null $formName
      * @param bool $validate
+     * @param null $scenario
      * @return bool|ActiveRecord|Form
      */
-    public function updateById($id, $data, $formName = '', $validate = true, $scenario = null)
+    public function updateByModel($model, $data, $formName = '', $validate = true, $scenario = null)
     {
-        $model = $this->findById($id);
         $form = $this->getRelatedForm();
         if($scenario) {
             $form->scenario = $scenario;
@@ -263,6 +263,23 @@ trait ModifyTrait
         }
 
         return $this->update($form, $model, $validate);
+    }
+
+    /**
+     * Обновление записи по id
+     *
+     * @param $id
+     * @param array $data
+     * @param string|null $formName
+     * @param bool $validate
+     * @param null $scenario
+     * @return bool|ActiveRecord|Form
+     */
+    public function updateById($id, $data, $formName = '', $validate = true, $scenario = null)
+    {
+        $model = $this->findById($id);
+
+        return $this->updateByModel($model, $data, $formName, $validate, $scenario);
     }
 
     /**
