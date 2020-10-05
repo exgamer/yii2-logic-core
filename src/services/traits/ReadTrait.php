@@ -150,7 +150,9 @@ trait ReadTrait
         }
 
         $model = $query->one();
-        $this->extendModel($model);
+        if ($model) {
+            $this->extendModel($model);
+        }
 
         return $model;
     }
