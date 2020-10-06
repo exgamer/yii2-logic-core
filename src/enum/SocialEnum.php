@@ -21,6 +21,7 @@ class SocialEnum extends Enum
     const YANDEX = 'yandex';
     const YOUTUBE = 'youtube';
     const TELEGRAM = 'telegram';
+    const LINKEDIN = 'linkedin';
 
     public static function labels()
     {
@@ -34,7 +35,8 @@ class SocialEnum extends Enum
             self::ODNOCLASSNIKI => Yii::t('common', "Odnoklassniki"),
             self::YANDEX => Yii::t('common', "Yandex"),
             self::YOUTUBE => Yii::t('common', "Youtube"),
-            self::TELEGRAM => Yii::t('common', "Telegram")
+            self::TELEGRAM => Yii::t('common', "Telegram"),
+            self::LINKEDIN => Yii::t('common', "LinkedIn")
         ];
     }
 }
