@@ -134,7 +134,7 @@ trait ModifyTrait
                         $command->bindValue($k, $v);
                     };
                 }
-                
+
                 $result = $command->execute();
             }
 
@@ -184,14 +184,20 @@ trait ModifyTrait
      */
     public function create(Model $form)
     {
-        $this->beforeCreate($form);
-        $model = $this->save($form);
-        if (! $model) {
-            return $model;
+        $db = $this->getDb();
+        $transaction = $db->beginTransaction();
+        try {
+            $this->beforeCreate($form);
+            $model = $this->save($form);
+            if (! $model) {
+                return $model;
+            }
+            $this->afterCreate($form);
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
         }
-        $this->afterCreate($form);
-
-        return $model;
+        return $model ?? false;
     }
 
     /**
@@ -204,14 +210,21 @@ trait ModifyTrait
      */
     public function update(Model $form, ActiveRecord $model, $validate = true)
     {
-        $this->beforeUpdate($form, $model);
-        $model = $this->save($form, $model, $validate);
-        if (! $model) {
-            return $model;
+        $db = $this->getDb();
+        $transaction = $db->beginTransaction();
+        try {
+            $this->beforeUpdate($form, $model);
+            $model = $this->save($form, $model, $validate);
+            if (! $model) {
+                return $model;
+            }
+            $this->afterUpdate($form, $model);
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
         }
-        $this->afterUpdate($form, $model);
 
-        return $model;
+        return $model ?? false;
     }
 
     /**
@@ -389,11 +402,18 @@ trait ModifyTrait
      */
     public function delete(ActiveRecord $model)
     {
-        $this->beforeDelete($model);
-        $result = $model->delete();
-        $this->afterDelete($model);
+        $db = $this->getDb();
+        $transaction = $db->beginTransaction();
+        try {
+            $this->beforeDelete($model);
+            $result = $model->delete();
+            $this->afterDelete($model);
+            $transaction->commit();
+        } catch(Exception $e) {
+            $transaction->rollback();
+        }
 
-        return $result;
+        return $result ?? false;
     }
 
     /**
