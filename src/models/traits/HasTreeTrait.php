@@ -114,7 +114,7 @@ trait HasTreeTrait
         $treeModel::deleteAll("child_id=:obj_id OR parent_id=:obj_id",[
             'obj_id'=>$this->id
         ]);
-        static::updateAll(['parent_id' => 0], 'parent_id = :obj_id' , ['obj_id' => $this->id]);
+        static::updateAll(['parent_id' => null], 'parent_id = :obj_id' , ['obj_id' => $this->id]);
     }
 
     /**
