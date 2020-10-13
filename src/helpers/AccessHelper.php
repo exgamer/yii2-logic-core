@@ -61,6 +61,8 @@ class AccessHelper
     }
 
     /**
+     * @TODO нужен рефактор
+     *
      * Проверка прав доступа
      *
      * Пример:
@@ -108,6 +110,7 @@ class AccessHelper
                 static::getAccessPermission($controller, $name),
                 static::getDomainAccessPermission($controller, $name)
             ];
+
             foreach ($customPerms as $p) {
                 if (Yii::$app->user->can($p, $params)){
                     return true;
@@ -138,6 +141,19 @@ class AccessHelper
         }
 
         $permissions = static::getPermissionsByAction($controller, $name, $domain_id);
+        if (is_object($controller)) {
+            // @TODO нужно достать даже если контроллер строка а пока добавялем роли из контроллера по экшену, если контроллер обьект
+            $accessBehavior = $controller->getBehavior('access');
+            $rules = $accessBehavior->rules;
+            foreach ($rules as $rule) {
+                if (!in_array($name, $rule->actions)) {
+                    continue;
+                }
+
+                $permissions = ArrayHelper::merge($permissions, $rule->roles);
+            }
+        }
+
         foreach ($permissions as $permission){
             if (Yii::$app->user->can($permission, $params)){
                 return true;
