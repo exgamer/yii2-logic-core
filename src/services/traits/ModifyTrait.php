@@ -83,6 +83,7 @@ trait ModifyTrait
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollback();
+            throw $e;
         }
 
         return $result ?? false;
@@ -142,6 +143,7 @@ trait ModifyTrait
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollback();
+            throw $e;
         }
 
         return $result ?? false;
@@ -196,7 +198,9 @@ trait ModifyTrait
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollback();
+            throw $e;
         }
+
         return $model ?? false;
     }
 
@@ -222,6 +226,7 @@ trait ModifyTrait
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollback();
+            throw $e;
         }
 
         return $model ?? false;
@@ -411,6 +416,7 @@ trait ModifyTrait
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollback();
+            throw $e;
         }
 
         return $result ?? false;

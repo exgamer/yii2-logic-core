@@ -22,6 +22,10 @@ class IndexAction extends Action
      * @var string
      */
     public $serviceMethod = 'getDataProvider';
+    /**
+     * @var string
+     */
+    public $searchClass;
 
     /**
      * @var bool
@@ -34,7 +38,11 @@ class IndexAction extends Action
     public function run()
     {
         $this->rememberUrl();
-        $searchClass = $this->getSearchClass();
+        $searchClass = $this->searchClass;
+        if (! $searchClass) {
+            $searchClass = $this->getSearchClass();
+        }
+
         $searchModel = Yii::createObject($searchClass);
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);

@@ -4,6 +4,7 @@ namespace concepture\yii2logic\helpers;
 use Yii;
 use concepture\yii2logic\enum\AccessEnum;
 use concepture\yii2logic\enum\PermissionEnum;
+use yii\helpers\ArrayHelper;
 
 /**
  * Класс содержит вспомогательные методы для рабоыт с rbac
@@ -60,6 +61,8 @@ class AccessHelper
     }
 
     /**
+     * @TODO нужен рефактор
+     *
      * Проверка прав доступа
      *
      * Пример:
@@ -101,12 +104,13 @@ class AccessHelper
             $controller = Yii::$app->controller;
         }
 
-        //значит передали навзание полномочия
+        //значит передали навзание полномочия и проверка конкретно на полномочие без учета роли админа
         if ($asPermission) {
             $customPerms = [
                 static::getAccessPermission($controller, $name),
                 static::getDomainAccessPermission($controller, $name)
             ];
+
             foreach ($customPerms as $p) {
                 if (Yii::$app->user->can($p, $params)){
                     return true;
@@ -125,10 +129,10 @@ class AccessHelper
         /**
          * Если экшен не является дефолтно заданным значит нужно проверку ставить вручную
          */
-        if (! in_array($name, static::$_edit_actions) && ! in_array($name, static::$_read_actions) && ! in_array($name, static::$_sort_actions)){
-            // если полночоие не кастомное надо вернуть true иначе сломается rbac
-            return true;
-        }
+//        if (! in_array($name, static::$_edit_actions) && ! in_array($name, static::$_read_actions) && ! in_array($name, static::$_sort_actions)){
+//            // если полночоие не кастомное надо вернуть true иначе сломается rbac
+//            return true;
+//        }
 
         $params['action'] = $name;
         $domain_id = null;
@@ -137,8 +141,35 @@ class AccessHelper
         }
 
         $permissions = static::getPermissionsByAction($controller, $name, $domain_id);
+        if (is_object($controller)) {
+            // @TODO нужно достать даже если контроллер строка а пока добавялем роли из контроллера по экшену, если контроллер обьект
+            $accessBehavior = $controller->getBehavior('access');
+            $rules = $accessBehavior->rules;
+            foreach ($rules as $rule) {
+                if (!in_array($name, $rule->actions)) {
+                    continue;
+                }
+
+                $permissions = ArrayHelper::merge($permissions, $rule->roles);
+            }
+        }
+
         foreach ($permissions as $permission){
             if (Yii::$app->user->can($permission, $params)){
+                return true;
+            }
+        }
+
+        // если нет доступа по сгенеренным роялм проверям конкретно по полномочию с учетом админских ролей
+        $customPerms = [
+            AccessEnum::SUPERADMIN,
+            AccessEnum::ADMIN,
+            static::getAccessPermission($controller, PermissionEnum::ADMIN),
+            static::getAccessPermission($controller, $name),
+            static::getDomainAccessPermission($controller, $name)
+        ];
+        foreach ($customPerms as $p) {
+            if (Yii::$app->user->can($p, $params)){
                 return true;
             }
         }

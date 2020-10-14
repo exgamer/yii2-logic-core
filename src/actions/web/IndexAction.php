@@ -16,11 +16,19 @@ class IndexAction extends Action
 {
     public $view = 'index';
     public $serviceMethod = 'getDataProvider';
+    /**
+     * @var string
+     */
+    public $searchClass;
 
     public function run()
     {
         $this->rememberUrl();
-        $searchClass = $this->getSearchClass();
+        $searchClass = $this->searchClass;
+        if (! $searchClass) {
+            $searchClass = $this->getSearchClass();
+        }
+
         $searchModel = Yii::createObject($searchClass);
         $this->extendSearch($searchModel);
         $searchModel->load(Yii::$app->request->queryParams);

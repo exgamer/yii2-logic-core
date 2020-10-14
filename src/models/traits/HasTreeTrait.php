@@ -114,7 +114,7 @@ trait HasTreeTrait
         $treeModel::deleteAll("child_id=:obj_id OR parent_id=:obj_id",[
             'obj_id'=>$this->id
         ]);
-        static::updateAll(['parent_id' => 0], 'parent_id = :obj_id' , ['obj_id' => $this->id]);
+        static::updateAll(['parent_id' => null], 'parent_id = :obj_id' , ['obj_id' => $this->id]);
     }
 
     /**
@@ -133,5 +133,20 @@ trait HasTreeTrait
     public function getParent()
     {
         return $this->hasOne(static::class, ['id' => 'parent_id']);
+    }
+
+
+    public function getChilds()
+    {
+        return $this->hasMany(static::class, ['parent_id' => 'id']);
+    }
+
+    public function getChildsCount()
+    {
+        if (isset($this->childs)) {
+            return count($this->childs);
+        }
+
+        return 0;
     }
 }
