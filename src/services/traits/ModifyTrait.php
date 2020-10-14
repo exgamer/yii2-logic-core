@@ -427,7 +427,7 @@ trait ModifyTrait
     {
         if (! $model->undelete()){
             throw new Exception(
-                Yii::t('service','model undelete exception - {errors}', [
+                Yii::t('core','model undelete exception - {errors}', [
                     'errors' => Json::encode($model->getErrors())
                 ])
             );
