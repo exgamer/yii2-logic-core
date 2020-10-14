@@ -134,4 +134,19 @@ trait HasTreeTrait
     {
         return $this->hasOne(static::class, ['id' => 'parent_id']);
     }
+
+
+    public function getChilds()
+    {
+        return $this->hasMany(static::class, ['parent_id' => 'id']);
+    }
+
+    public function getChildsCount()
+    {
+        if (isset($this->childs)) {
+            return count($this->childs);
+        }
+
+        return 0;
+    }
 }
