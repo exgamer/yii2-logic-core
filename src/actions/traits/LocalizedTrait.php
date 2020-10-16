@@ -20,8 +20,16 @@ trait LocalizedTrait
      */
     protected function getLocale()
     {
-        if (Yii::$app->getRequest()->getQueryParam('locale') === null){
-            return Yii::$app->language;
+        if (Yii::$app->getRequest()->getQueryParam('locale') === null) {
+            $language = Yii::$app->language;
+//            if(is_string($language)) {
+//                list($languageIso, $countryIso) = @explode('-', $language);
+//                if($languageIso) {
+//                    $language = $languageIso;
+//                }
+//            }
+
+            return $language;
         }
 
         return Yii::$app->getRequest()->getQueryParam('locale');

@@ -88,7 +88,16 @@ trait HasLocalizationTrait
     {
         $localeConverterClass = static::getLocaleConverterClass();
         if (static::$current_locale === null){
-            return $localeConverterClass::key(Yii::$app->language);
+
+            $language = Yii::$app->language;
+            if(is_string($language)) {
+                list($languageIso, $countryIso) = @explode('-', $language);
+                if($languageIso) {
+                    $language = $languageIso;
+                }
+            }
+
+            return $localeConverterClass::key($language);
         }
 
         return $localeConverterClass::key(static::$current_locale);
