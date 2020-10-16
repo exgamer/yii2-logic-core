@@ -22,12 +22,12 @@ trait LocalizedTrait
     {
         if (Yii::$app->getRequest()->getQueryParam('locale') === null) {
             $language = Yii::$app->language;
-//            if(is_string($language)) {
-//                list($languageIso, $countryIso) = @explode('-', $language);
-//                if($languageIso) {
-//                    $language = $languageIso;
-//                }
-//            }
+            if(is_string($language)) {
+                list($languageIso, ) = @explode('-', $language);
+                if($languageIso) {
+                    $language = $languageIso;
+                }
+            }
 
             return $language;
         }
