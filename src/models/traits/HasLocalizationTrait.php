@@ -91,7 +91,7 @@ trait HasLocalizationTrait
 
             $language = Yii::$app->language;
             if(is_string($language)) {
-                list($languageIso, $countryIso) = @explode('-', $language);
+                list($languageIso, ) = @explode('-', $language);
                 if($languageIso) {
                     $language = $languageIso;
                 }
