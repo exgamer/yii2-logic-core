@@ -10,6 +10,8 @@ use concepture\yii2logic\console\traits\OutputTrait;
 use yii\helpers\Console;
 
 /**
+ * @deprecated Использовать concepture\yii2logic\dataprocessor\v2\DataProcessor
+ *
  * Class DataProcessor
  *
  *  $config = [

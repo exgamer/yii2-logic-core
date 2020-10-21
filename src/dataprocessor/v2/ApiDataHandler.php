@@ -1,12 +1,10 @@
 <?php
 
-namespace concepture\yii2logic\dataprocessor;
+namespace concepture\yii2logic\dataprocessor\v2;
 
 use yii\base\Exception;
 
 /**
- * @deprecated Использовать concepture\yii2logic\dataprocessor\v2\ApiDataHandler
- *
  * Вспомогательный класс для обработки данных полученных через апи
  *
  * @author CitizenZet

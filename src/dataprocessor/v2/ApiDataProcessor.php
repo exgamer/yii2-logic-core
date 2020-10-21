@@ -1,6 +1,6 @@
 <?php
 
-namespace concepture\yii2logic\dataprocessor;
+namespace concepture\yii2logic\dataprocessor\v2;
 
 use GuzzleHttp\Client;
 use Yii;
@@ -8,8 +8,6 @@ use yii\base\Exception;
 use yii\helpers\Console;
 
 /**
- * @deprecated Использовать concepture\yii2logic\dataprocessor\v2\ApiDataProcessor
- *
  * Class DataProcessor
  *
  *  $config = [
@@ -40,7 +38,7 @@ class ApiDataProcessor extends DataProcessor
         }
     }
 
-    protected function executeQuery($inputData = null)
+    protected function executeQuery()
     {
         $client = new Client(['timeout' => 0]);
         $res = $client->request($this->dataHandler->method, $this->dataHandler->getQuery(), $this->dataHandler->queryConfig);

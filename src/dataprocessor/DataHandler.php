@@ -8,6 +8,8 @@ use yii\db\Query;
 use yii\data\ActiveDataProvider;
 
 /**
+ * @deprecated Использовать concepture\yii2logic\dataprocessor\v2\DataHandler
+ *
  * Вспомогательный класс для обработки данных
  *
  * @author CitizenZet
