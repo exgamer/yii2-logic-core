@@ -27,7 +27,6 @@ use yii\helpers\Console;
  *
  * DataProcessor::exec($config);
  *
- * @package concepture\yii2logic\dataprocessor
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class DataProcessor extends Component
