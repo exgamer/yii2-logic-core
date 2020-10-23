@@ -378,7 +378,7 @@ class Post extends ActiveRecord
         $query->asArray();
     });
     
-        Если подключить к сервису PropertyModifyTrait можно делать запросы на модификацию через :
+    Если подключить к сервису PropertyModifyTrait можно делать запросы на модификацию через :
                 
     $this->userService()->modifyProperty()->insert([
         'entity_id' => 16,

@@ -6,6 +6,7 @@ use concepture\yii2logic\forms\Model;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\traits\HasDbConnectionTrait;
 use concepture\yii2logic\services\traits\ModifyTrait;
+use concepture\yii2logic\services\traits\SqlModifyTrait;
 use Exception;
 use Yii;
 use yii\base\Component;
@@ -22,6 +23,7 @@ use yii\helpers\Json;
 class PropertyModifyAdapter extends Component
 {
     use ModifyTrait;
+    use SqlModifyTrait;
     use HasDbConnectionTrait;
 
     public $propertyModelClass;
