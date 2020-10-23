@@ -23,7 +23,6 @@ class PropertyReadAdapter extends Component
     /**
      * Возвращает QueryBuilder
      *
-     * @param null $model
      * @return ActiveQuery
      */
     public function getQuery()
