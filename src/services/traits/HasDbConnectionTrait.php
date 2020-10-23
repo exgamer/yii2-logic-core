@@ -16,7 +16,7 @@ use yii\db\Connection;
  * Trait HasDbConnetionTrait
  * @package concepture\yii2logic\services\traits
  */
-trait HasDbConnetionTrait
+trait HasDbConnectionTrait
 {
     /**
      * @param $sql

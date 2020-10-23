@@ -4,7 +4,7 @@ namespace concepture\yii2logic\services;
 use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2logic\services\interfaces\ModifyEventInterface;
-use concepture\yii2logic\services\traits\HasDbConnetionTrait;
+use concepture\yii2logic\services\traits\HasDbConnectionTrait;
 use concepture\yii2logic\services\traits\RepositoryTrait;
 use concepture\yii2logic\services\traits\SqlModifyTrait;
 use concepture\yii2logic\services\traits\SqlReadTrait;
@@ -48,5 +48,5 @@ abstract class Service extends Component implements ModifyEventInterface
     use CacheTrait;
     use StaticDataTrait;
     use RepositoryTrait;
-    use HasDbConnetionTrait;
+    use HasDbConnectionTrait;
 }
