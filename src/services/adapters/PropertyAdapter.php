@@ -3,6 +3,7 @@
 namespace concepture\yii2logic\services\adapters;
 
 use concepture\yii2logic\services\traits\ReadTrait;
+use Exception;
 use yii\base\Component;
 use yii\db\ActiveQuery;
 
@@ -22,6 +23,7 @@ class PropertyAdapter extends Component
     /**
      * Возвращает QueryBuilder
      *
+     * @param null $model
      * @return ActiveQuery
      */
     public function getQuery()
@@ -31,5 +33,34 @@ class PropertyAdapter extends Component
         $this->extendQuery($query);
 
         return $query;
+    }
+
+    /**
+     * @deprecated метод пока не поддерживается
+     *
+     * @param array $queryParams
+     * @param array $config
+     * @param null $searchModel
+     * @param null $formName
+     * @param null $condition
+     * @throws Exception
+     */
+    public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null, $condition = null)
+    {
+        throw new Exception("unsupported method");
+    }
+
+    /**
+     * @param $id
+     * @param array $with
+     * @param bool $asArray
+     * @return mixed
+     * @throws Exception
+     * @deprecated метод не поддерживается
+     *
+     */
+    public function findById($id , $with = [], $asArray = false)
+    {
+        throw new Exception("unsupported method, use getOneByCondition");
     }
 }
