@@ -8,7 +8,7 @@ use yii\base\Component;
 use yii\db\ActiveQuery;
 
 /**
- * Адаптер для работы с проперти
+ * Адаптер для работы с проперти только чтение
  *
  * Class PropertyAdapter
  * @package concepture\yii2logic\services\adapters
