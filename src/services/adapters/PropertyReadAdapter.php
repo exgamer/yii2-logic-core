@@ -50,12 +50,13 @@ class PropertyReadAdapter extends Component
     }
 
     /**
+     * @deprecated метод не поддерживается
+     *
      * @param $id
      * @param array $with
      * @param bool $asArray
      * @return mixed
      * @throws Exception
-     * @deprecated метод не поддерживается
      *
      */
     public function findById($id , $with = [], $asArray = false)
