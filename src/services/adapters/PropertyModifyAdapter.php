@@ -2,19 +2,11 @@
 
 namespace concepture\yii2logic\services\adapters;
 
-use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\forms\Model;
-use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\models\ActiveRecord;
-use concepture\yii2logic\services\events\modify\AfterBatchInsertEvent;
-use concepture\yii2logic\services\events\modify\AfterModifyEvent;
-use concepture\yii2logic\services\events\modify\BeforeBatchInsertEvent;
-use concepture\yii2logic\services\Service;
-use concepture\yii2logic\services\traits\HasDbConnetionTrait;
+use concepture\yii2logic\services\traits\HasDbConnectionTrait;
 use concepture\yii2logic\services\traits\ModifyTrait;
-use concepture\yii2logic\services\traits\ReadTrait;
 use Exception;
-use ReflectionException;
 use Yii;
 use yii\base\Component;
 use yii\db\ActiveQuery;
@@ -30,7 +22,7 @@ use yii\helpers\Json;
 class PropertyModifyAdapter extends Component
 {
     use ModifyTrait;
-    use HasDbConnetionTrait;
+    use HasDbConnectionTrait;
 
     public $propertyModelClass;
 
