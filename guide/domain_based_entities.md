@@ -371,6 +371,13 @@ class Post extends ActiveRecord
 
 3. В сервис при создании добавляем установку локали указанного домена
 
+    Если подключить к сервису PropertyReadTrait можно делать запросы на чтение через :
+
+    $properties =  $this->readProperty()->getAllByCondition(function (ActiveQuery $query) use ($user, $domainIds) {
+        $query->andWhere(['entity_id' => $user->id, 'domain_id' => $domainIds]);
+        $query->asArray();
+    });
+                
 ```php
 
 <?php
@@ -405,6 +412,7 @@ use yii\db\Query;
 class PostService extends Base implements UrlHistoryInterface, SitemapServiceInterface , CopyPropertyInterface
 {
     use concepture\yii2handbook\services\traits\ModifySupportTrait;
+    use PropertyReadTrait;
 
 
     protected function beforeCreate(Model $form)
