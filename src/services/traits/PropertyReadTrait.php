@@ -31,7 +31,7 @@ trait PropertyReadTrait
     /**
      * Возвращает адаптер дял рабоыт с проперти
      *
-     * @return PropertyAdapter
+     * @return PropertyReadAdapter
      */
     public function readProperty()
     {
