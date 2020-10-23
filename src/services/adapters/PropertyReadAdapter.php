@@ -14,7 +14,7 @@ use yii\db\ActiveQuery;
  * @package concepture\yii2logic\services\adapters
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class PropertyAdapter extends Component
+class PropertyReadAdapter extends Component
 {
     use ReadTrait;
 

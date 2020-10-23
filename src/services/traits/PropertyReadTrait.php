@@ -1,7 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
-use concepture\yii2logic\services\adapters\PropertyAdapter;
+use concepture\yii2logic\services\adapters\PropertyReadAdapter;
 use yii\helpers\ArrayHelper;
 use yii\db\ActiveQuery;
 use Yii;
@@ -19,14 +19,14 @@ trait PropertyReadTrait
      *
      * @var
      */
-    public $propertyAdapter;
+    public $propertyReadAdapter;
 
     /**
      * Класс адаптера
      *
      * @var string
      */
-    public $propertyAdapterClass = PropertyAdapter::class;
+    public $propertyReadAdapterClass = PropertyReadAdapter::class;
 
     /**
      * Возвращает адаптер дял рабоыт с проперти
@@ -35,12 +35,12 @@ trait PropertyReadTrait
      */
     public function readProperty()
     {
-        if (! $this->propertyAdapter) {
+        if (! $this->propertyReadAdapter) {
             $modelClass = $this->getRelatedModelClass();
-            $this->propertyAdapter = Yii::createObject([ 'class' => $this->propertyAdapterClass, 'propertyModelClass' => $modelClass::getPropertyModelClass()]);
+            $this->propertyReadAdapter = Yii::createObject([ 'class' => $this->propertyReadAdapterClass, 'propertyModelClass' => $modelClass::getPropertyModelClass()]);
         }
 
-        return $this->propertyAdapter;
+        return $this->propertyReadAdapter;
     }
 }
 
