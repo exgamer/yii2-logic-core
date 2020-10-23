@@ -8,6 +8,8 @@ use yii\db\ActiveQuery;
 use Yii;
 
 /**
+ * @deprecated Устарело, не использовать. Для работы с property добавлены PropertyModifyTrait и PropertyReadTrait
+ *
  * Треит для подключения к сервисам которые используют модель со свойствами
  *
  * Trait PropertyTrait
