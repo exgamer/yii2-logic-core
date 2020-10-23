@@ -377,7 +377,14 @@ class Post extends ActiveRecord
         $query->andWhere(['entity_id' => $user->id, 'domain_id' => $domainIds]);
         $query->asArray();
     });
+    
+        Если подключить к сервису PropertyModifyTrait можно делать запросы на модификацию через :
                 
+    $this->userService()->modifyProperty()->insert([
+        'entity_id' => 16,
+        'domain_id' => 10,
+        'username' => 'test',
+    ]);
 ```php
 
 <?php
@@ -413,6 +420,7 @@ class PostService extends Base implements UrlHistoryInterface, SitemapServiceInt
 {
     use concepture\yii2handbook\services\traits\ModifySupportTrait;
     use PropertyReadTrait;
+    use PropertyModifyTrait;
 
 
     protected function beforeCreate(Model $form)
