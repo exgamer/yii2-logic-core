@@ -519,13 +519,13 @@ trait HasPropertyTrait
                 }
             }
         }else {
+            if ($this->isAnyAttributeChanged()) {
+                $property->setUpdatedAt();
+            }
+
             if ($property->hasAttribute("is_deleted")) {
                 $property->is_deleted = 0;
             }
-        }
-
-        if ($this->isAnyAttributeChanged()) {
-            $property->setUpdatedAt();
         }
 
         foreach ($property->attributes() as $attribute){
