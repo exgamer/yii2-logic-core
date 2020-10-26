@@ -21,7 +21,7 @@ trait HasPropertyTrait
 {
     public function beforeSave($insert)
     {
-        if ($this->isAnyAttributeChanged()) {
+        if (! $insert && $this->isAnyAttributeChanged()) {
             $this->setUpdatedAt();
         }
 
