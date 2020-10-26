@@ -19,6 +19,15 @@ use yii\db\ActiveQuery;
  */
 trait HasPropertyTrait
 {
+    public function beforeSave($insert)
+    {
+        if ($this->isAnyAttributeChanged()) {
+            $this->setUpdatedAt();
+        }
+
+        return parent::beforeSave($insert);
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         $this->saveProperty($insert, $changedAttributes);
@@ -513,6 +522,10 @@ trait HasPropertyTrait
             if ($property->hasAttribute("is_deleted")) {
                 $property->is_deleted = 0;
             }
+        }
+
+        if ($this->isAnyAttributeChanged()) {
+            $property->setUpdatedAt();
         }
 
         foreach ($property->attributes() as $attribute){

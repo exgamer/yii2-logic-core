@@ -236,4 +236,47 @@ abstract class ActiveRecord extends Base
 
         return null;
     }
+
+
+    /**
+     * Возвращает массив с атрибутами которые быди изменены
+     * @return array
+     */
+    public function getChangedAtributes()
+    {
+        $result = [];
+        foreach ($this->oldAttributes as $attribute => $value) {
+            if ($this->{$attribute} == $value) {
+                continue;
+            }
+
+            $result[] = $attribute;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Проверка изменились ли какие либо атрибуты модели
+     *
+     * @return bool
+     */
+    public function isAnyAttributeChanged()
+    {
+        $changed = $this->getChangedAtributes();
+
+        return ! empty($changed);
+    }
+
+    /**
+     * Устанавливает поле updated_at (Должно быть datetime)
+     *
+     *
+     */
+    public function setUpdatedAt()
+    {
+        if ($this->hasAttribute("updated_at")) {
+            $this->updated_at = date('Y-m-d H:i:s');
+        }
+    }
 }
