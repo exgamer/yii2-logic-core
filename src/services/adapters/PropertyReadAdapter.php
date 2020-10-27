@@ -2,10 +2,12 @@
 
 namespace concepture\yii2logic\services\adapters;
 
+use concepture\yii2logic\data\ActiveDataProvider;
 use concepture\yii2logic\services\traits\HasDbConnectionTrait;
 use concepture\yii2logic\services\traits\ReadTrait;
 use concepture\yii2logic\services\traits\SqlReadTrait;
 use Exception;
+use Yii;
 use yii\base\Component;
 use yii\db\ActiveQuery;
 
@@ -39,7 +41,6 @@ class PropertyReadAdapter extends Component
     }
 
     /**
-     * @deprecated метод пока не поддерживается
      *
      * @param array $queryParams
      * @param array $config
@@ -50,7 +51,40 @@ class PropertyReadAdapter extends Component
      */
     public function getDataProvider($queryParams = [], $config = [], $searchModel = null, $formName = null, $condition = null)
     {
-        throw new Exception("unsupported method");
+        if ($searchModel === null) {
+            $searchModel = Yii::createObject($this->propertyModelClass);
+        }
+
+        $query = $this->getQuery();
+        if (is_callable($condition)){
+            call_user_func($condition, $query);
+        }
+        if (is_array($condition)){
+            foreach ($condition as $name => $value){
+                $query->andWhere([$name => $value]);
+            }
+        }
+
+        if (! isset($config['query'])) {
+            $config['query'] = $query;
+        }
+
+        $dataProvider = new ActiveDataProvider($config);
+        if (! empty($queryParams)) {
+            $searchModel->load($queryParams, $formName);
+        }
+        if (!$searchModel->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            $query->andWhere('0=1');
+
+            return $dataProvider;
+        }
+
+        $searchModel->extendQuery($query);
+        $searchModel->extendDataProvider($dataProvider);
+        $this->extendDataProviderModels($dataProvider);
+
+        return $dataProvider;
     }
 
     /**
