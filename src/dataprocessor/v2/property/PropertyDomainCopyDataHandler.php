@@ -11,25 +11,24 @@ use yii\db\ActiveQuery;
 use yii\db\Query;
 
 /**
- * Class ReviewDataHandler
+ * DataHandler для создания несуществующих проперти на новых доменах
  *
- *
- * @package console\datahandlers
+ * Class PropertyCopyDataHandler
+ * @package concepture\yii2logic\dataprocessor\v2\property
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-abstract class PropertyCopyDataHandler extends DataHandler
+abstract class PropertyDomainCopyDataHandler extends DataHandler
 {
+    /**
+     * массив id доменов на которых должны быть проперти
+     *
+     * @var integer[]
+     */
     public $domainIds;
-
-//    public function beforeExecute()
-//    {
-//        $enabledDomainData = $this->domainService()->getEnabledDomainData();
-//        $this->domainIds = array_keys($enabledDomainData);
-//    }
 
     public function setupQuery(ActiveQuery $query)
     {
         parent::setupQuery($query);
-//        $query->innerJoin('dynamic_elements_v2 d', "dynamic_elements_property.entity_id = d.id AND d.name NOT LIKE 'FUTSAL%'");
         $query->andWhere(['domain_id' => $this->domainIds]);
         $query->asArray();
     }
@@ -50,6 +49,7 @@ abstract class PropertyCopyDataHandler extends DataHandler
         $data = $this->getData('data');
         $insertData = [];
         foreach ($data as $entity_id => $domain_ids) {
+            // получаем разницу массивов, тюею домены на которых проперти нет
             $diff = array_diff($this->domainIds, $domain_ids);
             if (empty($diff)) {
                 continue;
