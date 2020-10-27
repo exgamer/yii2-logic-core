@@ -29,6 +29,7 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
     public function setupQuery(ActiveQuery $query)
     {
         parent::setupQuery($query);
+        $query->resetCondition();
         $query->andWhere(['domain_id' => $this->domainIds]);
         $query->asArray();
     }
