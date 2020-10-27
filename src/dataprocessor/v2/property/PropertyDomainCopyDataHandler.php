@@ -70,7 +70,9 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
             return;
         }
 
+        $this->outputSuccess( "data insert start - " . count($insertData) . " rows");
         $this->getService()->batchInsert(['entity_id', 'domain_id'], $insertData);
+        $this->outputSuccess( "data insert complete - " . count($insertData) . " rows");
     }
 
     /**
