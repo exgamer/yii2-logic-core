@@ -64,6 +64,12 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
             }
 
         }
+
+        if (empty($insertData)) {
+            $this->outputSuccess( "no data for create");
+            return;
+        }
+
         $this->getService()->batchInsert(['entity_id', 'domain_id'], $insertData);
     }
 
