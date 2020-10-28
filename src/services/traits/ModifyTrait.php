@@ -47,6 +47,17 @@ trait ModifyTrait
     }
 
     /**
+     * Множественная вставка записей
+     *
+     * @param $data
+     * @return bool
+     */
+    public function multipleInsert($fields, $data)
+    {
+        return $this->getDb()->createCommand()->batchInsert($this->getTableName(), $fields, $data)->execute();
+    }
+    
+    /**
      * Мультивставка записей если их нет
      *
      * поля которые нужно встатвить
