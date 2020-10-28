@@ -56,7 +56,7 @@ trait ModifyTrait
     {
         return $this->getDb()->createCommand()->batchInsert($this->getTableName(), $fields, $data)->execute();
     }
-    
+
     /**
      * Мультивставка записей если их нет
      *

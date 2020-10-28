@@ -32,6 +32,7 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
         $query->resetCondition();
         $query->andWhere(['domain_id' => $this->domainIds]);
         $query->asArray();
+        $query->groupBy(['entity_id', 'domain_id']);
     }
 
     public function processModel(&$data)
