@@ -1,4 +1,5 @@
 <?php
+
 namespace concepture\yii2logic\models\traits\v2\property;
 
 use concepture\yii2logic\db\HasPropertyActiveQuery;
@@ -67,6 +68,16 @@ trait HasPropertyTrait
     }
 
     /**
+     * Возвращает
+     *
+     * @return string
+     */
+    public static function linkedEntityIdFieldName()
+    {
+        return 'entity_id';
+    }
+
+    /**
      * Возвращает названия полей свойств, которые будут исключены при маппинге данных из основной модели
      *
      * @return array
@@ -76,7 +87,7 @@ trait HasPropertyTrait
     {
         return ArrayHelper::merge([
             'id',
-            'entity_id',
+            static::linkedEntityIdFieldName(),
             'default',
         ], static::getUniqueFieldAsArray());
     }
@@ -263,7 +274,7 @@ trait HasPropertyTrait
         /**
          * Выборка дефолтных свойств
          */
-        $query->leftJoin($m::tableName() . " {$defaultPropertyAlias}", "{$defaultPropertyAlias}.entity_id = " . static::tableName() . ".id AND {$defaultPropertyAlias}.default = 1");
+        $query->leftJoin($m::tableName() . " {$defaultPropertyAlias}", "{$defaultPropertyAlias}." . static::linkedEntityIdFieldName() . " = " . static::tableName() . ".id AND {$defaultPropertyAlias}.default = 1");
         static::extendFind($query);
 
         return $query;
@@ -333,7 +344,7 @@ trait HasPropertyTrait
         }
 
         $query->{$propertyJoin}($m::tableName() . " ". static::propertyAlias(),
-            static::propertyAlias() . '.entity_id = '. static::tableName().'.id AND '
+            static::propertyAlias() . '.' . static::linkedEntityIdFieldName() . ' = '. static::tableName().'.id AND '
             . implode(' AND ', $queryArray));
     }
 
@@ -496,15 +507,16 @@ trait HasPropertyTrait
             $propertyCondition[$field] = $this->{$field};
         }
 
-        if (! $propertyM->hasAttribute("entity_id")) {
-            throw  new Exception('property table must have `entity_id` field');
+        $entityIdFieldName = static::linkedEntityIdFieldName();
+        if (! $propertyM->hasAttribute($entityIdFieldName)) {
+            throw  new Exception('property table must have `' .$entityIdFieldName. '` field');
         }
 
-        $propertyCondition['entity_id'] = $this->id;
+        $propertyCondition[$entityIdFieldName] = $this->id;
         $property = $propertyM::find()->where($propertyCondition)->one();
         if (! $property){
             $property = Yii::createObject($propertyClass);
-            $property->entity_id = $this->id;
+            $property->{$entityIdFieldName} = $this->id;
             if ($insert){
                 if (! $property->hasAttribute("default")) {
                     throw  new Exception('property table must have `default` field');
@@ -590,8 +602,9 @@ trait HasPropertyTrait
     public function deleteProperties()
     {
         $propertyClass = static::getPropertyModelClass();
+        $entityIdFieldName = static::linkedEntityIdFieldName();
         $propertyClass::deleteAll([
-            'entity_id' => $this->id
+            $entityIdFieldName => $this->id
         ]);
     }
 
@@ -636,7 +649,7 @@ trait HasPropertyTrait
             $condition[static::propertyAlias() . '.' . $field] = $val;
         }
 
-        return $this->hasOne($propertyClass::className(), ['entity_id' => 'id'])
+        return $this->hasOne($propertyClass::className(), [static::linkedEntityIdFieldName() => 'id'])
             ->alias(static::propertyAlias())
             ->andOnCondition($condition);
     }
@@ -649,7 +662,7 @@ trait HasPropertyTrait
     public function getProperties()
     {
         $propertyClass = static::getPropertyModelClass();
-        $query =  $this->hasMany($propertyClass, ['entity_id' => 'id']);
+        $query =  $this->hasMany($propertyClass, [static::linkedEntityIdFieldName() => 'id']);
         $query->where = [];
         $field = static::uniqueField();
         if (! is_array($field)) {
@@ -713,7 +726,7 @@ trait HasPropertyTrait
         $query = $propertyClass::find();
 
         if (filter_var($id, FILTER_VALIDATE_INT) !== false || (is_array($id) && ! ArrayHelper::isAssociative($id))) {
-            $query->andWhere(['entity_id' => $id]);
+            $query->andWhere([static::linkedEntityIdFieldName() => $id]);
         }elseif (is_callable($id)){
             call_user_func($id, $query);
         }elseif (is_array($id)){
