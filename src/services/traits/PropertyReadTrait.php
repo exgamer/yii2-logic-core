@@ -42,7 +42,7 @@ trait PropertyReadTrait
 
         return $this->propertyReadAdapter;
     }
-    
+
     /**
      * Возвращает альяс пропертей связанной модели
      *
