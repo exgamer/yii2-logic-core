@@ -32,6 +32,7 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
         $query->resetCondition();
         $query->andWhere(['domain_id' => $this->domainIds]);
         $query->asArray();
+        $query->groupBy(['entity_id', 'domain_id']);
     }
 
     public function processModel(&$data)
@@ -49,6 +50,7 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
         parent::afterExecute();
         $data = $this->getData('data');
         $insertData = [];
+        $ignoreData = [];
         foreach ($data as $entity_id => $domain_ids) {
             // получаем разницу массивов, тюею домены на которых проперти нет
             $diff = array_diff($this->domainIds, $domain_ids);
@@ -57,7 +59,7 @@ abstract class PropertyDomainCopyDataHandler extends DataHandler
             }
 
             foreach ($diff as $domain_id) {
-                $insertData[$entity_id] = [
+                $insertData[] = [
                     'entity_id' => $entity_id,
                     'domain_id' => $domain_id,
                 ];
