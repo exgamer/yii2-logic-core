@@ -42,5 +42,17 @@ trait PropertyReadTrait
 
         return $this->propertyReadAdapter;
     }
+    
+    /**
+     * Возвращает альяс пропертей связанной модели
+     *
+     * @return string
+     */
+    public function propertyAlias()
+    {
+        $modelClass = $this->getRelatedModelClass();
+
+        return $modelClass::propertyAlias();
+    }
 }
 
