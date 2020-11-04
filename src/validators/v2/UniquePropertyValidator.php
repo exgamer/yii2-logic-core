@@ -19,12 +19,15 @@ class UniquePropertyValidator extends Validator
      * @var array
      */
     public $fields = [];
-
     /**
      * Локализованные поля для валидации
      * @var array
      */
     public $propertyFields = [];
+    /**
+     * @var string название колонки для перевязки с основной сущностью
+     */
+    public $linkedEntityColumnName = 'entity_id';
 
     /**
      * @inheritDoc
@@ -65,7 +68,7 @@ class UniquePropertyValidator extends Validator
         }
 
         if (isset($model->id)) {
-            $query->andWhere(['<>', $propertyAlias . '.entity_id', $model->id]);
+            $query->andWhere(['<>', $propertyAlias . ".{$this->linkedEntityColumnName}", $model->id]);
         }
 
         $result = $query->all();
