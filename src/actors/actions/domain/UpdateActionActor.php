@@ -72,6 +72,13 @@ class UpdateActionActor extends ActionActor
      */
     public $checkAccess = true;
 
+    /**
+     * Использовать ли clearFind если запись не найдена
+     *
+     * @var bool
+     */
+    public $useClearFind = true;
+
     public $serviceMethod = 'update';
 
     /**
@@ -217,7 +224,7 @@ class UpdateActionActor extends ActionActor
                 $query->applyPropertyUniqueValue($domain_id);
             }
         });
-        if (! $model){
+        if (! $model && $this->useClearFind){
 
             return $originModelClass::clearFind()->where(['id' => $id])->one();
         }
