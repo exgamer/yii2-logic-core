@@ -2,6 +2,8 @@
 
 namespace concepture\yii2logic\actions\web\v2;
 
+use concepture\yii2logic\actors\actions\CreateActionActor;
+use ReflectionException;
 use Yii;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
@@ -35,39 +37,20 @@ class CreateAction extends Action
 
     /**
      * @return staing HTML
+     * @throws ReflectionException
      */
     public function run()
     {
-        $model = $this->getForm();
-        $model->scenario = $this->scenario;
-        if (method_exists($model, 'customizeForm')) {
-            $model->customizeForm();
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
-                # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
-                if ( RequestHelper::isMagicModal()){
-                    return $this->controller->responseJson([
-                        'data' => $result,
-                    ]);
-                }
-                if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                    $redirectStore = $this->getController()->redirectStoreUrl();
-                    if($redirectStore) {
-                        return $redirectStore;
-                    }
-
-                    # todo: криво пашет
-                    return $this->redirectPrevious([$this->redirect, 'id' => $result->id]);
-                } else {
-                    return $this->redirect(['update', 'id' => $result->id]);
-                }
-            }
-        }
-
-        return $this->render($this->view, [
-            'model' => $model,
+        $actor = Yii::createObject([
+            'class' => CreateActionActor::class,
+            'view' => $this->view,
+            'redirect' => $this->redirect,
+            'scenario' => $this->scenario,
+            'controller' => $this->controller,
+            'service' => $this->getService(),
+            'serviceMethod' => $this->serviceMethod,
         ]);
+
+        return $actor->run();
     }
 }
