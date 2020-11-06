@@ -107,7 +107,7 @@ class UpdateActionActor extends ActionActor
             throw new NotFoundHttpException();
         }
 
-        if ($this->checkAccess && ! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
+        if ($this->checkAccess && ! AccessHelper::checkAccess('update', ['model' => $originModel])){
             throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
