@@ -2,7 +2,7 @@
 
 namespace concepture\yii2logic\actions\web\v2;
 
-use concepture\yii2logic\helpers\AccessHelper;
+use concepture\yii2logic\actors\actions\UpdateActionActor;
 use Yii;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
@@ -43,72 +43,21 @@ class UpdateAction extends Action
      * @param $id
      *
      * @return mixed
+     * @throws ReflectionException
      */
     public function run($id)
     {
-        $originModel = $this->getModel($id);
-        if (!$originModel){
-            if (! $this->originModelNotFoundCallback) {
-                throw new NotFoundHttpException();
-            }
-
-            if (is_callable($this->originModelNotFoundCallback)){
-                return call_user_func($this->originModelNotFoundCallback, $this);
-            }
-        }
-
-        if (! AccessHelper::checkAccess($this->id, ['model' => $originModel])){
-            throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
-        }
-
-        $model = $this->getForm();
-        $model->scenario = $this->scenario;
-        $model->setAttributes($originModel->attributes, false);
-
-        if (method_exists($model, 'customizeForm')) {
-            $model->customizeForm($originModel);
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-            $originModel->setAttributes($model->attributes);
-            if ($model->validate(null, true, $originModel)) {
-                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
-                    # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
-                    if ( RequestHelper::isMagicModal()){
-                        return $this->controller->responseJson([
-                            'data' => $result,
-                        ]);
-                    }
-                    if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                        $redirectStore = $this->getController()->redirectStoreUrl();
-                        if($redirectStore) {
-                            return $redirectStore;
-                        }
-
-                        # todo: криво пашет
-                        return $this->redirectPrevious([$this->redirect]);
-                    }
-                }
-            }
-
-            $model->addErrors($originModel->getErrors());
-        }
-
-        return $this->render($this->view, [
-            'model' => $model,
-            'originModel' => $originModel,
+        $actor = Yii::createObject([
+            'class' => UpdateActionActor::class,
+            'id' => $id,
+            'view' => $this->view,
+            'redirect' => $this->redirect,
+            'scenario' => $this->scenario,
+            'controller' => $this->controller,
+            'service' => $this->getService(),
+            'serviceMethod' => $this->serviceMethod,
         ]);
-    }
 
-    /**
-     * Возвращает модель для редактирования
-     *
-     * @param $id
-     * @return ActiveRecord
-     * @throws ReflectionException
-     */
-    protected function getModel($id)
-    {
-        return $this->getService()->findById($id);
+        return $actor->run();
     }
 }
