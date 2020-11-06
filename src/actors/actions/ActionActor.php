@@ -15,7 +15,7 @@ abstract class ActionActor extends Actor
 {
     public $controller;
     public $service;
-    public $serviceMethod = 'update';
+    public $serviceMethod;
 
     /**
      * @return string

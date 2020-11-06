@@ -71,6 +71,9 @@ class UpdateActionActor extends ActionActor
      * @var bool
      */
     public $checkAccess = true;
+
+    public $serviceMethod = 'update';
+
     /**
      * Действия до загрузки данных в форму
      *
