@@ -15,20 +15,80 @@ use yii\web\Application;
 use yii\web\NotFoundHttpException;
 
 /**
+ * Выполнение ряда операций при модификации сущности
+ *
  * Class UpdateActionActor
  * @package concepture\yii2logic\actors
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 class UpdateActionActor extends ActionActor
 {
+    /**
+     * Идентификатор редактируемой записи
+     *
+     * @var integer
+     */
     public $id;
+    /**
+     * Идентификатор текущего домена
+     *
+     * @var integer
+     */
     public $domain_id;
+    /**
+     * Идентификатор редактируемого домена
+     *
+     * @var integer
+     */
     public $edited_domain_id;
+    /**
+     * Идентификатор редактируемого языка
+     *
+     * @var integer
+     */
     public $locale_id;
+    /**
+     * Предстваление для рендера
+     *
+     * @var string
+     */
     public $view = 'update';
+    /**
+     * Редирект после успешной модификации
+     *
+     * @var string
+     */
     public $redirect = 'index';
+    /**
+     * Сценарий формы
+     *
+     * @var string
+     */
     public $scenario = ScenarioEnum::UPDATE;
+    /**
+     * Нужна ли првоерка на доступ
+     *
+     * @var bool
+     */
     public $checkAccess = true;
+    /**
+     * Действия до загрузки данных в форму
+     *
+     * @var callable
+     */
+    public $beforeLoad;
+    /**
+     * Действия до валидации формы
+     *
+     * @var callable
+     */
+    public $beforeValidate;
+    /**
+     * Действия до выполнения метода сервиса
+     *
+     * @var callable
+     */
+    public $beforeServiceAction;
 
     public function run()
     {
@@ -63,9 +123,21 @@ class UpdateActionActor extends ActionActor
             $model->locale_id = $this->locale_id;
         }
 
+        if (is_callable($this->beforeLoad)) {
+            call_user_func($this->beforeLoad, $model, $originModel);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
+            if (is_callable($this->beforeValidate)) {
+                call_user_func($this->beforeValidate, $model, $originModel);
+            }
+
             if ($model->validate(null, true, $originModel)) {
+                if (is_callable($this->beforeServiceAction)) {
+                    call_user_func($this->beforeServiceAction, $model, $originModel);
+                }
+
                 if (($result = $this->getService()->{$this->getServiceMethod()}($model, $originModel)) !== false) {
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
