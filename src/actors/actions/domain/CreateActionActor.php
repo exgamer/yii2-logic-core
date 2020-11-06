@@ -86,6 +86,18 @@ class CreateActionActor extends ActionActor
      * @var callable
      */
     public $beforeServiceAction;
+    /**
+     * Действия после выполнения метода сервиса
+     *
+     * @var callable
+     */
+    public $afterServiceAction;
+    /**
+     * Действия до рендера
+     *
+     * @var callable
+     */
+    public $beforeRender;
 
     public function run()
     {
@@ -121,6 +133,10 @@ class CreateActionActor extends ActionActor
                 }
 
                 if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
+                    if (is_callable($this->afterServiceAction)) {
+                        call_user_func($this->afterServiceAction, $model, $result);
+                    }
+
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
                         return $this->getController()->responseJson([
@@ -141,6 +157,10 @@ class CreateActionActor extends ActionActor
                     }
                 }
             }
+        }
+
+        if (is_callable($this->beforeRender)) {
+            call_user_func($this->beforeRender, $model);
         }
 
         return $this->getController()->render($this->view, [
