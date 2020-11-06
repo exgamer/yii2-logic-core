@@ -2,7 +2,6 @@
 namespace concepture\yii2logic\actors\actions\domain;
 
 use concepture\yii2logic\actors\actions\ActionActor;
-use concepture\yii2logic\db\HasPropertyActiveQuery;
 use concepture\yii2logic\enum\ScenarioEnum;
 use concepture\yii2logic\helpers\AccessHelper;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
