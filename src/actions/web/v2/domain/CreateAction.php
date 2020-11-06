@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\actions\web\v2\domain;
 
+use concepture\yii2logic\actors\actions\domain\CreateActionActor;
 use Yii;
 use concepture\yii2logic\actions\Action;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
@@ -49,51 +50,19 @@ class CreateAction extends Action
      */
     public function run($domain_id = null, $edited_domain_id = null, $locale_id = null)
     {
-        $model = $this->getForm();
-        $model->scenario = $this->scenario;
-        if (method_exists($model, 'customizeForm')) {
-            $model->customizeForm();
-        }
-
-        if (! $edited_domain_id) {
-            $edited_domain_id = $domain_id;
-        }
-
-        //Для случая создания сущности, когда у домена указаны используемые языки версий, чтобы подставить верную связку домена и языка
-        Yii::$app->domainService->resolveLocaleId($edited_domain_id, $locale_id, $this->controller->domainByLocale);
-        $model->domain_id = $edited_domain_id;
-        if (property_exists($model, 'locale_id')) {
-            $model->locale_id = $locale_id;
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
-                # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
-                if ( RequestHelper::isMagicModal()){
-                    return $this->controller->responseJson([
-                        'data' => $result,
-                    ]);
-                }
-
-                if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
-                    $redirectStore = $this->getController()->redirectStoreUrl();
-                    if($redirectStore) {
-                        return $redirectStore;
-                    }
-
-                    # todo: криво пашет
-                    return $this->redirectPrevious([$this->redirect, 'id' => $result->id, 'domain_id' => $domain_id, 'edited_domain_id' => $edited_domain_id]);
-                } else {
-                    return $this->redirect(['update', 'id' => $result->id, 'domain_id' => $domain_id, 'edited_domain_id' => $edited_domain_id]);
-                }
-            }
-        }
-
-        return $this->render($this->view, [
-            'model' => $model,
+        $actor = Yii::createObject([
+            'class' => CreateActionActor::class,
             'domain_id' => $domain_id,
+            'edited_domain_id' => $edited_domain_id,
             'locale_id' => $locale_id,
-            'edited_domain_id' => $edited_domain_id
+            'view' => $this->view,
+            'redirect' => $this->redirect,
+            'scenario' => $this->scenario,
+            'controller' => $this->controller,
+            'service' => $this->getService(),
+            'serviceMethod' => $this->serviceMethod,
         ]);
+
+        return $actor->run();
     }
 }
