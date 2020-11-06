@@ -4,6 +4,7 @@ namespace concepture\yii2logic\actors\actions;
 use concepture\yii2logic\actors\actions\ActionActor;
 use concepture\yii2logic\db\HasPropertyActiveQuery;
 use concepture\yii2logic\enum\ScenarioEnum;
+use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\helpers\AccessHelper;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 use ReflectionException;
@@ -44,14 +45,14 @@ class UpdateActionActor extends ActionActor
     public $redirect = 'index';
     /**
      * Сценарий формы
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $scenario = ScenarioEnum::UPDATE;
     /**
      * Нужна ли првоерка на доступ
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $checkAccess = true;
     /**
@@ -84,50 +85,60 @@ class UpdateActionActor extends ActionActor
      * @var callable
      */
     public $beforeRender;
+    /**
+     * Форма
+     *
+     * @var Form
+     */
+    public $model;
+    /**
+     * Модель
+     *
+     * @var ActiveRecord
+     */
+    public $originModel;
+    /**
+     * Результ модель
+     *
+     * @var ActiveRecord
+     */
+    public $result;
 
     public function run()
     {
-        $originModel = $this->getModel($this->id);
-        if (!$originModel){
+        $this->originModel = $this->getModel($this->id);
+        if (!$this->originModel){
             throw new NotFoundHttpException();
         }
 
-        if ($this->checkAccess && ! AccessHelper::checkAccess('update', ['model' => $originModel])){
+        if ($this->checkAccess && ! AccessHelper::checkAccess('update', ['model' => $this->originModel])){
             throw new ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
-        $model = $this->getService()->getRelatedForm();
-        $model->scenario = $this->scenario;
-        $model->setAttributes($originModel->attributes, false);
+        $this->model = $this->getService()->getRelatedForm();
+        $this->model->scenario = $this->scenario;
+        $this->model->setAttributes($this->originModel->attributes, false);
 
-        if (method_exists($model, 'customizeForm')) {
-            $model->customizeForm($originModel);
+        if (method_exists($this->model, 'customizeForm')) {
+            $this->model->customizeForm($this->originModel);
         }
 
-        if (is_callable($this->beforeLoad)) {
-            call_user_func($this->beforeLoad, $this, $model, $originModel);
-        }
+        $this->callback($this->beforeLoad);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $originModel->setAttributes($model->attributes);
-            if (is_callable($this->beforeValidate)) {
-                call_user_func($this->beforeValidate, $this, $model, $originModel);
-            }
+        if ($this->model->load(Yii::$app->request->post())) {
+            $this->originModel->setAttributes($this->model->attributes);
+            $this->callback($this->beforeValidate);
 
-            if ($model->validate(null, true, $originModel)) {
-                if (is_callable($this->beforeServiceAction)) {
-                    call_user_func($this->beforeServiceAction, $this, $model, $originModel);
-                }
+            if ($this->model->validate(null, true, $this->originModel)) {
+                $this->callback($this->beforeServiceAction);
 
-                if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
-                    if (is_callable($this->afterServiceAction)) {
-                        call_user_func($this->afterServiceAction, $this, $model, $originModel, $result);
-                    }
+                if (($this->result = $this->getService()->{$this->serviceMethod}($this->model, $this->originModel)) !== false) {
+                    $this->callback($this->afterServiceAction);
 
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
                         return $this->getController()->responseJson([
-                            'data' => $result,
+                            'data' => $this->result,
                         ]);
                     }
                     if (Yii::$app->request->post(RequestHelper::REDIRECT_BTN_PARAM)) {
@@ -142,16 +153,14 @@ class UpdateActionActor extends ActionActor
                 }
             }
 
-            $model->addErrors($originModel->getErrors());
+            $this->model->addErrors($this->originModel->getErrors());
         }
 
-        if (is_callable($this->beforeRender)) {
-            call_user_func($this->beforeRender, $this, $model, $originModel);
-        }
+        $this->callback($this->beforeRender);
 
         return $this->getController()->render($this->view, [
-            'model' => $model,
-            'originModel' => $originModel,
+            'model' => $this->model,
+            'originModel' => $this->originModel,
         ]);
     }
 

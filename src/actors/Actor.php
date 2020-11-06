@@ -11,4 +11,11 @@ use yii\base\Component;
 abstract class Actor extends Component
 {
     abstract function run();
+
+    protected function callback($callback)
+    {
+        if (is_callable($callback)) {
+            call_user_func($callback, $this);
+        }
+    }
 }

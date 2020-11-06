@@ -2,11 +2,9 @@
 namespace concepture\yii2logic\actors\actions\domain;
 
 use concepture\yii2logic\actors\actions\ActionActor;
-use concepture\yii2logic\db\HasPropertyActiveQuery;
 use concepture\yii2logic\enum\ScenarioEnum;
-use concepture\yii2logic\helpers\AccessHelper;
+use concepture\yii2logic\forms\Form;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
-use ReflectionException;
 use Yii;
 use yii\base\Component;
 use yii\db\ActiveQuery;
@@ -98,13 +96,25 @@ class CreateActionActor extends ActionActor
      * @var callable
      */
     public $beforeRender;
+    /**
+     * Форма
+     *
+     * @var Form
+     */
+    public $model;
+    /**
+     * Результ модель
+     *
+     * @var ActiveRecord
+     */
+    public $result;
 
     public function run()
     {
-        $model = $this->getService()->getRelatedForm();
-        $model->scenario = $this->scenario;
-        if (method_exists($model, 'customizeForm')) {
-            $model->customizeForm();
+        $this->model = $this->getService()->getRelatedForm();
+        $this->model->scenario = $this->scenario;
+        if (method_exists($this->model, 'customizeForm')) {
+            $this->model->customizeForm();
         }
 
         if (! $this->edited_domain_id) {
@@ -113,34 +123,26 @@ class CreateActionActor extends ActionActor
 
         //Для случая создания сущности, когда у домена указаны используемые языки версий, чтобы подставить верную связку домена и языка
         Yii::$app->domainService->resolveLocaleId($this->edited_domain_id, $this->locale_id, $this->getController()->domainByLocale);
-        $model->domain_id = $this->edited_domain_id;
-        if (property_exists($model, 'locale_id')) {
-            $model->locale_id = $this->locale_id;
+        $this->model->domain_id = $this->edited_domain_id;
+        if (property_exists($this->model, 'locale_id')) {
+            $this->model->locale_id = $this->locale_id;
         }
 
-        if (is_callable($this->beforeLoad)) {
-            call_user_func($this->beforeLoad, $this, $model);
-        }
+        $this->callback($this->beforeLoad);
 
-        if ($model->load(Yii::$app->request->post())) {
-            if (is_callable($this->beforeValidate)) {
-                call_user_func($this->beforeValidate, $this, $model);
-            }
+        if ($this->model->load(Yii::$app->request->post())) {
+            $this->callback($this->beforeValidate);
 
-            if ($model->validate()) {
-                if (is_callable($this->beforeServiceAction)) {
-                    call_user_func($this->beforeServiceAction, $this, $model);
-                }
+            if ($this->model->validate()) {
+                $this->callback($this->beforeServiceAction);
 
-                if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
-                    if (is_callable($this->afterServiceAction)) {
-                        call_user_func($this->afterServiceAction, $this, $model, $result);
-                    }
+                if (($this->result = $this->getService()->{$this->serviceMethod}($this->model)) !== false) {
+                    $this->callback($this->afterServiceAction);
 
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
                     if ( RequestHelper::isMagicModal()){
                         return $this->getController()->responseJson([
-                            'data' => $result,
+                            'data' => $this->result,
                         ]);
                     }
 
@@ -151,20 +153,18 @@ class CreateActionActor extends ActionActor
                         }
 
                         # todo: криво пашет
-                        return $this->getController()->redirectPrevious([$this->redirect, 'id' => $result->id, 'domain_id' => $this->domain_id, 'edited_domain_id' => $this->edited_domain_id]);
+                        return $this->getController()->redirectPrevious([$this->redirect, 'id' => $this->result->id, 'domain_id' => $this->domain_id, 'edited_domain_id' => $this->edited_domain_id]);
                     } else {
-                        return $this->getController()->redirect(['update', 'id' => $result->id, 'domain_id' => $this->domain_id, 'edited_domain_id' => $this->edited_domain_id]);
+                        return $this->getController()->redirect(['update', 'id' => $this->result->id, 'domain_id' => $this->domain_id, 'edited_domain_id' => $this->edited_domain_id]);
                     }
                 }
             }
         }
 
-        if (is_callable($this->beforeRender)) {
-            call_user_func($this->beforeRender, $this, $model);
-        }
+        $this->callback($this->beforeRender);
 
         return $this->getController()->render($this->view, [
-            'model' => $model,
+            'model' => $this->model,
             'domain_id' => $this->domain_id,
             'locale_id' => $this->locale_id,
             'edited_domain_id' => $this->edited_domain_id
