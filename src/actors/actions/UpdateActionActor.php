@@ -105,23 +105,23 @@ class UpdateActionActor extends ActionActor
         }
 
         if (is_callable($this->beforeLoad)) {
-            call_user_func($this->beforeLoad, $model, $originModel);
+            call_user_func($this->beforeLoad, $this, $model, $originModel);
         }
 
         if ($model->load(Yii::$app->request->post())) {
             $originModel->setAttributes($model->attributes);
             if (is_callable($this->beforeValidate)) {
-                call_user_func($this->beforeValidate, $model, $originModel);
+                call_user_func($this->beforeValidate, $this, $model, $originModel);
             }
 
             if ($model->validate(null, true, $originModel)) {
                 if (is_callable($this->beforeServiceAction)) {
-                    call_user_func($this->beforeServiceAction, $model, $originModel);
+                    call_user_func($this->beforeServiceAction, $this, $model, $originModel);
                 }
 
                 if (($result = $this->getService()->{$this->serviceMethod}($model, $originModel)) !== false) {
                     if (is_callable($this->afterServiceAction)) {
-                        call_user_func($this->afterServiceAction, $model, $originModel, $result);
+                        call_user_func($this->afterServiceAction, $this, $model, $originModel, $result);
                     }
 
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
@@ -146,7 +146,7 @@ class UpdateActionActor extends ActionActor
         }
 
         if (is_callable($this->beforeRender)) {
-            call_user_func($this->beforeRender, $model, $originModel);
+            call_user_func($this->beforeRender, $this, $model, $originModel);
         }
 
         return $this->getController()->render($this->view, [

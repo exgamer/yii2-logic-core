@@ -90,22 +90,22 @@ class CreateActionActor extends ActionActor
         }
 
         if (is_callable($this->beforeLoad)) {
-            call_user_func($this->beforeLoad, $model);
+            call_user_func($this->beforeLoad, $this, $model);
         }
 
         if ($model->load(Yii::$app->request->post())) {
             if (is_callable($this->beforeValidate)) {
-                call_user_func($this->beforeValidate, $model);
+                call_user_func($this->beforeValidate, $this, $model);
             }
 
             if ($model->validate()) {
                 if (is_callable($this->beforeServiceAction)) {
-                    call_user_func($this->beforeServiceAction, $model);
+                    call_user_func($this->beforeServiceAction, $this, $model);
                 }
                 
                 if (($result = $this->getService()->{$this->serviceMethod}($model)) !== false) {
                     if (is_callable($this->afterServiceAction)) {
-                        call_user_func($this->afterServiceAction, $model, $result);
+                        call_user_func($this->afterServiceAction, $this, $model, $result);
                     }
 
                     # todo: объеденить все условия редиректов, в переопределенной функции redirect базового контролера ядра (logic)
@@ -130,7 +130,7 @@ class CreateActionActor extends ActionActor
         }
 
         if (is_callable($this->beforeRender)) {
-            call_user_func($this->beforeRender, $model);
+            call_user_func($this->beforeRender, $this, $model);
         }
 
         return $this->getController()->render($this->view, [
