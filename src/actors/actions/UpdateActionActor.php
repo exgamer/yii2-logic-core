@@ -12,6 +12,7 @@ use yii\base\Component;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\Application;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -80,7 +81,7 @@ class UpdateActionActor extends ActionActor
         }
 
         if ($this->checkAccess && ! AccessHelper::checkAccess('update', ['model' => $originModel])){
-            throw new \yii\web\ForbiddenHttpException(Yii::t("core", "You are not the owner"));
+            throw new ForbiddenHttpException(Yii::t("core", "You are not the owner"));
         }
 
         $model = $this->getService()->getRelatedForm();
