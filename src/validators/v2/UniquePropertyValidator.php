@@ -30,6 +30,11 @@ class UniquePropertyValidator extends Validator
     public $linkedEntityColumnName = 'entity_id';
 
     /**
+     * @var string
+     */
+    public $serviceName;
+
+    /**
      * @inheritDoc
      */
     public function init()
@@ -57,7 +62,12 @@ class UniquePropertyValidator extends Validator
             $propertyAlias = $model::propertyAlias();
         }
 
-        $serviceName = ClassHelper::getServiceName($model, "Form");
+        if($this->serviceName) {
+            $serviceName = $this->serviceName;
+        } else {
+            $serviceName = ClassHelper::getServiceName($model, "Form");
+        }
+        
         $query = Yii::$app->{$serviceName}->getQuery();
         foreach ($this->fields as $field){
             $query->andWhere([$field => $model->{$field}]);
