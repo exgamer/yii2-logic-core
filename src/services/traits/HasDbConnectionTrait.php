@@ -176,7 +176,7 @@ trait HasDbConnectionTrait
                 if ($class) {
                     $serviceName = ClassHelper::getServiceName($class);
                     if (Yii::$app->has($serviceName)) {
-                        
+
                         return Yii::$app->{$serviceName};
                     }
                 }

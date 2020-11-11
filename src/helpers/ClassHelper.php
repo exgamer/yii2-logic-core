@@ -99,6 +99,13 @@ class ClassHelper
         return $name."Service";
     }
 
+    /**
+     * !! Метод корректно возвращает название сервиса если таблица и модель идноименны
+     * в противном случае использовать однойменный метод у сервиса там будет учтено поле model_class у entity_type
+     *
+     * @param $tableName
+     * @return string
+     */
     public static function getServiceByEntityTable($tableName)
     {
         $serviceName =  lcfirst(Inflector::camelize($tableName));
