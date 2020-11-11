@@ -169,6 +169,19 @@ trait HasDbConnectionTrait
     {
         $serviceName =  ClassHelper::getServiceByEntityTable($tableName);
         if (! Yii::$app->has($serviceName)){
+            // @TODO костылина для того чтобы проверить указан ли класс модели <model_class> для entity_type
+            if (Yii::$app->has('entityTypeService')) {
+                // Проверяем указан ли класс модели для сущности
+                $class = \Yii::$app->entityTypeService->catalogValue($tableName, 'table_name', 'model_class');
+                if ($class) {
+                    $serviceName = ClassHelper::getServiceName($class);
+                    if (Yii::$app->has($serviceName)) {
+                        
+                        return Yii::$app->{$serviceName};
+                    }
+                }
+            }
+
             return null;
         }
 
