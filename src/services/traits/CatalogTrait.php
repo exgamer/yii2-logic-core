@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\services\traits;
 
+use concepture\yii2logic\actors\db\QueryActor;
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
 use concepture\yii2logic\helpers\ClassHelper;
@@ -33,6 +34,7 @@ trait CatalogTrait
      * @param bool $excludeDefault
      * @param null $searchKey
      * @return array
+     * @throws Exception
      */
     public function modelsCatalog($excludeDefault = false, $searchKey = null, $condition = null)
     {
@@ -324,6 +326,7 @@ trait CatalogTrait
      * @param array $condition
      * @param bool $excludeDefault
      * @return mixed
+     * @throws Exception
      */
     public function getAllModelsForList($condition = null, $excludeDefault = false)
     {
@@ -344,8 +347,39 @@ trait CatalogTrait
             }
         }
         $this->extendCatalogTraitQuery($query);
+        if ($this->getCatalogQueryGlobalExtendClass()) {
+            $actor = Yii::createObject([
+                'class' => $this->getCatalogQueryGlobalExtendClass(),
+                'query' => $query,
+            ]);
+            if (! $actor instanceof QueryActor) {
+                throw new Exception($this->getCatalogQueryGlobalExtendClass() . " is not instance of QueryActor");
+            }
+
+            $actor->run();
+        }
 
         return $query->all();
+    }
+
+    /**
+     * ВОзвращает класс для расширения запроса при получении каталога
+     *
+     * @return string|null
+     */
+    public function getCatalogQueryGlobalExtendClass()
+    {
+        if (! isset(Yii::$app->params['yii2logic'])){
+
+            return null;
+        }
+
+        if (! isset(Yii::$app->params['yii2logic']['catalogQueryGlobalExtendClass'])){
+
+            return null;
+        }
+
+        return Yii::$app->params['yii2logic']['catalogQueryGlobalExtendClass'];
     }
 
     /**
@@ -361,6 +395,7 @@ trait CatalogTrait
      * @param array $where
      * @param boolean $excludeDefault
      * @return mixed
+     * @throws Exception
      */
     public function getAllList($from = 'id', $to, $where = [], $excludeDefault = false)
     {

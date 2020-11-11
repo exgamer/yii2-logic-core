@@ -42,3 +42,20 @@
 3. для получения ключа по значению Yii::$app->someService->catalogKey();
 
 4. для получения значения по ключу Yii::$app->someService->catalogValue();
+
+5. Для глобальной модификации запроса при получении каталога можно использовать классы
+   унаследованные от QueryActor.php.
+    !!! Можно использовать например для сущностей с мультиязычной property для получения 
+    в админке каталогов с языком приложения а не с языком домена !!!
+    
+    Можно указать параметр в backend/config/params.php
+```php
+<?php
+$params = [
+    'yii2logic' => [
+        'catalogQueryGlobalExtendClass' => \concepture\yii2handbook\actors\db\LocaleBasedPropertyQueryActor::class
+    ],
+];
+
+return $params;
+```
