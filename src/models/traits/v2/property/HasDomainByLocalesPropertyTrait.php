@@ -100,7 +100,7 @@ trait HasDomainByLocalesPropertyTrait
         if (! $updatedFields) {
             return;
         }
-        
+
         $condition = [
             'entity_id' => $property->entity_id
         ];
