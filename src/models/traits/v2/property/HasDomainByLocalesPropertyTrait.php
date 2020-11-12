@@ -42,7 +42,7 @@ trait HasDomainByLocalesPropertyTrait
      *
      * @return array
      */
-    public function groupUniqueFields()
+    public function propertyGroupUniqueFields()
     {
         return [
             "domain_id"
@@ -54,7 +54,7 @@ trait HasDomainByLocalesPropertyTrait
      *
      * @return array
      */
-    public function updatedFieldsByGroup()
+    public function updatedFieldsByPropertyGroup()
     {
         return [
 
@@ -76,7 +76,7 @@ trait HasDomainByLocalesPropertyTrait
                 continue;
             }
 
-            if (! in_array($attribute, $this->updatedFieldsByGroup())) {
+            if (! in_array($attribute, $this->updatedFieldsByPropertyGroup())) {
                 continue;
             }
 
@@ -91,12 +91,12 @@ trait HasDomainByLocalesPropertyTrait
      */
     public function afterPropertySave($property)
     {
-        $groupFields = $this->groupUniqueFields();
+        $groupFields = $this->propertyGroupUniqueFields();
         if (! $groupFields) {
             return;
         }
 
-        $updatedFields = $this->updatedFieldsByGroup();
+        $updatedFields = $this->updatedFieldsByPropertyGroup();
         if (! $updatedFields) {
             return;
         }
