@@ -62,6 +62,29 @@ trait HasDomainByLocalesPropertyTrait
     }
 
     /**
+     * Загружает в переданную модель поля которые являются общими дял проперти в пределах домена
+     *
+     * @param $model
+     * @throws \Exception
+     */
+    public function loadUpdatedFieldsToModel($model)
+    {
+        $propertyClass = static::getPropertyModelClass();
+        $property = Yii::createObject($propertyClass);
+        foreach ($property->attributes() as $attribute) {
+            if (in_array($attribute, static::excludedPropertyFields())) {
+                continue;
+            }
+
+            if (! in_array($attribute, $this->updatedFieldsByGroup())) {
+                continue;
+            }
+
+            $model->{$attribute} = $this->{$attribute};
+        }
+    }
+
+    /**
      * Обновление общих полей для пропертей по одному и тому же домену
      *
      * @param $property
