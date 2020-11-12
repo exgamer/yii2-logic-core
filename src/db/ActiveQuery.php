@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\db;
 
+use concepture\yii2logic\models\interfaces\HasDomainPropertyInterface;
 use Yii;
 use concepture\yii2logic\enum\IsDeletedEnum;
 use concepture\yii2logic\enum\StatusEnum;
@@ -20,6 +21,20 @@ class ActiveQuery extends Base
     {
         $this->where = [];
         $this->params = [];
+
+        return $this;
+    }
+
+    public function resetJoin()
+    {
+        $this->join = [];
+
+        return $this;
+    }
+
+    public function resetSelect()
+    {
+        $this->select = null;
 
         return $this;
     }
@@ -89,7 +104,9 @@ class ActiveQuery extends Base
         $alias = trim($model::tableName(), '{}%') . ".";;
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
-            in_array(HasLocalePropertyTrait::class, $traits)){
+            in_array(HasLocalePropertyTrait::class, $traits) ||
+            $model instanceof HasDomainPropertyInterface)
+        {
             $propModelClass = $model::getPropertyModelClass();
             $propModel = Yii::createObject($propModelClass);
             if ($propModel->hasAttribute('status')){
@@ -121,7 +138,9 @@ class ActiveQuery extends Base
         $alias = trim($model::tableName(), '{}%') . ".";;
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
-            in_array(HasLocalePropertyTrait::class, $traits)){
+            in_array(HasLocalePropertyTrait::class, $traits) ||
+            $model instanceof HasDomainPropertyInterface)
+        {
             $propModelClass = $model::getPropertyModelClass();
             $propModel = Yii::createObject($propModelClass);
             if ($propModel->hasAttribute('is_deleted')){
@@ -150,7 +169,9 @@ class ActiveQuery extends Base
         $alias = "";
         $traits = ClassHelper::getTraits($model);
         if (in_array(HasDomainPropertyTrait::class, $traits) ||
-            in_array(HasLocalePropertyTrait::class, $traits)){
+            in_array(HasLocalePropertyTrait::class, $traits) ||
+            $model instanceof HasDomainPropertyInterface)
+        {
             $propModelClass = $model::getPropertyModelClass();
             $propModel = Yii::createObject($propModelClass);
             if ($propModel->hasAttribute('domain_id')){
