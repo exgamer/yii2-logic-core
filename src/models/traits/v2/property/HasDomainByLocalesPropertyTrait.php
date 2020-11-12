@@ -100,8 +100,10 @@ trait HasDomainByLocalesPropertyTrait
         if (! $updatedFields) {
             return;
         }
-
-        $condition = [];
+        
+        $condition = [
+            'entity_id' => $property->entity_id
+        ];
         foreach ($groupFields as $field) {
             $condition[$field] = $property->{$field};
         }
