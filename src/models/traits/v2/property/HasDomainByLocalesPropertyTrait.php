@@ -57,7 +57,7 @@ trait HasDomainByLocalesPropertyTrait
     public function updatedFieldsByGroup()
     {
         return [
-            "category_id"
+
         ];
     }
 

@@ -320,7 +320,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2handbook\converters\LocaleConverter;
-use concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait;
+use concepture\yii2logic\models\traits\v2\property\HasDomainByLocalesPropertyTrait;
 use concepture\yii2handbook\models\traits\DomainTrait;
 use concepture\yii2user\models\traits\UserTrait;
 use concepture\yii2handbook\models\traits\TagsTrait;
@@ -334,34 +334,7 @@ use common\validators\HtmlContentFilter;
  */
 class Post extends ActiveRecord
 {
-    use HasDomainPropertyTrait;
-
-    /**
-     * Возвращает название поля по которому будет разделение свойств
-     *
-     * @return array
-     */
-    public static function uniqueField()
-    {
-        return [
-            "domain_id",
-            "locale_id",
-        ];
-    }
-
-    /**
-     * Возвращает значение поля по которому будет разделение свойств
-     *
-     * @return mixed
-     */
-    public static function uniqueFieldValue()
-    {
-        return [
-            "domain_id" => Yii::$app->domainService->getCurrentDomainId(),
-            "locale_id" => Yii::$app->domainService->getCurrentDomainLocaleId(),
-        ];
-    }
-
+    use HasDomainByLocalesPropertyTrait;
 }
 
 
