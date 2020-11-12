@@ -233,8 +233,14 @@ class UpdateActionActor extends ActionActor
             }
         });
         if (! $model && $this->useClearFind){
-
-            return $originModelClass::clearFind()->where(['id' => $id])->one();
+            $domainModel = $this->getService()->getOneByCondition(function(ActiveQuery $query) use($id, $domain_id, $locale_id, $fields) {
+                $query->andWhere(['id' => $id]);
+                $query->applyPropertyUniqueValue(['domain_id' => $domain_id]);
+            });
+            $model = $originModelClass::clearFind()->where(['id' => $id])->one();
+            if ($domainModel) {
+                $domainModel->loadPropertyValuesToModel($model);
+            }
         }
 
         return $model;
