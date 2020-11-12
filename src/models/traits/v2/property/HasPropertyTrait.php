@@ -556,8 +556,12 @@ trait HasPropertyTrait
             throw new Exception("property not saved");
         }
 
+        $this->afterPropertySave($property);
+
         return true;
     }
+
+    public function afterPropertySave($property){}
 
     /**
      * Зачищает все атрибуты кроме исключений excludedPropertyFields
