@@ -48,6 +48,8 @@ trait HasDomainByLocalesPropertyTrait
     {
         $model = Yii::createObject(static::class);
         // если модель справочник для того чтобы получить данные по соответствию locale_id к domain_id вызываем getResolvedCurrentDomainAndLocale
+        // Используется для сущностей справочников где основным критерием является locale_id
+        // в этом случае если domain_id не соответствует указанному locale_id то будет подставлен domain_id согласно locale_id
         if ($model instanceof IAmDictionaryInterface) {
             return Yii::$app->domainService->getResolvedCurrentDomainAndLocale();
         }
