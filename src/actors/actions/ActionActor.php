@@ -16,6 +16,24 @@ abstract class ActionActor extends Actor
     public $controller;
     public $service;
     public $serviceMethod;
+    public $viewParams = [];
+
+    /**
+     * @return array
+     */
+    public function getViewParams(): array
+    {
+        return $this->viewParams;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function setViewParam($key, $value)
+    {
+        $this->viewParams[$key] = $value;
+    }
 
     /**
      * @return string
