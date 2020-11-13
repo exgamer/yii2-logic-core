@@ -351,8 +351,35 @@ class Post extends DomainByLocalesPropertyActiveRecord
     }
 }
 
+```
+
+## !!!!Для использования сущности как справочника с разделением по языкам!!!!
+
+```php
+
+<?php
+
+namespace common\models;
+
+use concepture\yii2logic\models\DomainBasedDictionaryActiveRecord;
+
+/**
+ * Модель постов
+ *
+ * @author kamaelkz <kamaelkz@yandex.kz>
+ */
+class Post extends DomainBasedDictionaryActiveRecord
+{
+  
+   
+}
 
 
+
+
+```
+
+#####
 
 ```
 
@@ -426,30 +453,3 @@ class PostService extends Base implements UrlHistoryInterface, SitemapServiceInt
 
 
 
-```
-
-## Для использования сущности как справочника с разделением по языкам
-
-```php
-
-<?php
-
-namespace common\models;
-
-use concepture\yii2logic\models\DomainBasedDictionaryActiveRecord;
-
-/**
- * Модель постов
- *
- * @author kamaelkz <kamaelkz@yandex.kz>
- */
-class Post extends DomainBasedDictionaryActiveRecord
-{
-  
-   
-}
-
-
-
-
-```
