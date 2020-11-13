@@ -349,7 +349,6 @@ trait CatalogTrait
             }
         }
         $this->extendCatalogTraitQuery($query);
-//        $this->trigger(static::EVENT_CATALOG_QUERY_EXTEND, new QueryExtendEvent(['query' => $query]));
         if ($this->getCatalogQueryGlobalExtendClass()) {
             $actor = Yii::createObject([
                 'class' => $this->getCatalogQueryGlobalExtendClass(),
