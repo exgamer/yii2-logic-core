@@ -67,7 +67,7 @@ class UniquePropertyValidator extends Validator
         } else {
             $serviceName = ClassHelper::getServiceName($model, "Form");
         }
-        
+
         $query = Yii::$app->{$serviceName}->getQuery();
         foreach ($this->fields as $field){
             $query->andWhere([$field => $model->{$field}]);

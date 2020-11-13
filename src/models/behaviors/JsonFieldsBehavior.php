@@ -3,6 +3,7 @@ namespace concepture\yii2logic\models\behaviors;
 
 use Yii;
 use yii\base\Behavior;
+use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
 use Exception;
@@ -112,7 +113,12 @@ class JsonFieldsBehavior extends Behavior
      */
     protected function attributeToArray($attribute)
     {
-        if(! is_string($this->owner->{$attribute})) {
+        $attributeExists = (
+            $this->owner instanceof ActiveRecord && $this->owner->hasAttribute($attribute))
+            || ($this->owner instanceof Model && property_exists($this->owner, $attribute)
+        );
+
+        if($attributeExists && ! is_string($this->owner->{$attribute})) {
             /**
              * @TODO Сделано для того чтобы при получении поста с массивом json строк данные возвращались в виде массива
              */
@@ -125,7 +131,7 @@ class JsonFieldsBehavior extends Behavior
                     }
                 }
 
-                if ($data) {
+                if ($data && $attributeExists) {
                     $this->owner->{$attribute} = $data;
                 }
             }
@@ -133,8 +139,9 @@ class JsonFieldsBehavior extends Behavior
             return;
         }
 
-
-        $this->owner->{$attribute} = Json::decode($this->owner->{$attribute}, true) ?? [];
+        if($attributeExists) {
+            $this->owner->{$attribute} = Json::decode($this->owner->{$attribute}, true) ?? [];
+        }
     }
 
     /**
