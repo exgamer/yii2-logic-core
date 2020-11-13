@@ -163,11 +163,11 @@ class CreateActionActor extends ActionActor
 
         $this->callback($this->beforeRender);
 
-        return $this->getController()->render($this->view, [
+        return $this->getController()->render($this->view, ArrayHelper::merge([
             'model' => $this->model,
             'domain_id' => $this->domain_id,
             'locale_id' => $this->locale_id,
             'edited_domain_id' => $this->edited_domain_id
-        ]);
+        ], $this->getViewParams()));
     }
 }

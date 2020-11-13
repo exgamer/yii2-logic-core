@@ -12,6 +12,7 @@ use Yii;
 use yii\base\Component;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\Application;
 use yii\web\NotFoundHttpException;
 
@@ -136,8 +137,8 @@ class CreateActionActor extends ActionActor
 
         $this->callback($this->beforeRender);
 
-        return $this->getController()->render($this->view, [
+        return $this->getController()->render($this->view, ArrayHelper::merge([
             'model' => $this->model,
-        ]);
+        ], $this->getViewParams()));
     }
 }
