@@ -11,6 +11,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\Application;
 use yii\web\NotFoundHttpException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Выполнение ряда операций при создании сущности
