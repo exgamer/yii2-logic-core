@@ -8,6 +8,9 @@ use concepture\yii2logic\helpers\ClassHelper;
 use concepture\yii2logic\models\traits\HasLocalizationTrait;
 use concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait;
 use concepture\yii2logic\models\traits\v2\property\HasLocalePropertyTrait;
+use concepture\yii2logic\services\events\modify\BeforeModelSaveEvent;
+use concepture\yii2logic\services\events\read\CatalogQueryExtendEvent;
+use concepture\yii2logic\services\events\read\QueryExtendEvent;
 use Yii;
 use Exception;
 use yii\helpers\ArrayHelper;
@@ -330,7 +333,6 @@ trait CatalogTrait
      */
     public function getAllModelsForList($condition = null, $excludeDefault = false)
     {
-        $where = [];
         $query = $this->getQuery();
         if ($excludeDefault === false) {
             $query->active();
@@ -347,6 +349,7 @@ trait CatalogTrait
             }
         }
         $this->extendCatalogTraitQuery($query);
+//        $this->trigger(static::EVENT_CATALOG_QUERY_EXTEND, new QueryExtendEvent(['query' => $query]));
         if ($this->getCatalogQueryGlobalExtendClass()) {
             $actor = Yii::createObject([
                 'class' => $this->getCatalogQueryGlobalExtendClass(),
