@@ -1,6 +1,7 @@
 <?php
 namespace concepture\yii2logic\models\traits\v2\property;
 
+use concepture\yii2logic\models\interfaces\IAmDictionaryInterface;
 use Yii;
 
 /**
@@ -10,6 +11,20 @@ use Yii;
 trait HasDomainByLocalesPropertyTrait
 {
     use HasPropertyTrait;
+
+    /**
+     * @return string
+     */
+    protected static function getPropertyJoin()
+    {
+        $model = Yii::createObject(static::class);
+        // если модель справочник вызываем leftJoin
+        if ($model instanceof IAmDictionaryInterface) {
+            return 'leftJoin';
+        }
+
+        return 'innerJoin';
+    }
 
     /**
      * Возвращает название поля по которому будет разделение свойств
@@ -31,6 +46,12 @@ trait HasDomainByLocalesPropertyTrait
      */
     public static function uniqueFieldValue()
     {
+        $model = Yii::createObject(static::class);
+        // если модель справочник вызываем getResolvedCurrentDomainAndLocale
+        if ($model instanceof IAmDictionaryInterface) {
+            return Yii::$app->domainService->getResolvedCurrentDomainAndLocale();
+        }
+
         return [
             "domain_id" => Yii::$app->domainService->getCurrentDomainId(),
             "locale_id" => Yii::$app->domainService->getCurrentDomainLocaleId(),
