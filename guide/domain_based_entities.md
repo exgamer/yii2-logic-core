@@ -427,3 +427,38 @@ class PostService extends Base implements UrlHistoryInterface, SitemapServiceInt
 
 
 ```
+
+## Для использования сущности как справочника с разделением по языкам
+
+```php
+
+<?php
+
+namespace common\models;
+
+use Yii;
+use yii\helpers\ArrayHelper;
+use concepture\yii2logic\models\ActiveRecord;
+use concepture\yii2handbook\converters\LocaleConverter;
+use concepture\yii2logic\models\DomainByLocalesPropertyActiveRecord;
+use concepture\yii2handbook\models\traits\DomainTrait;
+use concepture\yii2user\models\traits\UserTrait;
+use concepture\yii2handbook\models\traits\TagsTrait;
+use kamaelkz\yii2cdnuploader\traits\ModelTrait;
+use common\validators\HtmlContentFilter;
+
+/**
+ * Модель постов
+ *
+ * @author kamaelkz <kamaelkz@yandex.kz>
+ */
+class Post extends DomainByLocalesPropertyActiveRecord implements IAmDictionaryInterface
+{
+  
+   
+}
+
+
+
+
+```
