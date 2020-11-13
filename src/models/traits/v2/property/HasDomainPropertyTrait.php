@@ -4,6 +4,7 @@ namespace concepture\yii2logic\models\traits\v2\property;
 use common\models\Sports;
 use concepture\yii2logic\db\HasPropertyActiveQuery;
 use concepture\yii2logic\helpers\ClassHelper;
+use concepture\yii2logic\models\interfaces\HasDomainPropertyInterface;
 use concepture\yii2logic\models\traits\HasLocalizationTrait;
 use Yii;
 
@@ -51,7 +52,9 @@ trait HasDomainPropertyTrait
             $domainAlias = "";
             $traits = ClassHelper::getTraits($relationModel);
             if (in_array(HasDomainPropertyTrait::class, $traits) ||
-                in_array(HasLocalePropertyTrait::class, $traits)){
+                in_array(HasLocalePropertyTrait::class, $traits) ||
+                $relationModel instanceof HasDomainPropertyInterface)
+            {
                 $propModelClass = $relationModel::getPropertyModelClass();
                 $propModel = Yii::createObject($propModelClass);
                 if ($propModel->hasAttribute('domain_id')){

@@ -10,7 +10,7 @@
     - таблица со свойствами должна обязательно содержать поля (entity_id, deafult и поле по которому будет определяться уникальность в этмо случае domain_id) 
 
 
-1. Создаем модель AR унаследованную от *concepture\yii2logic\models\ActiveRecord* и подключаем треит concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait
+1. Создаем модель AR унаследованную от *concepture\yii2logic\models\DomainPropertyActiveRecord*
    
    Создаем модель для таблицы со свойствами BookmakerProperty
 
@@ -60,14 +60,13 @@ use concepture\yii2logic\validators\TranslitValidator;
  * @property string $updated_at
  * @property integer $is_deleted
  */
-class Bookmaker extends ActiveRecord
+class Bookmaker extends DomainPropertyActiveRecord
 {
     public $allow_physical_delete = false;
 
     use ModelTrait;
     use StatusTrait;
     use IsDeletedTrait;
-    use HasDomainPropertyTrait;
 
     /**
      * @return string
@@ -308,7 +307,8 @@ class BookmakerSearch extends Bookmaker
 
 1. В таблицу property добавляем поля domain_id и locale_id
 2. Первичный ключ (entity_id, domain_id, locale_id)
-3. В модель добавляем
+3. Модель наследуем от *concepture\yii2logic\models\DomainByLocalesPropertyActiveRecord*
+4. Нужно сделать общие поля по всем языкам домена, нужно указать поля в методе updatedFieldsByPropertyGroup()
 
 ```php
 
@@ -320,7 +320,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use concepture\yii2logic\models\ActiveRecord;
 use concepture\yii2handbook\converters\LocaleConverter;
-use concepture\yii2logic\models\traits\v2\property\HasDomainPropertyTrait;
+use concepture\yii2logic\models\DomainByLocalesPropertyActiveRecord;
 use concepture\yii2handbook\models\traits\DomainTrait;
 use concepture\yii2user\models\traits\UserTrait;
 use concepture\yii2handbook\models\traits\TagsTrait;
@@ -332,40 +332,54 @@ use common\validators\HtmlContentFilter;
  *
  * @author kamaelkz <kamaelkz@yandex.kz>
  */
-class Post extends ActiveRecord
+class Post extends DomainByLocalesPropertyActiveRecord
 {
-    use HasDomainPropertyTrait;
-
+  
+    
     /**
-     * Возвращает название поля по которому будет разделение свойств
+     *  !!  Только если нужно чтобы какие то проперти в пределпх домена но на разных языках были одинаковые
+     * 
+     * Поля которые будут обновлены для всех property по groupUniqueFields
      *
      * @return array
      */
-    public static function uniqueField()
+    public function updatedFieldsByPropertyGroup()
     {
         return [
-            "domain_id",
-            "locale_id",
+            "category_id"
         ];
     }
+}
 
-    /**
-     * Возвращает значение поля по которому будет разделение свойств
-     *
-     * @return mixed
-     */
-    public static function uniqueFieldValue()
-    {
-        return [
-            "domain_id" => Yii::$app->domainService->getCurrentDomainId(),
-            "locale_id" => Yii::$app->domainService->getCurrentDomainLocaleId(),
-        ];
-    }
+```
 
+## !!!!Для использования сущности как справочника с разделением по языкам!!!!
+
+```php
+
+<?php
+
+namespace common\models;
+
+use concepture\yii2logic\models\DomainBasedDictionaryActiveRecord;
+
+/**
+ * Модель постов
+ *
+ * @author kamaelkz <kamaelkz@yandex.kz>
+ */
+class Post extends DomainBasedDictionaryActiveRecord
+{
+  
+   
 }
 
 
 
+
+```
+
+#####
 
 ```
 
@@ -439,4 +453,3 @@ class PostService extends Base implements UrlHistoryInterface, SitemapServiceInt
 
 
 
-```

@@ -104,6 +104,30 @@ trait HasPropertyTrait
     }
 
     /**
+     * Загрузить проперти атрибуты в переданную модель
+     *
+     * @param $model
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
+    public function loadPropertyValuesToModel($model)
+    {
+        $propertyClass = static::getPropertyModelClass();
+        $property = Yii::createObject($propertyClass);
+        foreach ($property->attributes() as $attribute) {
+            if (in_array($attribute, static::excludedPropertyFields())) {
+                continue;
+            }
+
+            if (in_array($attribute, static::excludedPropertyDefaultValues())) {
+                continue;
+            }
+
+            $model->{$attribute} = $this->{$attribute};
+        }
+    }
+
+    /**
      * Возвращает название поля по которому будет разделение свойств
      *
      * @return string

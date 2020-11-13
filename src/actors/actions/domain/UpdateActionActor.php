@@ -5,6 +5,7 @@ use concepture\yii2logic\actors\actions\ActionActor;
 use concepture\yii2logic\enum\ScenarioEnum;
 use concepture\yii2logic\forms\Form;
 use concepture\yii2logic\helpers\AccessHelper;
+use concepture\yii2logic\models\interfaces\HasDomainByLocalesPropertyInterface;
 use kamaelkz\yii2admin\v1\helpers\RequestHelper;
 use ReflectionException;
 use Yii;
@@ -233,8 +234,16 @@ class UpdateActionActor extends ActionActor
             }
         });
         if (! $model && $this->useClearFind){
-
-            return $originModelClass::clearFind()->where(['id' => $id])->one();
+            $model = $originModelClass::clearFind()->where(['id' => $id])->one();
+            if ($model && $model instanceof HasDomainByLocalesPropertyInterface) {
+                $domainModel = $this->getService()->getOneByCondition(function (ActiveQuery $query) use ($id, $domain_id, $locale_id, $fields) {
+                    $query->andWhere(['id' => $id]);
+                    $query->applyPropertyUniqueValue(['domain_id' => $domain_id]);
+                });
+                if ($domainModel) {
+                    $domainModel->loadUpdatedFieldsToModel($model);
+                }
+            }
         }
 
         return $model;
