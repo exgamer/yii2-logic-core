@@ -47,7 +47,7 @@ trait HasDomainByLocalesPropertyTrait
     public static function uniqueFieldValue()
     {
         $model = Yii::createObject(static::class);
-        // если модель справочник вызываем getResolvedCurrentDomainAndLocale
+        // если модель справочник для того чтобы получить данные по соответствию locale_id к domain_id вызываем getResolvedCurrentDomainAndLocale
         if ($model instanceof IAmDictionaryInterface) {
             return Yii::$app->domainService->getResolvedCurrentDomainAndLocale();
         }
