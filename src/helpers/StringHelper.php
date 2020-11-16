@@ -190,7 +190,7 @@ class StringHelper extends BaseHelper
      * @param string $separator
      * @return int|string
      */
-    private static function resolveDouble($number, $decimals=0, $decimal='.', $separator=',') {
+    protected static function resolveDouble($number, $decimals=0, $decimal='.', $separator=',') {
         $result = number_format($number, $decimals, $decimal, $separator);
         $fractionCheck = $result - floor($result);
         if (! $fractionCheck) {
