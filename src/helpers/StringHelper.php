@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\helpers;
 
+use Yii;
 use yii\helpers\StringHelper as BaseHelper;
 use yii\helpers\ArrayHelper;
 
@@ -132,5 +133,70 @@ class StringHelper extends BaseHelper
     public static function isHTML($string)
     {
         return $string != strip_tags($string) ? true:false;
+    }
+
+    /**
+     * Возвращает числа в формате 725 тыс.,   824 млн.
+     *
+     * @param $number
+     * @param int $smallestAccepted
+     * @param int $decimals
+     * @return int|string
+     */
+    public static function numberHumanize($number, $smallestAccepted=1000, $decimals = 1) {
+        $number = intval($number);
+        if($number < $smallestAccepted) return $number;
+
+        if($number < 100) {
+            return static::resolveDouble($number, $decimals);
+        }
+
+        if($number < 1000) {
+            $newValue = $number / 100;
+            return static::resolveDouble($newValue, $decimals) . " " . Yii::t('common', "hundred (short)");
+        }
+
+        if($number < 1000000) {
+            $newValue = $number / 1000.0;
+
+            return static::resolveDouble($newValue, $decimals) . " "  . Yii::t('common', "thousand (short)");
+        }
+
+        if($number < 1000000000) {
+            $newValue = $number / 1000000.0;
+            return static::resolveDouble($newValue, $decimals) . " "  . Yii::t('common', "million (short)");
+        }
+
+        // senseless on a 32 bit system probably.
+        if($number < 1000000000000) {
+            $newValue = $number / 1000000000.0;
+            return static::resolveDouble($newValue, $decimals) . " "  . Yii::t('common', "billion (short)");
+        }
+
+        if($number < 1000000000000000) {
+            $newValue = $number / 1000000000000.0;
+            return static::resolveDouble($newValue, $decimals) . " "  . Yii::t('common', "trillion (short)");
+        }
+
+        return $number;	// too big.
+    }
+
+    /**
+     * Возвращает форматированное число с дробью и если после запятой нули приводит их инту
+     *
+     * @param double $number
+     * @param int $decimals
+     * @param string $decimal
+     * @param string $separator
+     * @return int|string
+     */
+    private static function resolveDouble($number, $decimals=0, $decimal='.', $separator=',') {
+        $result = number_format($number, $decimals, $decimal, $separator);
+        $fractionCheck = $result - floor($result);
+        if (! $fractionCheck) {
+            return (int) $result;
+        }
+
+        return $result;
     }
 }
