@@ -36,26 +36,13 @@ class StringHelper extends BaseHelper
         return static::numberFormat($number, 0, $country_iso);
     }
 
-    /**
-     * @param $number
-     * @param int $decimals
-     * @param string $country_iso
-     * @return string
-     */
     public static function numberFormat($number, $decimals = 0, $country_iso = 'default')
     {
         if (isset(static::$number_formats[$country_iso])){
-            $result = number_format($number, $decimals, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1]);
-        } else {
-            $result = number_format($number);
+            return number_format($number, $decimals, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1]);
         }
 
-        $fractionCheck = $result - floor($result);
-        if (! $fractionCheck) {
-            return (int) $result;
-        }
-
-        return $result;
+        return number_format($number);
     }
 
     /**
