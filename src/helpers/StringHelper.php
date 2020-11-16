@@ -45,10 +45,17 @@ class StringHelper extends BaseHelper
     public static function numberFormat($number, $decimals = 0, $country_iso = 'default')
     {
         if (isset(static::$number_formats[$country_iso])){
-            return number_format($number, $decimals, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1]);
+            $result = number_format($number, $decimals, static::$number_formats[$country_iso][0], static::$number_formats[$country_iso][1]);
+        } else {
+            $result = number_format($number);
         }
 
-        return number_format($number);
+        $fractionCheck = $result - floor($result);
+        if (! $fractionCheck) {
+            return (int) $result;
+        }
+
+        return $result;
     }
 
     /**
