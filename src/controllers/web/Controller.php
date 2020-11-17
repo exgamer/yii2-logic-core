@@ -21,6 +21,7 @@ use concepture\yii2logic\actions\web\v2\ViewAction;
 # действия с доменом
 use concepture\yii2logic\actions\web\v2\domain\CreateAction as DomainCreateAction;
 use concepture\yii2logic\actions\web\v2\domain\UpdateAction as DomainUpdateAction;
+use concepture\yii2logic\actions\web\v2\domain\ViewAction as DomainViewAction;
 # локализованные действия
 use concepture\yii2logic\actions\web\localized\CreateAction as LocalizedCreateAction;
 use concepture\yii2logic\actions\web\localized\UpdateAction as LocalizedUpdateAction;
@@ -279,7 +280,7 @@ abstract class Controller extends Base
                     'domainByLocale' => $this->domainByLocale,
                 ]: CreateAction::class,
             'update' => $this->domain ? DomainUpdateAction::class : UpdateAction::class,
-            'view' => ViewAction::class,
+            'view' => $this->domain ? DomainViewAction::class : ViewAction::class,
             'delete' => DeleteAction::class,
         ];
     }
