@@ -102,10 +102,11 @@ trait ToJsonAttributesTrait
     {
         if (! $attributes) {
             $attributes = $this->attributes();
-            foreach ($attributes as $key => $attribute) {
-                if (in_array($attribute, $this->toJsonAttributes())) {
-                    unset($attributes[$key]);
-                }
+        }
+
+        foreach ($attributes as $key => $attribute) {
+            if (in_array($attribute, $this->toJsonAttributes())) {
+                unset($attributes[$key]);
             }
         }
 
@@ -124,10 +125,11 @@ trait ToJsonAttributesTrait
     {
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
-            foreach ($attributeNames as $key => $attribute) {
-                if (in_array($attribute, $this->toJsonAttributes())) {
-                    unset($attributeNames[$key]);
-                }
+        }
+
+        foreach ($attributeNames as $key => $attribute) {
+            if (in_array($attribute, $this->toJsonAttributes())) {
+                unset($attributeNames[$key]);
             }
         }
 

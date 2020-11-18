@@ -419,11 +419,12 @@ trait HasPropertyTrait
     {
         if (! $attributes) {
             $attributes = $this->attributes();
-            $propertyModelClass = static::getPropertyModelClass();
-            $propertyModel = Yii::createObject($propertyModelClass);
-            $propertyAttributes = $propertyModel->attributes();
-            $attributes = array_diff($attributes, $propertyAttributes);
         }
+
+        $propertyModelClass = static::getPropertyModelClass();
+        $propertyModel = Yii::createObject($propertyModelClass);
+        $propertyAttributes = $propertyModel->attributes();
+        $attributes = array_diff($attributes, $propertyAttributes);
 
         return parent::insert($runValidation, $attributes);
     }
@@ -440,11 +441,12 @@ trait HasPropertyTrait
     {
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
-            $propertyModelClass = static::getPropertyModelClass();
-            $propertyModel = Yii::createObject($propertyModelClass);
-            $propertyAttributes = $propertyModel->attributes();
-            $attributeNames = array_diff($attributeNames, $propertyAttributes);
         }
+
+        $propertyModelClass = static::getPropertyModelClass();
+        $propertyModel = Yii::createObject($propertyModelClass);
+        $propertyAttributes = $propertyModel->attributes();
+        $attributeNames = array_diff($attributeNames, $propertyAttributes);
 
         return parent::update($runValidation, $attributeNames);
     }
