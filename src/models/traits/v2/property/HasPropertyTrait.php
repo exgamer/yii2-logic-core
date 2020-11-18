@@ -417,11 +417,6 @@ trait HasPropertyTrait
      */
     public function insert($runValidation = true, $attributes = null)
     {
-        if ($runValidation && !$this->validate($attributes)) {
-            Yii::info('Model not inserted due to validation error.', __METHOD__);
-            return false;
-        }
-
         if (! $attributes) {
             $attributes = $this->attributes();
             $propertyModelClass = static::getPropertyModelClass();
@@ -430,27 +425,7 @@ trait HasPropertyTrait
             $attributes = array_diff($attributes, $propertyAttributes);
         }
 
-        if (!$this->isTransactional(self::OP_INSERT)) {
-            return $this->insertInternal($attributes);
-        }
-
-        $transaction = static::getDb()->beginTransaction();
-        try {
-            $result = $this->insertInternal($attributes);
-            if ($result === false) {
-                $transaction->rollBack();
-            } else {
-                $transaction->commit();
-            }
-
-            return $result;
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
+        return parent::insert($runValidation, $attributes);
     }
 
     /**
@@ -463,10 +438,6 @@ trait HasPropertyTrait
      */
     public function update($runValidation = true, $attributeNames = null)
     {
-        if ($runValidation && !$this->validate($attributeNames)) {
-            return false;
-        }
-
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
             $propertyModelClass = static::getPropertyModelClass();
@@ -475,27 +446,7 @@ trait HasPropertyTrait
             $attributeNames = array_diff($attributeNames, $propertyAttributes);
         }
 
-        if (!$this->isTransactional(self::OP_UPDATE)) {
-            return $this->updateInternal($attributeNames);
-        }
-
-        $transaction = static::getDb()->beginTransaction();
-        try {
-            $result = $this->updateInternal($attributeNames);
-            if ($result === false) {
-                $transaction->rollBack();
-            } else {
-                $transaction->commit();
-            }
-
-            return $result;
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
+        return parent::update($runValidation, $attributes);
     }
 
     /**
