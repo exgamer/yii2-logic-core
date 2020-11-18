@@ -446,7 +446,7 @@ trait HasPropertyTrait
             $attributeNames = array_diff($attributeNames, $propertyAttributes);
         }
 
-        return parent::update($runValidation, $attributes);
+        return parent::update($runValidation, $attributeNames);
     }
 
     /**
