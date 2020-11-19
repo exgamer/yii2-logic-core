@@ -100,6 +100,11 @@ trait ToJsonAttributesTrait
      */
     public function insert($runValidation = true, $attributes = null)
     {
+        if ($runValidation && !$this->validate($attributes)) {
+            Yii::info('Model not inserted due to validation error.', __METHOD__);
+            return false;
+        }
+
         if (! $attributes) {
             $attributes = $this->attributes();
         }
@@ -110,7 +115,7 @@ trait ToJsonAttributesTrait
             }
         }
 
-        return parent::insert($runValidation, $attributes);
+        return parent::insert(false, $attributes);
     }
 
     /**
@@ -123,6 +128,10 @@ trait ToJsonAttributesTrait
      */
     public function update($runValidation = true, $attributeNames = null)
     {
+        if ($runValidation && !$this->validate($attributeNames)) {
+            return false;
+        }
+
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
         }
@@ -133,7 +142,7 @@ trait ToJsonAttributesTrait
             }
         }
 
-        return parent::update($runValidation, $attributeNames);
+        return parent::update(false, $attributeNames);
     }
 }
 
