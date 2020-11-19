@@ -2,6 +2,8 @@
 namespace concepture\yii2logic\models\traits;
 
 use concepture\yii2logic\helpers\StringHelper;
+use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\helpers\Json;
 
 /**
@@ -100,6 +102,11 @@ trait ToJsonAttributesTrait
      */
     public function insert($runValidation = true, $attributes = null)
     {
+        if ($runValidation && !$this->validate($attributes)) {
+            Yii::info('Model not inserted due to validation error.', __METHOD__);
+            return false;
+        }
+
         if (! $attributes) {
             $attributes = $this->attributes();
         }
@@ -110,7 +117,7 @@ trait ToJsonAttributesTrait
             }
         }
 
-        return parent::insert($runValidation, $attributes);
+        return parent::insert(false, $attributes);
     }
 
     /**
@@ -123,6 +130,10 @@ trait ToJsonAttributesTrait
      */
     public function update($runValidation = true, $attributeNames = null)
     {
+        if ($runValidation && !$this->validate($attributeNames)) {
+            return false;
+        }
+
         if (! $attributeNames) {
             $attributeNames = $this->attributes();
         }
@@ -133,7 +144,29 @@ trait ToJsonAttributesTrait
             }
         }
 
-        return parent::update($runValidation, $attributeNames);
+        return parent::update(false, $attributeNames);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function extendDataProvider(ActiveDataProvider $dataProvider)
+    {
+        $jsonField = $this->jsonFieldName();
+        $dbType = $this->getAttrDbType($jsonField);
+        $sort = $dataProvider->getSort();
+        $jsonAttributes = $this->toJsonAttributes();
+        if (in_array($dbType, ['json', 'jsonb']) && $sort && $jsonAttributes) {
+            foreach ($jsonAttributes as $jsonAttr) {
+                if (isset($sort->attributes[$jsonAttr]['asc'])) {
+                    $sort->attributes[$jsonAttr]['asc'] = new Expression("({$jsonField}->>'$.{$jsonAttr}') ASC");
+                }
+                if (isset($sort->attributes[$jsonAttr]['desc'])) {
+                    $sort->attributes[$jsonAttr]['desc'] = new Expression("({$jsonField}->>'$.{$jsonAttr}') DESC");
+                }
+            }
+        }
+        parent::extendDataProvider($dataProvider);
     }
 }
 
