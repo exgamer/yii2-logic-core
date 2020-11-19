@@ -82,7 +82,8 @@ trait ReadTrait
             $config['query'] = $query;
         }
 
-        $dataProvider = new ActiveDataProvider($config);
+        $config['class'] = ActiveDataProvider::class;
+        $dataProvider = Yii::createObject($config);
         if (! empty($queryParams)) {
             $searchModel->load($queryParams, $formName);
         }
