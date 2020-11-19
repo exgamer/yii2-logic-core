@@ -241,6 +241,11 @@ trait HasPropertyTrait
             }
 
             if (in_array($attribute, static::excludedPropertyDefaultValues())) {
+                // есил атрибут не поле в бд выкидываем из селекта
+                if (! $property->isDbField($attribute)) {
+                    continue;
+                }
+
                 $result[] = static::propertyAlias() . "." . $attribute;
                 continue;
             }
