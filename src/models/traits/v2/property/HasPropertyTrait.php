@@ -236,16 +236,16 @@ trait HasPropertyTrait
         $property = Yii::createObject($propertyClass);
         $result = [];
         foreach ($property->attributes() as $attribute) {
+            // если атрибут не поле в бд выкидываем из селекта
+            if (! $property->isDbField($attribute)) {
+                continue;
+            }
+
             if (in_array($attribute, static::excludedPropertyFields())) {
                 continue;
             }
 
             if (in_array($attribute, static::excludedPropertyDefaultValues())) {
-                // есил атрибут не поле в бд выкидываем из селекта
-                if (! $property->isDbField($attribute)) {
-                    continue;
-                }
-
                 $result[] = static::propertyAlias() . "." . $attribute;
                 continue;
             }
