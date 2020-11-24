@@ -3,6 +3,7 @@
 namespace concepture\yii2logic\models\traits\v2\property;
 
 use concepture\yii2logic\db\HasPropertyActiveQuery;
+use concepture\yii2logic\models\interfaces\HasJsonFieldInterface;
 use Exception;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
@@ -236,12 +237,52 @@ trait HasPropertyTrait
         $property = Yii::createObject($propertyClass);
         $result = [];
         foreach ($property->attributes() as $attribute) {
-            // если атрибут не поле в бд выкидываем из селекта
-            if (! $property->isDbField($attribute)) {
+            if (in_array($attribute, static::excludedPropertyFields())) {
                 continue;
             }
 
-            if (in_array($attribute, static::excludedPropertyFields())) {
+            // обработка полей properties которые являются json данными
+            if ($property instanceof HasJsonFieldInterface) {
+                $propertyAlias = static::propertyAlias();
+                $jsonFieldName = $property->jsonFieldName();
+                $jsonFields = $property->toJsonAttributes();
+                if ($attribute == $jsonFieldName) {
+                    foreach ($jsonFields as $key) {
+                        // если ключ в исключаниях
+                        if (in_array($key, static::excludedPropertyDefaultValues())) {
+                            $result[] = new Expression("CASE
+                               WHEN CAST(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') as CHAR) = 'null'
+                                   THEN null
+                               WHEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') IS NOT NULL
+                                   THEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}')
+
+                                   ELSE
+                                       null
+                                       END as {$key}");
+
+                            continue;
+                        }
+
+                        // если нужно подставить значение дефолтного property
+                        $result[] = new Expression("CASE
+                               WHEN CAST(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') as CHAR) = 'null'
+                                   THEN JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}')
+                               WHEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') IS NOT NULL
+                                   THEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}')
+
+                                   ELSE
+                                       JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}')
+                                       END as {$key}");
+
+
+                    }
+
+                    continue;
+                }
+            }
+
+            // если атрибут не поле в бд выкидываем из селекта
+            if (! $property->isDbField($attribute)) {
                 continue;
             }
 
