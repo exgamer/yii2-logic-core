@@ -254,7 +254,7 @@ trait HasPropertyTrait
                                WHEN CAST(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') as CHAR) = 'null'
                                    THEN null
                                WHEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') IS NOT NULL
-                                   THEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}')
+                                   THEN JSON_UNQUOTE(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}'))
 
                                    ELSE
                                        null
@@ -266,12 +266,12 @@ trait HasPropertyTrait
                         // если нужно подставить значение дефолтного property
                         $result[] = new Expression("CASE
                                WHEN CAST(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') as CHAR) = 'null'
-                                   THEN JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}')
+                                   THEN JSON_UNQUOTE(JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}'))
                                WHEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}') IS NOT NULL
-                                   THEN JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}')
+                                   THEN JSON_UNQUOTE(JSON_EXTRACT({$propertyAlias}.{$jsonFieldName}, '$.{$key}'))
 
                                    ELSE
-                                       JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}')
+                                       JSON_UNQUOTE(JSON_EXTRACT({$defaultPropertyAlias}.{$jsonFieldName}, '$.{$key}'))
                                        END as {$key}");
 
 
