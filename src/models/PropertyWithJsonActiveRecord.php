@@ -6,9 +6,9 @@ use concepture\yii2logic\models\interfaces\HasJsonFieldInterface;
 use concepture\yii2logic\models\traits\ToJsonAttributesTrait;
 
 /**
- * Доменные свойства постов
- *
- * @author kamaelkz <kamaelkz@yandex.kz>
+ * Class PropertyWithJsonActiveRecord
+ * @package concepture\yii2logic\models
+ * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
 abstract class PropertyWithJsonActiveRecord extends ActiveRecord implements HasJsonFieldInterface
 {
