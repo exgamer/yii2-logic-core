@@ -30,7 +30,7 @@ class OnThenAllRequiredValidator extends Validator
 
         if (! empty($filled) && ! (empty($notFilled))) {
             foreach ($notFilled as $attr) {
-                $this->addError($model, $attr,  Yii::t('core', 'Значение «{attribute}» должно быть заполнено.', ['attribute' => $model->getAttributeLabel($attr)]));
+                $this->addError($model, $attr,  Yii::t('common', 'Значение «{attribute}» должно быть заполнено.', ['attribute' => $model->getAttributeLabel($attr)]));
             }
         }
     }
