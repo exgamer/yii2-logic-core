@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @package concepture\yii2logic\validators\v2
  * @author Olzhas Kulzhambekov <exgamer@live.ru>
  */
-class OnThenAllRequiredValidator extends Validator
+class OneThenAllRequiredValidator extends Validator
 {
     public function validateAttributes($model, $attributes = null)
     {
