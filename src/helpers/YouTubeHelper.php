@@ -22,8 +22,8 @@ class YouTubeHelper
     public static function parseChannelIdFromUrl($url)
     {
         $parsed = parse_url(rtrim($url, '/'));
-        if (isset($parsed['path']) && preg_match('/^\/channel\/(([^\/])+?)$/', $parsed['path'], $matches)) {
-            return $matches[1];
+        if (isset($parsed['path']) && preg_match('/^\/(c|channel)\/(?<channel>[^\/]+)/', $parsed['path'], $matches)) {
+            return $matches['channel'];
         }
 
         throw new Exception("{$url} is not a valid YouTube channel URL");
