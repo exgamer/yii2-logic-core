@@ -455,9 +455,9 @@ trait ModifyTrait
      * Дефствия перед загрузкой формы в модель $model->load($data) в функции save
      *
      * @param Model $form
-     * @param ActiveRecord|null $model
+     * @param ActiveRecord $model
      */
-    protected function beforeModelLoad(Model $form , ActiveRecord $model = null)
+    protected function beforeModelLoad(Model $form , ActiveRecord $model)
     {
 
     }
