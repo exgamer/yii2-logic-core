@@ -12,26 +12,39 @@ use yii\base\InvalidConfigException;
  */
 trait JsonActiveQueryTrait
 {
-//    public function addJsonSelect($params)
-//    {
-//        $columns = [];
-//        foreach ($params as $key => $value) {
-//            if (is_numeric($key)) {
-//                list($cont, $column) = $this->splitJsonColumn($value);
-//                $valArr = explode('.', $value);
-//                $as     = end($valArr);
-//            } else {
-//                list($cont, $column) = $this->splitJsonColumn($key);
-//                $as = $value;
-//            }
-//
-//            $columns[] = "JSON_EXTRACT($cont, '$column') AS $as";
-//        }
-//
-//        $this->addSelect($columns);
-//
-//        return $this;
-//    }
+    /**
+     *   Добавляет к селекту выбр по Json
+     *
+     *   $query->addSelect('*');
+     *   $query->addJsonSelect([
+     *       'data.bet-links'
+     *   ]);
+     *
+     * @param $params
+     * @return $this
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
+    public function addJsonSelect($params)
+    {
+        $columns = [];
+        foreach ($params as $key => $value) {
+            if (is_numeric($key)) {
+                list($cont, $column) = $this->splitJsonColumn($value);
+                $valArr = explode('.', $value);
+                $as     = end($valArr);
+            } else {
+                list($cont, $column) = $this->splitJsonColumn($key);
+                $as = $value;
+            }
+
+            $columns[] = "JSON_EXTRACT($cont, '$column') AS $as";
+        }
+
+        $this->addSelect($columns);
+
+        return $this;
+    }
 
     /**
      * Добавляет условие где ключ из json не null
