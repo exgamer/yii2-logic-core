@@ -2,6 +2,7 @@
 
 namespace concepture\yii2logic\db;
 
+use concepture\yii2logic\db\traits\JsonActiveQueryTrait;
 use concepture\yii2logic\models\interfaces\HasDomainPropertyInterface;
 use Yii;
 use concepture\yii2logic\enum\IsDeletedEnum;
@@ -14,6 +15,8 @@ use yii\db\ActiveQuery as Base;
 
 class ActiveQuery extends Base
 {
+    use JsonActiveQueryTrait;
+
     /**
      * Сброс условий запроса
      */

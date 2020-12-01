@@ -110,7 +110,7 @@ trait JsonActiveQueryTrait
      * @return array
      * @throws Exception
      */
-    public function getCondition($params)
+    protected function getCondition($params)
     {
         $condition = [];
         foreach ($params as $key => $value) {
@@ -129,7 +129,7 @@ trait JsonActiveQueryTrait
      * @throws InvalidConfigException
      * @throws Exception
      */
-    public function splitJsonColumn($column)
+    protected function splitJsonColumn($column)
     {
         $columns = explode('.', $column);
         $cond    = array_shift($columns);
