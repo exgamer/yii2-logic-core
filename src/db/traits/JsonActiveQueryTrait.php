@@ -76,6 +76,10 @@ trait JsonActiveQueryTrait
     /**
      * Добавляет условие для json
      *
+     *     $query->andJsonWhere([
+     *          'data.bet-links.[0].text' => 'П1'
+     *     ]);
+     *
      * @param $params
      * @return $this
      * @throws Exception
@@ -90,6 +94,10 @@ trait JsonActiveQueryTrait
 
     /**
      * Добавляет условие для json
+     *
+     *     $query->orJsonWhere([
+     *          'data.bet-links.[0].text' => 'П1'
+     *     ]);
      *
      * @param $params
      * @return $this
