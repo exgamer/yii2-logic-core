@@ -33,6 +33,21 @@ trait JsonActiveQueryTrait
 //        return $this;
 //    }
 
+    /**
+     * Добавляет условие где ключ из json не null
+     *
+     *     $query->andJsonWhereNotNull([
+     *           'data.bet-links'
+     *      ]);
+     *
+     *     $query->andJsonWhereNotNull([
+     *           'data.bet-links.[0].text'
+     *      ]);
+     *
+     * @param $params
+     * @return $this
+     * @throws Exception
+     */
     public function andJsonWhereNotNull($params)
     {
         if (! is_array($params)) {
@@ -58,10 +73,32 @@ trait JsonActiveQueryTrait
         return $this;
     }
 
+    /**
+     * Добавляет условие для json
+     *
+     * @param $params
+     * @return $this
+     * @throws Exception
+     */
     public function andJsonWhere($params)
     {
         $condition = $this->getCondition($params);
         $this->andWhere($condition);
+
+        return $this;
+    }
+
+    /**
+     * Добавляет условие для json
+     *
+     * @param $params
+     * @return $this
+     * @throws Exception
+     */
+    public function orJsonWhere($params)
+    {
+        $condition = $this->getCondition($params);
+        $this->orWhere($condition);
 
         return $this;
     }
@@ -108,6 +145,10 @@ trait JsonActiveQueryTrait
         }
 
         foreach ($columns as &$column) {
+            if (strpos($column, '[') !== false) {
+                continue;
+            }
+
             if ($quotes){
                 $column = '"' . $column . '"';
             }
@@ -115,6 +156,7 @@ trait JsonActiveQueryTrait
 
         array_unshift($columns, '$');
         $jsonCond = implode('.', $columns);
+        $jsonCond = str_replace(".[", "[", $jsonCond);
 
         return [$cond, $jsonCond];
     }
