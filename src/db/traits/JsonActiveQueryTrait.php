@@ -129,6 +129,23 @@ trait JsonActiveQueryTrait
     }
 
     /**
+     * добавляет условие по количеству элементов в json
+     *
+     * @param $params
+     * @param null $jsonAlias
+     * @return $this
+     * @throws Exception
+     */
+    public function andWhereJsonCountEquals($params, $jsonAlias = null)
+    {
+        $condition = $this->getCondition($params, $jsonAlias, "JSON_LENGTH");
+        $this->andWhere($condition);
+
+        return $this;
+    }
+
+
+    /**
      * Сортировка по json полям
      *
      * @param $params
@@ -149,10 +166,11 @@ trait JsonActiveQueryTrait
      *
      * @param $params
      * @param null $jsonAlias
+     * @param string $method
      * @return array
      * @throws Exception
      */
-    protected function getCondition($params, $jsonAlias = null)
+    protected function getCondition($params, $jsonAlias = null, $method = 'JSON_EXTRACT')
     {
         $condition = [];
         foreach ($params as $key => $value) {
@@ -161,7 +179,7 @@ trait JsonActiveQueryTrait
                 $cont = $jsonAlias . "." . $cont;
             }
 
-            $condition["JSON_EXTRACT($cont, '$column')"] = $value;
+            $condition["{$method}($cont, '$column')"] = $value;
         }
 
         return $condition;
