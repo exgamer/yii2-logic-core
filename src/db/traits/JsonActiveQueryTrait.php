@@ -21,8 +21,8 @@ trait JsonActiveQueryTrait
      *   ]);
      *
      * @param $params
-     * @param null $jsonAlias
      * @return $this
+     * @throws InvalidConfigException
      * @throws Exception
      */
     public function addJsonSelect($params, $jsonAlias = null)
@@ -62,7 +62,6 @@ trait JsonActiveQueryTrait
      *      ]);
      *
      * @param $params
-     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
@@ -99,7 +98,6 @@ trait JsonActiveQueryTrait
      *     ]);
      *
      * @param $params
-     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
@@ -119,7 +117,6 @@ trait JsonActiveQueryTrait
      *     ]);
      *
      * @param $params
-     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
@@ -132,10 +129,25 @@ trait JsonActiveQueryTrait
     }
 
     /**
-     * Собирает условие для json
+     * Сортировка по json полям
      *
      * @param $params
      * @param null $jsonAlias
+     * @return $this
+     * @throws Exception
+     */
+    public function jsonOrderBy($params, $jsonAlias = null)
+    {
+        $condition = $this->getCondition($params, $jsonAlias);
+        $this->orderBy($condition);
+
+        return $this;
+    }
+
+    /**
+     * Собирает условие для json
+     *
+     * @param $params
      * @return array
      * @throws Exception
      */
