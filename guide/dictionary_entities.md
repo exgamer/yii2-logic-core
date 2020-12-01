@@ -1,5 +1,7 @@
 ####Мини гайд по использованию сущностей которые будут словарями
 
+#!!! ВАЖНО!! Yii::$app->domainService->getResolvedCurrentDomainAndLocale() определяет domain_id и locale_id который будет подставлен в запрос. Зависит от ключей languages b language_iso из domain_map
+
 
 # В этом случае данне будут собираться в зависимости от  domain_id и locale_id
 
