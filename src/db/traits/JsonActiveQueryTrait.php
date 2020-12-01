@@ -148,6 +148,7 @@ trait JsonActiveQueryTrait
      * Собирает условие для json
      *
      * @param $params
+     * @param null $jsonAlias
      * @return array
      * @throws Exception
      */
