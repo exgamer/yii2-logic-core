@@ -21,11 +21,11 @@ trait JsonActiveQueryTrait
      *   ]);
      *
      * @param $params
+     * @param null $jsonAlias
      * @return $this
-     * @throws InvalidConfigException
      * @throws Exception
      */
-    public function addJsonSelect($params)
+    public function addJsonSelect($params, $jsonAlias = null)
     {
         $columns = [];
         foreach ($params as $key => $value) {
@@ -36,6 +36,10 @@ trait JsonActiveQueryTrait
             } else {
                 list($cont, $column) = $this->splitJsonColumn($key);
                 $as = $value;
+            }
+
+            if ($jsonAlias) {
+                $cont = $jsonAlias . "." . $cont;
             }
 
             $columns[] = "JSON_EXTRACT($cont, '$column') AS $as";
@@ -58,10 +62,11 @@ trait JsonActiveQueryTrait
      *      ]);
      *
      * @param $params
+     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
-    public function andJsonWhereNotNull($params)
+    public function andJsonWhereNotNull($params, $jsonAlias = null)
     {
         if (! is_array($params)) {
             $params[$params] = null;
@@ -78,7 +83,7 @@ trait JsonActiveQueryTrait
         }
 
         $params = $tmp;
-        $conditions = $this->getCondition($params);
+        $conditions = $this->getCondition($params, $jsonAlias);
         foreach ($conditions as $key => $value) {
             $this->andWhere(['not', [$key => $value]]);
         }
@@ -94,12 +99,13 @@ trait JsonActiveQueryTrait
      *     ]);
      *
      * @param $params
+     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
-    public function andJsonWhere($params)
+    public function andJsonWhere($params, $jsonAlias = null)
     {
-        $condition = $this->getCondition($params);
+        $condition = $this->getCondition($params, $jsonAlias);
         $this->andWhere($condition);
 
         return $this;
@@ -113,12 +119,13 @@ trait JsonActiveQueryTrait
      *     ]);
      *
      * @param $params
+     * @param null $jsonAlias
      * @return $this
      * @throws Exception
      */
-    public function orJsonWhere($params)
+    public function orJsonWhere($params, $jsonAlias = null)
     {
-        $condition = $this->getCondition($params);
+        $condition = $this->getCondition($params, $jsonAlias);
         $this->orWhere($condition);
 
         return $this;
@@ -128,14 +135,19 @@ trait JsonActiveQueryTrait
      * Собирает условие для json
      *
      * @param $params
+     * @param null $jsonAlias
      * @return array
      * @throws Exception
      */
-    protected function getCondition($params)
+    protected function getCondition($params, $jsonAlias = null)
     {
         $condition = [];
         foreach ($params as $key => $value) {
             list($cont, $column) = $this->splitJsonColumn($key);
+            if ($jsonAlias) {
+                $cont = $jsonAlias . "." . $cont;
+            }
+
             $condition["JSON_EXTRACT($cont, '$column')"] = $value;
         }
 
