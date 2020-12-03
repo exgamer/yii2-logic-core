@@ -144,7 +144,6 @@ trait JsonActiveQueryTrait
         return $this;
     }
 
-
     /**
      * Сортировка по json полям
      *
@@ -157,6 +156,22 @@ trait JsonActiveQueryTrait
     {
         $condition = $this->getCondition($params, $jsonAlias);
         $this->orderBy($condition);
+
+        return $this;
+    }
+
+    /**
+     * добавить сортировку по json полям
+     *
+     * @param $params
+     * @param null $jsonAlias
+     * @return $this
+     * @throws Exception
+     */
+    public function addJsonOrderBy($params, $jsonAlias = null)
+    {
+        $condition = $this->getCondition($params, $jsonAlias);
+        $this->addOrderBy($condition);
 
         return $this;
     }
