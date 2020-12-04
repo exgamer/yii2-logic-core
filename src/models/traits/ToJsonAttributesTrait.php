@@ -79,6 +79,7 @@ trait ToJsonAttributesTrait
         }
 
         foreach ($this->{$jsonFieldName} as $attribute => $value) {
+            //@TODO возможно нужно поставить проверку на существование атрибута, чтоыб не получать ошибки если есть ключи для которых нет атрибута
             $this->{$attribute} = $value;
         }
     }
