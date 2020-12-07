@@ -194,7 +194,12 @@ trait JsonActiveQueryTrait
                 $cont = $jsonAlias . "." . $cont;
             }
 
-            $condition["{$method}($cont, '$column')"] = $value;
+            $key = "{$method}($cont, '$column')";
+            if ($method == 'JSON_EXTRACT') {
+                $key = "JSON_UNQUOTE({$key})";
+            }
+
+            $condition[$key] = $value;
         }
 
         return $condition;
