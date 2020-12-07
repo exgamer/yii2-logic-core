@@ -5,6 +5,7 @@ namespace concepture\yii2logic\db\traits;
 use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\db\Expression;
 
 /**
  * Trait JsonActiveQueryTrait
@@ -97,6 +98,8 @@ trait JsonActiveQueryTrait
      *          'data.bet-links.[0].text' => 'П1'
      *     ]);
      *
+     *     $query->andJsonWhere(['>', 'json.event_at', new Expression('NOW()')], $propAlias);
+     *
      * @param $params
      * @return $this
      * @throws Exception
@@ -188,6 +191,35 @@ trait JsonActiveQueryTrait
     protected function getCondition($params, $jsonAlias = null, $method = 'JSON_EXTRACT')
     {
         $condition = [];
+        $compare = false;
+        foreach ($params as $key => $value) {
+            if ( filter_var($key, FILTER_VALIDATE_INT) === false ) {
+                continue;
+            }
+
+            $compare = true;
+        }
+
+        if ($compare) {
+            $compare = $params[0];
+            $key = $params[1];
+            $value = $params[2];
+            list($cont, $column) = $this->splitJsonColumn($key);
+            if ($jsonAlias) {
+                $cont = $jsonAlias . "." . $cont;
+            }
+
+            $key = "{$method}($cont, '$column')";
+            if ($method == 'JSON_EXTRACT') {
+                $key = "JSON_UNQUOTE({$key})";
+            }
+
+            $condition = [$compare, $key, $value];
+
+            return $condition;
+        }
+
+
         foreach ($params as $key => $value) {
             list($cont, $column) = $this->splitJsonColumn($key);
             if ($jsonAlias) {
