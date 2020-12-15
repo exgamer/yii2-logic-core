@@ -291,12 +291,14 @@ trait HasPropertyTrait
                 continue;
             }
 
-            $result[] = new Expression("CASE 
-                               WHEN {$propertyAlias}.{$attribute} IS NULL
-                                   THEN {$defaultPropertyAlias}.{$attribute}
-                                   ELSE
-                                       {$propertyAlias}.{$attribute}
-                                       END as {$attribute}");
+//            $result[] = new Expression("CASE
+//                               WHEN {$propertyAlias}.{$attribute} IS NULL
+//                                   THEN {$defaultPropertyAlias}.{$attribute}
+//                                   ELSE
+//                                       {$propertyAlias}.{$attribute}
+//                                       END as {$attribute}");
+
+            $result[] = new Expression("COALESCE({$propertyAlias}.{$attribute}, {$defaultPropertyAlias}.{$attribute}, {$propertyAlias}.{$attribute}) as {$attribute}");
         }
 
         $uniqueFields = static::getUniqueFieldAsArray();
