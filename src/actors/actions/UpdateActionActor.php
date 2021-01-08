@@ -105,6 +105,11 @@ class UpdateActionActor extends ActionActor
      */
     public $result;
 
+    /**
+     * @var string
+     */
+    public $serviceMethod = 'update';
+
     public function run()
     {
         $this->originModel = $this->getModel($this->id);
